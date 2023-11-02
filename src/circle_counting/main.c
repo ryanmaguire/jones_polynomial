@@ -23,22 +23,26 @@
  *  Date:   2023/10/31                                                        *
  ******************************************************************************/
 
-/*  printf found here.                                                        */
-#include <stdio.h>
-
-/*  malloc, calloc, realloc, and free are here.                               */
-#include <stdlib.h>
-
 /*  All of the tools are found here.                                          */
 #include "kauffman.h"
 
 /*  Several knots are provided here via signed Gauss code.                    */
 #include "knot_data.h"
 
+/*  Test of the Jones polynomial algorithm.                                   */
 int main(void)
 {
+    /*  Convert the string to a knot.                                         */
     struct knot K = knot_from_gauss_code(FIGURE_EIGHT);
+
+    /*  Compute the Jones polynomial. This is exponential in the number of    *
+     *  crossings. For a very large input this will take a while. For a small *
+     *  input like the figure-eight its instant.                              */
     struct laurent_polynomial out = normalized_jones(&K);
+
+    /*  And print the result to the screen.                                   */
     print_poly(&out);
+
     return 0;
 }
+/*  End of main.                                                              */

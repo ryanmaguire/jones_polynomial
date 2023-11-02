@@ -16,6 +16,8 @@
  *  You should have received a copy of the GNU General Public License along   *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
+
+/*  All typedef's and function prototypes are provided here.                  */
 #include "kauffman.h"
 
 void jones_normalization(const struct knot *K, struct laurent_polynomial *P)
