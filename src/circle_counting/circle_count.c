@@ -26,6 +26,7 @@ circle_count(const struct knot *K,
              const struct crossing_indices *ind,
              unsigned int resolution)
 {
+    /*  Declare all necessary variables. C89 requires declarations at the top.*/
     unsigned int number_of_circles, n, road_index, crossing, code_index;
     unsigned char direction, crossing_resolution, road_number;
     enum crossing_sign sign;
@@ -144,7 +145,7 @@ circle_count(const struct knot *K,
 
             /*  For a positive crossing the smoothings look as follows:       *
              *                                                                *
-             *                                   3           1                *
+             *                                   3           2                *
              *                                  \  \       /  /               *
              *                                   \  \     /  /                *
              *                                    \  \   /  /                 *
@@ -156,7 +157,7 @@ circle_count(const struct knot *K,
              *         \  \/  /                  /  /     \  \                *
              *          \ /  /                  /  /       \  \               *
              *           /  /                                                 *
-             *          /  / \                   3           1                *
+             *          /  / \                   3           2                *
              *         /  /\  \                 \  \       /  /               *
              *        /  /  \  \                 \  \     /  /                *
              *       /  /    \  \                 \  \   /  /                 *
@@ -197,7 +198,6 @@ circle_count(const struct knot *K,
                 {
                     road_number = (5U - road_number) & 0x03U;
 
-
                     /*  The one smoothing reverses the orientation for a      *
                      *  positive crossing. Forward (zero) maps to backward    *
                      *  (one) and backward maps to forward. Swapping (0, 1)   *
@@ -208,7 +208,7 @@ circle_count(const struct knot *K,
 
             /*  For a negative crossing the smoothings look as follows:       *
              *                                                                *
-             *                                   3           1                *
+             *                                   3           2                *
              *                                  \  \       /  /               *
              *                                   \  \     /  /                *
              *                                    \  \   /  /                 *
@@ -219,8 +219,8 @@ circle_count(const struct knot *K,
              *        \  \  /  /                  /  /   \  \                 *
              *         \  \/  /                  /  /     \  \                *
              *          \  \ /                  /  /       \  \               *
-             *           \  \                                                 *
-             *          / \  \                   3           1                *
+             *           \  \                    0           1                *
+             *          / \  \                   3           2                *
              *         /  /\  \                 \  \       /  /               *
              *        /  /  \  \                 \  \     /  /                *
              *       /  /    \  \                 \  \   /  /                 *
@@ -388,3 +388,4 @@ circle_count(const struct knot *K,
 
     return number_of_circles;
 }
+/*  End of circle_count.                                                      */
