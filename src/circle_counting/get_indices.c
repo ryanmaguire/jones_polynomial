@@ -20,7 +20,7 @@
 /*  malloc is found here. The index array is dynamically allocated.           */
 #include <stdlib.h>
 
-/*  All typedef's and function protocols are provided here.                   */
+/*  All typedef's and function prototypes are provided here.                  */
 #include "kauffman.h"
 
 /*  Returns an array ind where ind[n] is a struct containing the indices of   *

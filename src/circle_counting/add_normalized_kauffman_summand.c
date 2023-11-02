@@ -17,7 +17,7 @@
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
 
-/*  All typedef's and function protocols are provided here.                   */
+/*  All typedef's and function prototypes are provided here.                  */
 #include "kauffman.h"
 
 /******************************************************************************
@@ -38,9 +38,9 @@
  *                 -----                                                      *
  *                 k = 0                                                      *
  *                                                                            *
- *      where [L] denotes the Kauffman bracket of L. The only difference      *
- *      from the function add_kauffman_summand is that (q+q^{-1})^{c(k)}      *
- *      has been replaced with (q+q^{-1})^{c(k)-1}.                           *
+ *      where [L] denotes the (normalized) Kauffman bracket of L. The only    *
+ *      difference from the function add_kauffman_summand is that we've       *
+ *      replaced (q+q^{-1})^{c(k)} with (q+q^{-1})^{c(k)-1}.                  *
  *  Arguments:                                                                *
  *      cycles (unsigned int):                                                *
  *          The number of cycles corresponding to a complete smoothing.       *

@@ -17,7 +17,7 @@
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
 
-/*  All typedef's and function protocols are provided here.                   */
+/*  All typedef's and function prototypes are provided here.                  */
 #include "kauffman.h"
 
 /*  The powers (q + q^{-1})^n for n = 0, 1, ..., 33 are provided here.        */
