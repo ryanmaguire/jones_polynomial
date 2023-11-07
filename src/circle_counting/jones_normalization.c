@@ -29,7 +29,7 @@ void jones_normalization(const struct knot *K, struct laurent_polynomial *P)
 
     for (ind = 0U; ind < 2U * K->number_of_crossings; ++ind)
     {
-        if (K->sign[ind] == positive_crossing)
+        if (K->sign[ind] == POSITIVE_CROSSING)
             n_plus++;
         else
             n_minus++;

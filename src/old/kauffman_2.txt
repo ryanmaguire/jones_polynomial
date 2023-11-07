@@ -38,20 +38,16 @@
 
 /*  Crossing signs are negative and positive. This assumes the knot has been  *
  *  given an orientation.                                                     */
-typedef unsigned char crossing_sign;
-#define POSITIVE_CROSSING (0x00U)
-#define NEGATIVE_CROSSING (0x01U)
+enum crossing_sign {negative_crossing, positive_crossing};
 
 /*  Crossing type for the Gauss code. Is the current strand over or under.    */
-typedef unsigned char crossing_type;
-#define OVER_CROSSING (0x00U)
-#define UNDER_CROSSING (0x01U)
+enum crossing_type {under_crossing, over_crossing};
 
 /*  Extended Gauss code. This contains crossing number, sign, and type.       */
 struct knot {
     unsigned int number_of_crossings;
-    crossing_sign *sign;
-    crossing_type *type;
+    enum crossing_sign *sign;
+    enum crossing_type *type;
     unsigned int *crossing_number;
 };
 
@@ -76,9 +72,6 @@ extern void print_poly(const struct laurent_polynomial *P);
 extern struct knot knot_from_gauss_code(const char *str);
 extern struct laurent_polynomial jones(const struct knot *K);
 extern struct laurent_polynomial normalized_jones(const struct knot *K);
-
-extern unsigned char
-get_road_number(const struct knot *K, unsigned int index, unsigned char dir);
 
 extern void
 jones_normalization(const struct knot *K, struct laurent_polynomial *P);

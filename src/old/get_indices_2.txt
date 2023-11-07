@@ -16,62 +16,47 @@
  *  You should have received a copy of the GNU General Public License along   *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-#include <ctype.h>
+
+/*  malloc is found here. The index array is dynamically allocated.           */
 #include <stdlib.h>
-#include <libtmpl/include/tmpl_string.h>
+
+/*  All typedef's and function prototypes are provided here.                  */
 #include "kauffman.h"
 
-struct knot knot_from_gauss_code(const char *code)
+/*  Returns an array ind where ind[n] is a struct containing the indices of   *
+ *  the under and over crossings of the nth crossing.                         */
+struct crossing_indices *get_indices(const struct knot *K)
 {
-    crossing_sign sign_buffer[2U * MAX_CROSSINGS];
-    crossing_type type_buffer[2U * MAX_CROSSINGS];
-    unsigned int crossing_buffer[2U * MAX_CROSSINGS];
-    unsigned int index = 0U;
+    /*  Indexing variable for looping over the crossings in the knot.         */
     unsigned int n;
-    struct knot out;
-    const char *tmp;
-    char *whole_string = tmpl_String_Duplicate(code);
-    char *str = whole_string;
 
-    tmpl_String_Remove_Whitespace(str);
-    tmpl_String_Make_Lower_Case(str);
+    /*  Variable for the output crossing_index array.                         */
+    struct crossing_indices * ind;
 
-    while (*str)
+    /*  Check for invalid inputs.                                             */
+    if (!K)
+        return NULL;
+
+    /*  If there are no crossings, return an empty array (a NULL pointer).    */
+    if (K->number_of_crossings == 0U)
+        return NULL;
+
+    /*  Allocate memory for the array.                                        */
+    ind = malloc(sizeof(*ind)*K->number_of_crossings);
+
+    /*  Check if malloc failed.                                               */
+    if (!ind)
+        return NULL;
+
+    /*  Loop through and save the indices.                                    */
+    for (n = 0U; n < 2U * K->number_of_crossings; ++n)
     {
-        if (*str == 'o')
-            type_buffer[index] = OVER_CROSSING;
+        if (K->type[n] == over_crossing)
+            ind[K->crossing_number[n]].over = n;
         else
-            type_buffer[index] = UNDER_CROSSING;
-
-        str++;
-        tmp = str;
-
-        while (isdigit(*str))
-            str++;
-
-        crossing_buffer[index] = strtol(tmp, NULL, 10);
-
-        if (*str == '+')
-            sign_buffer[index] = POSITIVE_CROSSING;
-        else
-            sign_buffer[index] = NEGATIVE_CROSSING;
-
-        index++;
-        str++;
+            ind[K->crossing_number[n]].under = n;
     }
 
-    out.number_of_crossings = index >> 1U;
-    out.crossing_number = malloc(sizeof(*out.crossing_number) * index);
-    out.type = malloc(sizeof(*out.type) * index);
-    out.sign = malloc(sizeof(*out.sign) * index);
-
-    for (n = 0U; n < index; ++n)
-    {
-        out.crossing_number[n] = crossing_buffer[n];
-        out.type[n] = type_buffer[n];
-        out.sign[n] = sign_buffer[n];
-    }
-
-    free(whole_string);
-    return out;
+    return ind;
 }
+/*  End of get_indices.                                                       */

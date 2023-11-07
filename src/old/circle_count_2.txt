@@ -29,7 +29,7 @@ circle_count(const struct knot *K,
     /*  Declare all necessary variables. C89 requires declarations at the top.*/
     unsigned int number_of_circles, n, road_index, crossing, code_index;
     unsigned char direction, crossing_resolution, road_number;
-    crossing_sign sign;
+    enum crossing_sign sign;
 
     /*  Array for checking off which roads have been visited.                 */
     unsigned char have_visited[4U * MAX_CROSSINGS];
@@ -104,7 +104,7 @@ circle_count(const struct knot *K,
         /*  The code index is our current position in the Gauss code. We know *
          *  the crossing number and can compute the code index using our      *
          *  indexing table "ind". Compute this value.                         */
-        if (sign == POSITIVE_CROSSING)
+        if (sign == positive_crossing)
         {
             /*  From the above picture, if we are at a positive crossing and  *
              *  if the road number is odd, we are on the under strand. If the *
@@ -174,7 +174,7 @@ circle_count(const struct knot *K,
              *  smoothing preserves the orientation whereas the one smoothing *
              *  reverses it. We use this picture to figure out which road we  *
              *  are leaving on, and which direction we are walking.           */
-            if (sign == POSITIVE_CROSSING)
+            if (sign == positive_crossing)
             {
                 /*  For a zero smoothing we have:                             *
                  *      0 -> 3                                                *
@@ -262,7 +262,7 @@ circle_count(const struct knot *K,
              *  switching which branch we are one. Over goes to under and     *
              *  vice-verse. We use this with the Gauss code to see which      *
              *  crossing we are heading for next.                             */
-            if (K->type[code_index] == OVER_CROSSING)
+            if (K->type[code_index] == over_crossing)
                 code_index = ind[crossing].under;
             else
                 code_index = ind[crossing].over;
@@ -318,7 +318,58 @@ circle_count(const struct knot *K,
              *  orientation (whether we are walking forwards or backwards).   *
              *  Each possibility corresponds uniquely to one of the possible  *
              *  combinations of the three two-valued variables.               */
-            road_number = get_road_number(K, code_index, direction);
+            if (K->sign[code_index] == positive_crossing)
+            {
+                if (K->type[code_index] == over_crossing)
+                {
+                    /*  Positive crossing and over strand. We look to the     *
+                     *  picture on the right. If we are walking forwards, we  *
+                     *  must be entering the crossing from road 0. Otherwise  *
+                     *  we are entering from road 2.                          */
+                    if (direction == forward)
+                        road_number = 0U;
+                    else
+                        road_number = 2U;
+                }
+
+                else
+                {
+                    /*  Under strand, we again look to the picture on the     *
+                     *  right. Forward direction corresponds to 1 and         *
+                     *  walking backwards means we entered via 3.             */
+                    if (direction == forward)
+                        road_number = 1U;
+                    else
+                        road_number = 3U;
+                }
+            }
+
+            /*  Negative crossing, the results mirror the positive one.       */
+            else
+            {
+                if (K->type[code_index] == over_crossing)
+                {
+                    /*  We look to the left drawing now. Over crossing, if we *
+                     *  are walking forwards we entered through road 1 and if *
+                     *  backwards it must be road 3.                          */
+                    if (direction == forward)
+                        road_number = 1U;
+                    else
+                        road_number = 3U;
+                }
+
+                else
+                {
+                    /*  Lastly, negative crossing with the under strand. We   *
+                     *  again appeal to the image on the left. If walking     *
+                     *  forward we see that this corresponds to road 0, and   *
+                     *  if backwards we are coming in through road 2.         */
+                    if (direction == forward)
+                        road_number = 0U;
+                    else
+                        road_number = 2U;
+                }
+            }
 
             /*  Update the values of everything for the next computation. The *
              *  sign and crossing number can be read from the Gauss code.     */

@@ -16,62 +16,37 @@
  *  You should have received a copy of the GNU General Public License along   *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-#include <ctype.h>
-#include <stdlib.h>
-#include <libtmpl/include/tmpl_string.h>
+
+/*  All typedef's and function prototypes are provided here.                  */
 #include "kauffman.h"
 
-struct knot knot_from_gauss_code(const char *code)
+void jones_normalization(const struct knot *K, struct laurent_polynomial *P)
 {
-    crossing_sign sign_buffer[2U * MAX_CROSSINGS];
-    crossing_type type_buffer[2U * MAX_CROSSINGS];
-    unsigned int crossing_buffer[2U * MAX_CROSSINGS];
-    unsigned int index = 0U;
-    unsigned int n;
-    struct knot out;
-    const char *tmp;
-    char *whole_string = tmpl_String_Duplicate(code);
-    char *str = whole_string;
+    unsigned int ind, n_terms;
+    int shift;
+    int n_plus = 0;
+    int n_minus = 0;
 
-    tmpl_String_Remove_Whitespace(str);
-    tmpl_String_Make_Lower_Case(str);
-
-    while (*str)
+    for (ind = 0U; ind < 2U * K->number_of_crossings; ++ind)
     {
-        if (*str == 'o')
-            type_buffer[index] = OVER_CROSSING;
+        if (K->sign[ind] == positive_crossing)
+            n_plus++;
         else
-            type_buffer[index] = UNDER_CROSSING;
-
-        str++;
-        tmp = str;
-
-        while (isdigit(*str))
-            str++;
-
-        crossing_buffer[index] = strtol(tmp, NULL, 10);
-
-        if (*str == '+')
-            sign_buffer[index] = POSITIVE_CROSSING;
-        else
-            sign_buffer[index] = NEGATIVE_CROSSING;
-
-        index++;
-        str++;
+            n_minus++;
     }
 
-    out.number_of_crossings = index >> 1U;
-    out.crossing_number = malloc(sizeof(*out.crossing_number) * index);
-    out.type = malloc(sizeof(*out.type) * index);
-    out.sign = malloc(sizeof(*out.sign) * index);
+    n_plus = n_plus >> 1;
+    n_minus = n_minus >> 1;
+    shift = n_plus - 2*n_minus;
 
-    for (n = 0U; n < index; ++n)
+    P->lowest_degree += shift;
+    P->highest_degree += shift;
+
+    if (n_minus & 1)
     {
-        out.crossing_number[n] = crossing_buffer[n];
-        out.type[n] = type_buffer[n];
-        out.sign[n] = sign_buffer[n];
-    }
+        n_terms = (unsigned int)(P->highest_degree - P->lowest_degree + 1);
 
-    free(whole_string);
-    return out;
+        for (ind = 0U; ind < n_terms; ++ind)
+            P->coeffs[ind] = -P->coeffs[ind];
+    }
 }

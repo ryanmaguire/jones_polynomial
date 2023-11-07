@@ -51,7 +51,7 @@ struct crossing_indices *get_indices(const struct knot *K)
     /*  Loop through and save the indices.                                    */
     for (n = 0U; n < 2U * K->number_of_crossings; ++n)
     {
-        if (K->type[n] == over_crossing)
+        if (K->type[n] == OVER_CROSSING)
             ind[K->crossing_number[n]].over = n;
         else
             ind[K->crossing_number[n]].under = n;

@@ -23,8 +23,8 @@
 
 struct knot knot_from_gauss_code(const char *code)
 {
-    crossing_sign sign_buffer[2U * MAX_CROSSINGS];
-    crossing_type type_buffer[2U * MAX_CROSSINGS];
+    enum crossing_sign sign_buffer[2U * MAX_CROSSINGS];
+    enum crossing_type type_buffer[2U * MAX_CROSSINGS];
     unsigned int crossing_buffer[2U * MAX_CROSSINGS];
     unsigned int index = 0U;
     unsigned int n;
@@ -39,9 +39,9 @@ struct knot knot_from_gauss_code(const char *code)
     while (*str)
     {
         if (*str == 'o')
-            type_buffer[index] = OVER_CROSSING;
+            type_buffer[index] = over_crossing;
         else
-            type_buffer[index] = UNDER_CROSSING;
+            type_buffer[index] = under_crossing;
 
         str++;
         tmp = str;
@@ -52,9 +52,9 @@ struct knot knot_from_gauss_code(const char *code)
         crossing_buffer[index] = strtol(tmp, NULL, 10);
 
         if (*str == '+')
-            sign_buffer[index] = POSITIVE_CROSSING;
+            sign_buffer[index] = positive_crossing;
         else
-            sign_buffer[index] = NEGATIVE_CROSSING;
+            sign_buffer[index] = negative_crossing;
 
         index++;
         str++;
