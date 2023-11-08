@@ -16,25 +16,11 @@
  *  You should have received a copy of the GNU General Public License along   *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
+#ifndef KNOT_DATA_H
+#define KNOT_DATA_H
 
-/*  All of the tools are found here.                                          */
-#include "kauffman.h"
-#include "knot_data.h"
+#define RIGHT_HANDED_CHAIN_LINK_FENCE {{{1, 0, 2, 3}}, {{2, 1, 3, 0}}}
+#define RIGHT_HANDED_TREFOIL {{{1, 5, 2, 4}}, {{3, 1, 4, 0}}, {{5, 3, 0, 2}}}
+#define FIGURE_EIGHT {{{3, 1, 4, 0}}, {{7, 5, 0, 4}}, {{5, 2, 6, 3}}, {{1, 6, 2, 7}}}
 
-/*  Test of the Jones polynomial algorithm.                                   */
-int main(void)
-{
-    // struct crossing crossings[2] = {{{1, 0, 2, 3}}, {{2, 1, 3, 0}}};
-    struct crossing crossings[] = FIGURE_EIGHT;
-    struct knot K = {sizeof(crossings) / sizeof(crossings[0]), crossings};
-
-    /*  Compute the Jones polynomial. This is exponential in the number of    *
-     *  crossings. For a very large input this will take a while. For a small *
-     *  input like the figure-eight its instant.                              */
-    struct laurent_polynomial out = normalized_jones(&K);
-
-    /*  And print the result to the screen.                                   */
-    print_poly(&out);
-    return 0;
-}
-/*  End of main.                                                              */
+#endif
