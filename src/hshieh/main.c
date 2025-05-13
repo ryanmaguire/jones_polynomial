@@ -39,6 +39,7 @@ int main(void) {
 	struct laurent_polynomial trefoil_jones = jones_polynomial(&trefoil);
 	print_polynomial(&trefoil_jones, 'q');
 	printf("\n");
+	
 	/*Next, finding the Kauffman bracket polynomial and jones polynomial of knot 6_2 from Rolfsen's knot table*/
 	int knot_6_2_data[][4] = {{1, 9, 2, 8}, {3, 10, 4, 11}, {5, 12, 6, 1}, {7, 3, 8, 2}, {9, 6, 10, 7}, {11, 4, 12, 5}};
 	n = sizeof(knot_6_2_data) / sizeof(int) / 4;
@@ -55,6 +56,7 @@ int main(void) {
 	struct laurent_polynomial knot_6_2_jones = jones_polynomial(&knot_6_2);
 	print_polynomial(&knot_6_2_jones, 'q');
 	printf("\n");
+	
 	/*For a final example, finding the Kauffman bracket polynomial and jones polynomial of the torus knot T(7, 5)*/
 	int torus_7_5_data[][4] = {{1, 34, 2, 35}, {6, 29, 7, 30}, {7, 52, 8, 53}, {8, 19, 9, 20}, {9, 42, 10, 43}, {14, 37, 15, 38}, {15, 4, 16, 5}, {16, 27, 17, 28}, {17, 50, 18, 51}, {22, 45, 23, 46}, {23, 12, 24, 13}, {24, 35, 25, 36}, {25, 2, 26, 3}, {30, 53, 31, 54}, {31, 20, 32, 21}, {32, 43, 33, 44}, {33, 10, 34, 11}, {38, 5, 39, 6}, {39, 28, 40, 29}, {40, 51, 41, 52}, {41, 18, 42, 19}, {46, 13, 47, 14}, {47, 36, 48, 37}, {48, 3, 49, 4}, {49, 26, 50, 27}, {54, 21, 55, 22}, {55, 44, 56, 45}, {56, 11, 1, 12}};
 	n = sizeof(torus_7_5_data) / sizeof(int) / 4;
