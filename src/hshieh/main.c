@@ -35,7 +35,7 @@ int main(void) {
 	struct laurent_polynomial trefoil_kauffman = kauffman_polynomial(&trefoil);
 	print_polynomial(&trefoil_kauffman, 'A');
 	printf("Jones polynomial of the trefoil: ");
-	/*Jones polynomial of the trefoil is -t^4 + t^3 + t*/
+	/*Jones polynomial of the trefoil is -q^4 + q^3 + q*/
 	struct laurent_polynomial trefoil_jones = jones_polynomial(&trefoil);
 	print_polynomial(&trefoil_jones, 'q');
 	printf("\n");
@@ -51,7 +51,7 @@ int main(void) {
 	struct laurent_polynomial knot_6_2_kauffman = kauffman_polynomial(&knot_6_2);
 	print_polynomial(&knot_6_2_kauffman, 'A');
 	printf("Jones polynomial of knot 6_2: ");
-	/*Jones polynomial of knot 6_2 is t^5 - 2t^4 + 2t^3 - 2t^2 + 2t - 1 + t^-1*/
+	/*Jones polynomial of knot 6_2 is q^5 - 2q^4 + 2q^3 - 2q^2 + 2q - 1 + q^-1*/
 	struct laurent_polynomial knot_6_2_jones = jones_polynomial(&knot_6_2);
 	print_polynomial(&knot_6_2_jones, 'q');
 	printf("\n");
