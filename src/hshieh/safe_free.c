@@ -19,9 +19,12 @@
 
 #include "kauffman_implementation.h"
 
+/*Function to safely free a pointer*/
 void safe_free(void* allocated_pointer) {
+	/*If the pointer is null, then immediately return and do not free it*/
 	if (allocated_pointer == NULL)
 		return;
+	/*Otherwise, free the pointer and set it to null*/
 	free(allocated_pointer);
 	allocated_pointer = NULL;
 }

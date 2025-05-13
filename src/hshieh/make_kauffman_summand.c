@@ -25,9 +25,7 @@ struct kauffman_summand make_kauffman_summand(int number_of_coeffs, int highest_
 	struct kauffman_summand temp;
 	temp.number_of_coeffs = number_of_coeffs;
 	temp.highest_degree = highest_degree;
-	temp.coeffs = (int*)safe_malloc((size_t)number_of_coeffs * sizeof(int));
-	for (int index = 0; index < number_of_coeffs; index++)
-		temp.coeffs[index] = coeffs[index];
+	temp.coeffs = coeffs;
 	temp.sign = sign;
 	temp.basis_tangle = B;
 	return temp;

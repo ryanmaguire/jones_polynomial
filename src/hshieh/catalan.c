@@ -19,6 +19,7 @@
 
 /*Array to store first 20 Catalan numbers*/
 const int catalan[] = { 1, 1, 2, 5, 14, 42, 132, 429, 1430, 4862, 16796, 58786, 208012, 742900, 2674440, 9694845, 35357670, 129644790, 477638700, 1767263190 };
+
 /*Array to store prefix of the sums involved in computing Catalan numbers
 Catalan prefix[i][j] stores 0 if j = 0 or j > i, and otherwise, it equals
 C_0C_{i - 1} + C_1C_{i - 2} + ... + C_{j - 1}C_{i - j} */

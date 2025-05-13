@@ -28,12 +28,11 @@ void add_crossing(struct kauffman_summand* P, struct crossing* C, int strands_pr
 		BP = BP->next;
 	/*If BP is the first boundary point, then the leftmost boundary point could still be to its left*/
 	int has_first_boundary_point = (P->basis_tangle.first_boundary_point == BP) ? YES : NO;
-	if (has_first_boundary_point == YES) {
+	if (has_first_boundary_point == YES) 
 		while (crossing_position(BP->previous->strand_number, C) != -1 && BP->previous != P->basis_tangle.first_boundary_point) {
 			pos = crossing_position(BP->previous->strand_number, C);
 			BP = BP->previous;
 		}
-	}
 	/*If adding the crossing to the current kauffman summand would produe a twist, then we do not add
 	it normally and instead use the remove twist function */
 	if (remove_twist(P, BP, C, strands_present, pos, has_first_boundary_point) == NO) {
@@ -48,7 +47,6 @@ void add_crossing(struct kauffman_summand* P, struct crossing* C, int strands_pr
 			crossing_points[(pos + 1) % 4] = insert_boundary_point(C->data[(pos + 1) % 4], BP->previous, BP, BP->next);
 			if (has_first_boundary_point == YES)
 				P->basis_tangle.first_boundary_point = BP->previous;
-			BP = BP->next->next;
 		}
 		else if (strands_present == 2) {
 			/*If two strands are present at the crossing, then their labels need to be changed accordingly, and
@@ -60,7 +58,6 @@ void add_crossing(struct kauffman_summand* P, struct crossing* C, int strands_pr
 			crossing_points[(pos + 2) % 4] = BP->next;
 			crossing_points[(pos + 3) % 4] = BP;
 			swap_strand_pairs(BP, BP->next);
-			BP = BP->next->next;
 		}
 		else if (strands_present == 3) {
 			/*If three strands are present at the crossing, then the first and last boundary point need to be
@@ -91,12 +88,10 @@ void add_crossing(struct kauffman_summand* P, struct crossing* C, int strands_pr
 				BP = BP->next;
 			}
 			if (has_first_boundary_point == YES) {
-				if (P->basis_tangle.number_of_boundary_points > 4) {
+				if (P->basis_tangle.number_of_boundary_points > 4) 
 					P->basis_tangle.first_boundary_point = BP;
-				}
-				else {
+				else 
 					P->basis_tangle.first_boundary_point = NULL;
-				}
 			}
 		}
 		/*Crossing is stored in the basis tangle*/

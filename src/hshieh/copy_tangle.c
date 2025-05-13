@@ -57,6 +57,7 @@ struct specialized_tangle copy_tangle(struct specialized_tangle T) {
 			T_point->strand_number *= -1;
 			T_point->strand_pair = current;
 		}
+		/*If T has a crossing, then set the crossing points of temp to the correct boundary points*/
 		if (temp.has_crossing == YES) 
 			for (int index = 0; index < 4; index++) 
 				if (T.crossing_points[index] == T_point)

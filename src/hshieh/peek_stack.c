@@ -19,11 +19,10 @@
 
 #include "kauffman_implementation.h"
 
-/*Function to safely malloc a pointer with a certain amount of memory*/
-void* safe_malloc(size_t size) {
-	/*After allocating the pointer, check that it is not null; if it is, then exit the program*/
-	void* allocated_pointer = malloc(size);
-	if (allocated_pointer == NULL)
-		exit(EXIT_FAILURE);
-	return allocated_pointer;
+/*Function which returns the first element on top of the stack if there is one, and otherwise returns -1000*/
+int peek_stack(struct stack* S) {
+	if (S->free_position > 0)
+		return S->elements[S->free_position - 1];
+	else
+		return -1000;
 }

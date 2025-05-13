@@ -19,13 +19,6 @@
 
 #include "kauffman_implementation.h"
 
-void push_stack(int);
-int pop_stack(void);
-int peek_stack(void);
-
-static int* pairs_stack;
-static int free_position = 0;
-
 /*Function to find the index associated to a tangle*/
 /*For every tangle with no crossings, imagine straightening out the boundary into a line, where the leftmost point
 is the first point on the tangle. Then, with every pairing of boundary points, record down how many pairs of boundary
@@ -57,50 +50,51 @@ int tangle_index(struct specialized_tangle* T) {
 		}
 		BP = BP->next;
 	}
+	safe_free(adjusted_points);
+	safe_free(point_pairs);
+	extern const int catalan[];
 	extern const int catalan_prefix[][20];
-	pairs_stack = (int*)safe_malloc((size_t)pairs * sizeof(int));
 	/*To find the index of the tangle, we use a stack, which keeps tracks of strand pairs which are nested between 
 	other pairs of strands, and an element from the list is added to the stack if it is positive, as it indicates
 	that there is at least one pair of strands nested between that pair. If there is an element at the top, then the
 	catalan prefixes array counts the number of tangles with that element at the top which are lexicographically
 	smaller than the current tangle. */
-	int tangle_index = 0;
+	struct stack pair_starts = make_stack(pairs + 1);
+	struct stack pair_distances = make_stack(pairs + 1);
+	push_stack(&pair_starts, -1);
+	push_stack(&pair_distances, pairs);
+	int* tangle_index_summands = (int*)safe_malloc((size_t)pairs * sizeof(int));
+	int* tangle_index_multipliers = (int*)safe_malloc((size_t)pairs * sizeof(int));
+	int* tangle_index_dividers = (int*)safe_malloc((size_t)pairs * sizeof(int));
+	for (int index = 0; index < pairs; index++) 
+		tangle_index_multipliers[index] = tangle_index_dividers[index] = 1;
 	for (int index = 0; index < pairs; index++) {
 		int current_dist = dist_to_pair[index];
-		int top_element;
-		if ((top_element = peek_stack()) != -1) {
-			tangle_index += catalan_prefix[top_element--][current_dist];
-			pop_stack();
-			if (top_element > 0)
-				push_stack(top_element);
+		tangle_index_summands[index] = catalan_prefix[peek_stack(&pair_starts) + peek_stack(&pair_distances) - index + 1][current_dist];
+		while (peek_stack(&pair_starts) + peek_stack(&pair_distances) == index) {
+			int start = pop_stack(&pair_starts);
+			pop_stack(&pair_distances);
+			if (start == -1)
+				break;
+			int extra_pairs = peek_stack(&pair_starts) + peek_stack(&pair_distances) - index;
+			tangle_index_multipliers[start] *= catalan[extra_pairs];
+			tangle_index_dividers[index] *= catalan[extra_pairs];
 		}
-		else {
-			tangle_index += catalan_prefix[pairs - index][current_dist];
-			if (current_dist > 0)
-				push_stack(current_dist);
+		if (current_dist > 0) {
+			push_stack(&pair_starts, index);
+			push_stack(&pair_distances, current_dist);
 		}
 	}
+	safe_free(dist_to_pair);
+	int tangle_index = 0;
+	int current_multiplier = 1;
+	for (int index = 0; index < pairs; index++) {
+		tangle_index += current_multiplier * tangle_index_summands[index];
+		current_multiplier *= tangle_index_multipliers[index];
+		current_multiplier /= tangle_index_dividers[index];
+	}
+	safe_free(tangle_index_summands);
+	safe_free(tangle_index_multipliers);
+	safe_free(tangle_index_dividers);
 	return tangle_index;
-}
-
-/*Function to push element onto a stack*/
-void push_stack(int element) {
-	pairs_stack[free_position++] = element;
-}
-
-/*Function which pops the first element on a stack if there is one, and otherwise returns 0*/
-int pop_stack(void) {
-	if (free_position > 0) {
-		return pairs_stack[--free_position];
-	}
-	else
-		return -1;
-}
-
-/*Function which returns the first element on top of the stack if there is one, and otherwise returns 0*/
-int peek_stack(void) {
-	if (free_position > 0)
-		return pairs_stack[free_position - 1];
-	else
-		return -1;
 }

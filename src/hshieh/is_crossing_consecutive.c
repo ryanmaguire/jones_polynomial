@@ -19,11 +19,24 @@
 
 #include "kauffman_implementation.h"
 
-/*Function to safely malloc a pointer with a certain amount of memory*/
-void* safe_malloc(size_t size) {
-	/*After allocating the pointer, check that it is not null; if it is, then exit the program*/
-	void* allocated_pointer = malloc(size);
-	if (allocated_pointer == NULL)
-		exit(EXIT_FAILURE);
-	return allocated_pointer;
+/*Function to check if all strands of a crossing at a certain tangle are at consecutive positions*/
+int is_crossing_consecutive(struct crossing* C, int* boundary_point_positions, int strands_present, int tangle_width) {
+	/*First, set the crossing strand positions to the corresponding positions of boundary points on the tangle*/
+	int crossing_strand_positions[4];
+	for (int index = 0; index < 4; index++) 
+		crossing_strand_positions[index] = boundary_point_positions[C->data[index]];
+	/*Check if it's possible to start at one of the strands, and then trace the other present points consecutively*/
+	for (int index = 0; index < 4; index++) {
+		int current_position = crossing_strand_positions[index];
+		int current_index = index;
+		while (current_position != -1 && current_index != (index + strands_present) % 4) {
+			if (crossing_strand_positions[current_index] != current_position)
+				break;
+			current_index = (current_index + 1) % 4;
+			current_position = (current_position + 1) % tangle_width;
+		}
+		if (current_index == (index + strands_present)  % 4)
+			return YES;
+	}
+	return NO;
 }

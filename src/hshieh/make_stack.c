@@ -19,11 +19,10 @@
 
 #include "kauffman_implementation.h"
 
-/*Function to safely malloc a pointer with a certain amount of memory*/
-void* safe_malloc(size_t size) {
-	/*After allocating the pointer, check that it is not null; if it is, then exit the program*/
-	void* allocated_pointer = malloc(size);
-	if (allocated_pointer == NULL)
-		exit(EXIT_FAILURE);
-	return allocated_pointer;
+/*Function to create a stack given the maximum number of elements it can hold*/
+struct stack make_stack(int max_elements) {
+	struct stack temp;
+	temp.elements = (int*)safe_malloc((size_t)max_elements * sizeof(int));
+	temp.free_position = 0;
+	return temp;
 }

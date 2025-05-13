@@ -46,7 +46,7 @@ void print_polynomial(struct laurent_polynomial* P, char c) {
 				printf("1");
 		}
 		else {
-			printf("%c", c);
+			putchar(c);
 			if (degree != 1)
 				printf("^%d", degree);
 		}

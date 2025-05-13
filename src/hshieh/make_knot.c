@@ -24,8 +24,6 @@ struct knot make_knot(int number_of_crossings, struct crossing* crossings) {
 	/*After creating the struct variable, the number of crossings and crossings are copied over*/
 	struct knot temp;
 	temp.number_of_crossings = number_of_crossings;
-	temp.crossings = (struct crossing*)safe_malloc((size_t)number_of_crossings * sizeof(struct crossing));
-	for (int crossing = 0; crossing < temp.number_of_crossings; crossing++) 
-		temp.crossings[crossing] = crossings[crossing];
+	temp.crossings = crossings;
 	return temp;
 }

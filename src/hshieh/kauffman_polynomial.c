@@ -19,7 +19,7 @@
 
 #include "kauffman_implementation.h"
 
- /*Function to find the Kauffman bracket polynomial of a knot*/
+/*Function to find the Kauffman bracket polynomial of a knot*/
 /*This function uses the algorithm from "Efficient Computation of the Kauffman Bracket" by Ellenberg et al., where we first take a 
 cutting of the knot, which consists of a sequence of n + 1 tangles, where the first tangle is empty, and each tangle in the sequence
 adds one crossing to the previous tangle. Every time we add a crossing, we simply every tangle according to the definition of the Kauffman
@@ -36,7 +36,7 @@ struct laurent_polynomial kauffman_polynomial(struct knot* K) {
 		crossings_at_strand[strand] = (int*)safe_malloc(2 * sizeof(int));
 		crossings_at_strand[strand][0] = crossings_at_strand[strand][1] = -1;
 	}
-	for (int crossing = 0; crossing < n; crossing++) {
+	for (int crossing = 0; crossing < n; crossing++) 
 		for (int index = 0; index < 4; index++) {
 			int strand = K->crossings[crossing].data[index];
 			if (crossings_at_strand[strand][0] == -1) 
@@ -44,7 +44,6 @@ struct laurent_polynomial kauffman_polynomial(struct knot* K) {
 			else 
 				crossings_at_strand[strand][1] = crossing;
 		}
-	}
 	/*The array crossings_times_touched keeps track of how many visited arcs touched each crossing at every point
 	during the algorithm, and has_visited_crossing keeps track of the crossings which have been added to a tangle*/
 	int* crossings_times_touched = (int*)safe_calloc((size_t)n, sizeof(int));
@@ -93,17 +92,29 @@ struct laurent_polynomial kauffman_polynomial(struct knot* K) {
 	current_kauffman_summands[tangle_index(&initial_kauffman_summand.basis_tangle)] = &initial_kauffman_summand;
 	current_kauffman_summands[tangle_index(&copy_initial_summand->basis_tangle)] = copy_initial_summand;
 	int crossings_visited = 1;
+	struct specialized_tangle previous_tangle = initial_kauffman_summand.basis_tangle;
+	int has_updated_tangle = YES;
 	has_visited_crossing[current_crossing] = YES;
 	while (crossings_visited++ < n) {
 		previous_kauffman_summands = current_kauffman_summands;
-		/*To find the next crossing to visit, find the crossing which is touched by the most number of arcs*/
+		/*First, index the positions of the boundary points on the previous tangle*/
+		int* boundary_point_positions = (int*)safe_malloc((2 * (size_t)n + 1) * sizeof(int));
+		for (int strand = 1; strand <= 2 * n; strand++) 
+			boundary_point_positions[strand] = -1;
+		struct boundary_point* BP = previous_tangle.first_boundary_point;
+		for (int index = 0; index < previous_tangle.number_of_boundary_points; BP = BP->next) 
+			boundary_point_positions[BP->strand_number] = index++;
+		/*To find the next crossing to visit, find the crossing which is touched by the most number of arcs, and has all of its
+		strands present in the tangle consecutively*/
 		int max_touched = 0;
-		for (int crossing = 0; crossing < n; crossing++) {
-			if (crossings_times_touched[crossing] > max_touched && has_visited_crossing[crossing] == NO) {
-				current_crossing = crossing;
-				max_touched = crossings_times_touched[crossing];
-			}
-		}
+		for (int crossing = 0; crossing < n; crossing++) 
+			if (crossings_times_touched[crossing] > max_touched && has_visited_crossing[crossing] == NO) 
+				if (is_crossing_consecutive(K->crossings + crossing, boundary_point_positions, crossings_times_touched[crossing], current_width) == YES) {
+					current_crossing = crossing;
+					max_touched = crossings_times_touched[crossing];
+				}
+		safe_free(boundary_point_positions);
+		has_updated_tangle = NO;
 		int strands_present = max_touched;
 		old_width = current_width;
 		/*Width is changed by -2 * (number of strands present at crossing) + 4 */
@@ -114,9 +125,8 @@ struct laurent_polynomial kauffman_polynomial(struct knot* K) {
 			current_kauffman_summands[index] = NULL;
 		for (int index = 0; index < catalan[old_width / 2]; index++) {
 			struct kauffman_summand* P = previous_kauffman_summands[index];
-			if (P == NULL) {
+			if (P == NULL) 
 				continue;
-			}
 			/*The current crossing is first added to P*/
 			add_crossing(P, K->crossings + current_crossing, strands_present);
 			if (P->basis_tangle.has_crossing == NO) {
@@ -131,9 +141,14 @@ struct laurent_polynomial kauffman_polynomial(struct knot* K) {
 				add_to_kauffman_summand_collection(current_kauffman_summands, P);
 				smooth_crossing(Q, 1);
 				add_to_kauffman_summand_collection(current_kauffman_summands, Q);
+
 			}
-			
+			if (has_updated_tangle == NO) {
+				previous_tangle = P->basis_tangle;
+				has_updated_tangle = YES;
+			}
 		}
+		safe_free(previous_kauffman_summands);
 		/*The count of how many times each crossing has been touched is changed for the four arcs visited*/
 		for (int index = 0; index < 4; index++) {
 			int strand = K->crossings[current_crossing].data[index];
@@ -143,8 +158,14 @@ struct laurent_polynomial kauffman_polynomial(struct knot* K) {
 		}
 		has_visited_crossing[current_crossing] = YES;
 	}
+	for (int strand = 1; strand <= 2 * n; strand++)
+		safe_free(crossings_at_strand[strand]);
+	safe_free(crossings_at_strand);
+	safe_free(crossings_times_touched);
+	safe_free(has_visited_crossing);
 	/*At the end, current_kauffman_summands will only contain one kauffman summand*/
 	struct kauffman_summand* P = current_kauffman_summands[0];
+	safe_free(current_kauffman_summands);
 	/*The kauffman summand is converted to a laurent polynomial, and then returned*/
 	struct laurent_polynomial kauffman_polynomial = initialize_polynomial();
 	for (int index = 0; index <= n; index++) 
