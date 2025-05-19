@@ -29,4 +29,3 @@ struct laurent_polynomial make_polynomial(int lowest_degree, int highest_degree,
 		temp.coeffs[degree + DEGREE_SHIFT] = coeffs[degree - lowest_degree];
 	return temp;
 }
-x
