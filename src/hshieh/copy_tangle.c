@@ -16,7 +16,6 @@
  *  You should have received a copy of the GNU General Public License along   *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-
 #include "kauffman_implementation.h"
 
 /*Function to copy a tangle*/
@@ -29,6 +28,7 @@ struct specialized_tangle copy_tangle(struct specialized_tangle T) {
 		temp.crossing_points = (struct boundary_point**)safe_malloc(4 * sizeof(struct boundary_point*));
 	else
 		temp.crossing_points = T.crossing_points;
+
 	/*Loop through all boundary points of T*/
 	struct boundary_point* current = NULL;
 	struct boundary_point* previous = NULL;
@@ -45,6 +45,7 @@ struct specialized_tangle copy_tangle(struct specialized_tangle T) {
 			current->previous = NULL;
 			temp.first_boundary_point = current;
 		}
+
 		/*To record strand pairs, multiply the strand number by -1 if the pair hasn't been visited and 
 		record its address as its current strand pair*/
 		if (T_point->strand_pair->strand_number < 0) {
@@ -52,20 +53,27 @@ struct specialized_tangle copy_tangle(struct specialized_tangle T) {
 			pair_strands(T_point, T_point->strand_pair);
 			T_point-> strand_pair->strand_number *= -1;
 		}
+
+		/*Otherwise, return T_point back to its original state, so the original tangle is unchanged at the end*/
 		else {
-			/*Return T_point back to its original state, so the original tangle is unchanged at the end*/
 			T_point->strand_number *= -1;
 			T_point->strand_pair = current;
 		}
+
 		/*If T has a crossing, then set the crossing points of temp to the correct boundary points*/
 		if (temp.has_crossing == YES) 
 			for (int index = 0; index < 4; index++) 
 				if (T.crossing_points[index] == T_point)
 					temp.crossing_points[index] = current;
+
+		/*Move on to the next boundary point*/
 		previous = current;
 		T_point = T_point->next;
 	} while (T_point != T.first_boundary_point);
+
+	/*After getting back to the start, join the first and last boundary points together*/
 	current->next = temp.first_boundary_point;
 	temp.first_boundary_point->previous = current;
+
 	return temp;
 }

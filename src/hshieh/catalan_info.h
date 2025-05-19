@@ -16,13 +16,15 @@
  *  You should have received a copy of the GNU General Public License along   *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
+#ifndef CATALAN_INFO_H
+#define CATALAN_INFO_H
 
-#include "kauffman_implementation.h"
+/*Array to store first 20 Catalan numbers*/
+extern int catalan[];
 
-/*Function to make a crossing in PD code given an array of 4 arcs at the crossing*/
-struct crossing make_crossing(int* data) {
-	struct crossing temp;
-	for (int index = 0; index < 4; index++)
-		temp.data[index] = data[index];
-	return temp;
-}
+/*Array to store prefix of the sums involved in computing Catalan numbers
+Catalan prefix[i][j] stores 0 if j = 0 or j > i, and otherwise, it equals
+C_0C_{i - 1} + C_1C_{i - 2} + ... + C_{j - 1}C_{i - j} */
+extern int catalan_prefix[][20];
+
+#endif

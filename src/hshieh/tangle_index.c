@@ -16,8 +16,8 @@
  *  You should have received a copy of the GNU General Public License along   *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-
 #include "kauffman_implementation.h"
+#include "catalan_info.h"
 
 /*Function to find the index associated to a tangle*/
 /*For every tangle with no crossings, imagine straightening out the boundary into a line, where the leftmost point
@@ -31,6 +31,7 @@ inclusive.*/
 int tangle_index(struct specialized_tangle* T) {
 	struct boundary_point* BP = T->first_boundary_point;
 	int width = T->number_of_boundary_points;
+
 	/*The array point_pairs keeps track of which boundary point is paired with which other one, while the array 
 	dist_to_pair keeps track of the list described above*/
 	int* adjusted_points = (int*)safe_malloc((2 * MAX_CROSSINGS + 1) * sizeof(int));
@@ -50,10 +51,10 @@ int tangle_index(struct specialized_tangle* T) {
 		}
 		BP = BP->next;
 	}
+
 	safe_free(adjusted_points);
 	safe_free(point_pairs);
-	extern const int catalan[];
-	extern const int catalan_prefix[][20];
+
 	/*To find the index of the tangle, we use a stack, which keeps tracks of strand pairs which are nested between 
 	other pairs of strands, and an element from the list is added to the stack if it is positive, as it indicates
 	that there is at least one pair of strands nested between that pair. If there is an element at the top, then the

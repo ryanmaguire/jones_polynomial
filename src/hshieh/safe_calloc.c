@@ -16,7 +16,6 @@
  *  You should have received a copy of the GNU General Public License along   *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-
 #include "kauffman_implementation.h"
 
 /*Function to safely calloc a pointer with a certain amount of memory*/

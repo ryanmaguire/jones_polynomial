@@ -16,7 +16,6 @@
  *  You should have received a copy of the GNU General Public License along   *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-
 #include "kauffman_implementation.h"
 
 /*Function to remove twist, if adding a crossing to the current basis tangle of a kauffman summand would result in a twist, also 
@@ -31,6 +30,7 @@ int remove_twist(struct kauffman_summand *P, struct boundary_point* BP, struct c
 				P->highest_degree += 3;
 			else
 				P->highest_degree -= 3;
+
 			BP->strand_number = C->data[(position + 3) % 4];
 			BP->strand_pair->strand_number = C->data[(position + 2) % 4];
 			return YES;
@@ -39,6 +39,7 @@ int remove_twist(struct kauffman_summand *P, struct boundary_point* BP, struct c
 			return NO;
 		}
 	}
+
 	else if (num_present == 3) {
 		/*If three strands are present, check if the first two strands are paired together*/
 		if (BP->strand_pair->strand_number == C->data[(position + 1) % 4]) {
@@ -49,6 +50,7 @@ int remove_twist(struct kauffman_summand *P, struct boundary_point* BP, struct c
 				P->highest_degree += 3;
 			else
 				P->highest_degree -= 3;
+
 			delete_boundary_point(BP->previous->previous);
 			delete_boundary_point(BP->previous);
 			BP->strand_number = C->data[(position + 3) % 4];
@@ -64,6 +66,7 @@ int remove_twist(struct kauffman_summand *P, struct boundary_point* BP, struct c
 				P->highest_degree += 3;
 			else
 				P->highest_degree -= 3;
+
 			delete_boundary_point(BP->next->next);
 			delete_boundary_point(BP->next);
 			BP->strand_number = C->data[(position + 3) % 4];
@@ -75,6 +78,7 @@ int remove_twist(struct kauffman_summand *P, struct boundary_point* BP, struct c
 			return NO;
 		}
 	}
+
 	else if (num_present == 4) {
 		/*If four strands are present, first check if the first two strands are paired together*/
 		if (BP->strand_pair->strand_number == C->data[(position + 1) % 4]) {
@@ -84,9 +88,10 @@ int remove_twist(struct kauffman_summand *P, struct boundary_point* BP, struct c
 				P->highest_degree += 3;
 			else
 				P->highest_degree -= 3;
-			if (BP->next->next->strand_pair->strand_number == C->data[(position + 3) % 4]) {
-				/*If the last two strands are also paired together, then the tangle now has a circle, 
+
+			/*If the last two strands are also paired together, then the tangle now has a circle,
 				which needs to be removed as long as P has at least one more boundary point*/
+			if (BP->next->next->strand_pair->strand_number == C->data[(position + 3) % 4]) {
 				if (P->basis_tangle.number_of_boundary_points > 4)
 					remove_circle(P);
 			}
@@ -113,9 +118,10 @@ int remove_twist(struct kauffman_summand *P, struct boundary_point* BP, struct c
 				P->highest_degree += 3;
 			else
 				P->highest_degree -= 3;
-			if (BP->strand_pair->strand_number == C->data[(position + 3) % 4]) {
-				/*The first and last strands could also be paired together, and if they are, removed
+
+			/*The first and last strands could also be paired together, and if they are, removed
 				the circle that is formed as long as there are still more boundary points left*/
+			if (BP->strand_pair->strand_number == C->data[(position + 3) % 4]) {
 				if (P->basis_tangle.number_of_boundary_points > 4)
 					remove_circle(P);
 			}
@@ -142,6 +148,7 @@ int remove_twist(struct kauffman_summand *P, struct boundary_point* BP, struct c
 				P->highest_degree += 3;
 			else
 				P->highest_degree -= 3;
+
 			pair_strands(BP->strand_pair, BP->next->strand_pair);
 			for (int index = 0; index < 4; index++) {
 				delete_boundary_point(BP);
@@ -159,6 +166,7 @@ int remove_twist(struct kauffman_summand *P, struct boundary_point* BP, struct c
 			return NO;
 		}
 	}
+
 	/*If only one strand is present, it is impossible for there to be a twist*/
 	else {
 		return NO;
