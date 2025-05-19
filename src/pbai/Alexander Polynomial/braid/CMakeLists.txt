@@ -1,0 +1,1 @@
+add_library(braid "braid_knot.h" "new_braid_word.c" "destruct_braid_word.c" "compress_braid_word.c")
