@@ -1,15 +1,6 @@
 ﻿# CMakeList.txt : CMake project for Kauffman_Implementation, include source and define
 # project specific logic here.
 #
-cmake_minimum_required (VERSION 3.8)
-
-# Enable Hot Reload for MSVC compilers if supported.
-if (POLICY CMP0141)
-  cmake_policy(SET CMP0141 NEW)
-  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
-endif()
-
-project ("Kauffman_Implementation")
 
 # Add source to this project's executable.
 add_executable (Kauffman_Implementation "kauffman_implementation.h" "print_polynomial.c" "main.c"  "make_knot.c" "initialize_polynomial.c" "make_crossing.c"     "adjust_polynomial_degree.c"  "kauffman_polynomial.c" "make_tangle.c" "make_kauffman_summand.c" "insert_boundary_point.c" "copy_tangle.c" "delete_boundary_point.c" "copy_kauffman_summand.c"  "crossing_position.c" "pair_strands.c" "swap_strand_pairs.c" "remove_twist.c" "remove_circle.c" "add_crossing.c" "smooth_crossing.c" "catalan.c" "tangle_index.c"        "add_to_kauffman_summand.c" "add_to_kauffman_summand_collection.c"    "jones_polynomial.c" "safe_malloc.c" "safe_calloc.c" "safe_free.c" "is_crossing_consecutive.c" "make_stack.c" "push_stack.c" "pop_stack.c" "peek_stack.c" "catalan_info.h")
