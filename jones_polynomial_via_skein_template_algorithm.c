@@ -5,7 +5,7 @@ struct Gauss{// Give crossings, sign, over/under. Seems like you can do this in 
 int crossings; //number of crossings.
 int components; //number of components in link
 int *sizecomp; //gives sizes of each component
-int ***matrix; 
+int ***matrix;
 int splices;
 /* components # of matrices....
 (Each matrix has three rows: Top row gives crossing numbers )
@@ -313,8 +313,8 @@ int writhe(struct Gauss k1){ //This one works.
 }
 float Jones_Partial(struct Gauss k1, float n) {
     // Jones specialization
-    float alpha = 1.0/n/n;       
-    float z     = n - 1.0 / n;  
+    float alpha = 1.0/n/n;
+    float z     = n - 1.0 / n;
     float delta = -n - 1.0/n;
     // Base case: no crossings
     if (k1.crossings == 0){
@@ -349,7 +349,7 @@ float Jones_Partial(struct Gauss k1, float n) {
         if (isitsmaller(k1) == 1){
             return J2/alpha + z*J3;
         }
-    } 
+    }
     else {
         if (isitsmaller(k1) == 0){
             return J2*alpha - z*J3;
