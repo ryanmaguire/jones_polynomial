@@ -22,7 +22,7 @@
 #include <stdlib.h>
 
 /*The maximum possible number of crossings a knot can have for this algorithm */
-#define MAX_CROSSINGS 200
+#define MAX_CROSSINGS (32)
 /*The maximum size of the jones/kauffman bracket polynomial for such a knot, since for a knot 
 with n crossings, a hard limit for the smallest and largest degrees are -3n and 3n */
 #define MAX_POLY_SIZE (6 * MAX_CROSSINGS + 1)
