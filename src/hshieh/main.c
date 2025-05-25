@@ -50,7 +50,7 @@ int main(void) {
 	print_polynomial(&knot_6_2_jones, 'q');
 	printf("\n");
 
-	/*For a final example, finding the Kauffman bracket polynomial and jones polynomial of the torus knot T(7, 5)*/
+	/*For a larger example, finding the Kauffman bracket polynomial and jones polynomial of the torus knot T(7, 5)*/
 	struct crossing torus_7_5_crossings[] = {{{1, 34, 2, 35}}, {{6, 29, 7, 30}}, {{7, 52, 8, 53}}, {{8, 19, 9, 20}}, {{9, 42, 10, 43}}, {{14, 37, 15, 38}}, {{15, 4, 16, 5}}, {{16, 27, 17, 28}}, {{17, 50, 18, 51}}, {{22, 45, 23, 46}}, {{23, 12, 24, 13}}, {{24, 35, 25, 36}}, {{25, 2, 26, 3}}, {{30, 53, 31, 54}}, {{31, 20, 32, 21}}, {{32, 43, 33, 44}}, {{33, 10, 34, 11}}, {{38, 5, 39, 6}}, {{39, 28, 40, 29}}, {{40, 51, 41, 52}}, {{41, 18, 42, 19}}, {{46, 13, 47, 14}}, {{47, 36, 48, 37}}, {{48, 3, 49, 4}}, {{49, 26, 50, 27}}, {{54, 21, 55, 22}}, {{55, 44, 56, 45}}, {{56, 11, 1, 12}}};
 	n = sizeof(torus_7_5_crossings) / sizeof(struct crossing);
 	struct knot torus_7_5 = make_knot(n, torus_7_5_crossings);
@@ -62,5 +62,19 @@ int main(void) {
 	/*Jones polynomial of T(7, 5) is -q^22 - q^20 + q^16 + q^14 + q^12*/
 	struct laurent_polynomial torus_7_5_jones = jones_polynomial(&torus_7_5);
 	print_polynomial(&torus_7_5_jones, 'q');
+	printf("\n");
+
+	/*For a final example, finding the Kauffman bracket polynomial and jones polynomial of a knot from its DT code*/
+	char knot_DT_code[] = "dRisJqpebLnHCAgfokM";
+	struct DT_knot knot_in_DT = make_DT_knot(knot_DT_code);
+	struct knot knot_in_PD = DT_to_PD(knot_in_DT);
+	printf("Kauffman bracket polynomial of the knot with DT code dRisJqpebLnHCAgfokM: ");
+	/*Kauffman bracket polynomial of this knot is A^27 - 2A^23 + 3A^19 - 4A^15 + 2A^11 - 2A^7 - A^-1 + 2A^-5 - 3A^-9 + 6A^-13 - 6A^-17 + 6A^-21 - 5A^-25 + 3A^-29 - A^-33*/
+	struct laurent_polynomial knot_kauffman = kauffman_polynomial(&knot_in_PD);
+	print_polynomial(&knot_kauffman, 'A');
+	printf("Jones bracket polynomial of the knot with DT code dRisJqpebLnHCAgfokM: ");
+	/*Jones polynomial of this knot is q^15 - 3q^14 + 5q^13 - 6q^12 + 6q^11 - 6q^10 + 3q^9 - 2q^8 + q^7 + 2q^5 - 2q^4 + 4q^3 - 3q^2 + 2q - 1*/
+	struct laurent_polynomial knot_jones = jones_polynomial(&knot_in_PD);
+	print_polynomial(&knot_jones, 'q');
 	return 0;
 }

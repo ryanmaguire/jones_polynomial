@@ -22,7 +22,7 @@
 #include <stdlib.h>
 
 /*The maximum possible number of crossings a knot can have for this algorithm */
-#define MAX_CROSSINGS (32)
+#define MAX_CROSSINGS 200
 /*The maximum size of the jones/kauffman bracket polynomial for such a knot, since for a knot 
 with n crossings, a hard limit for the smallest and largest degrees are -3n and 3n */
 #define MAX_POLY_SIZE (6 * MAX_CROSSINGS + 1)
@@ -133,4 +133,17 @@ struct stack make_stack(int);
 void push_stack(struct stack*, int);
 int pop_stack(struct stack*);
 int peek_stack(struct stack*);
+
+/*Struct for knot in DT code; contains the DT code of the knot and the number of crossings*/
+struct DT_knot {
+	char* DT_code;
+	int number_of_crossings;
+};
+
+struct DT_knot make_DT_knot(char*);
+struct knot DT_to_PD(struct DT_knot);
+int DT_letter_to_number(char);
+int* copy_array(int*, int);
+int array_position(int*, int, int);
+void reverse_array(int*, int, int);
 #endif
