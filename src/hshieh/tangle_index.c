@@ -19,12 +19,6 @@
 #include "kauffman_implementation.h"
 #include "catalan_info.h"
 
-/*Stacks used for pair starts and pair distances later*/
-static int* pair_starts_stack;
-static int pair_starts_free_position;
-static int* pair_distances_stack;
-static int pair_distances_free_position;
-
 /*Functions to push, pop, and peek from a stack*/
 void push_stack(int*, int*, int);
 int pop_stack(int*, int*);
@@ -71,10 +65,10 @@ int tangle_index(struct specialized_tangle* T) {
 	that there is at least one pair of strands nested between that pair. If there is an element at the top, then the
 	catalan prefixes array counts the number of tangles with that element at the top which are lexicographically
 	smaller than the current tangle. */
-	pair_starts_stack = (int*)safe_malloc(((size_t)pairs + 1) * sizeof(int));
-	pair_starts_free_position = 0;
-	pair_distances_stack = (int*)safe_malloc(((size_t)pairs + 1) * sizeof(int));
-	pair_distances_free_position = 0;
+	int* pair_starts_stack = (int*)safe_malloc(((size_t)pairs + 1) * sizeof(int));
+	int pair_starts_free_position = 0;
+	int* pair_distances_stack = (int*)safe_malloc(((size_t)pairs + 1) * sizeof(int));
+	int pair_distances_free_position = 0;
 	push_stack(pair_starts_stack, &pair_starts_free_position, -1);
 	push_stack(pair_distances_stack, &pair_distances_free_position, pairs);
 	int* tangle_index_summands = (int*)safe_malloc((size_t)pairs * sizeof(int));
