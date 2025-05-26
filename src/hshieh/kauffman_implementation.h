@@ -123,17 +123,6 @@ void smooth_crossing(struct kauffman_summand*, int);
 void add_to_kauffman_summand(struct kauffman_summand*, struct kauffman_summand*);
 void add_to_kauffman_summand_collection(struct kauffman_summand**, struct kauffman_summand*);
 
-/*Struct for stack; stores elements of the stack and the next free position*/
-struct stack {
-	int* elements;
-	int free_position;
-};
-
-struct stack make_stack(int);
-void push_stack(struct stack*, int);
-int pop_stack(struct stack*);
-int peek_stack(struct stack*);
-
 /*Struct for knot in DT code; contains the DT code of the knot and the number of crossings*/
 struct DT_knot {
 	char* DT_code;
@@ -143,7 +132,4 @@ struct DT_knot {
 struct DT_knot make_DT_knot(char*);
 struct knot DT_to_PD(struct DT_knot);
 int DT_letter_to_number(char);
-int* copy_array(int*, int);
-int array_position(int*, int, int);
-void reverse_array(int*, int, int);
 #endif

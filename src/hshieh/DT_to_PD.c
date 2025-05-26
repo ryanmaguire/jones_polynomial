@@ -31,6 +31,11 @@ static int* intersection_counts;
 /*Function to perform dfs to determine all crossing directions*/
 void directions_dfs(int, int);
 
+/*Functions to copy array, find position of an element in an array, and reverse part of an array*/
+int* copy_array(int*, int);
+int array_position(int*, int, int);
+void reverse_array(int*, int, int);
+
 /*Function to convert DT code of a knot to PD code; based on the program in the Mathematica Knot Theory package
 written by Siddarth Sankaran*/
 struct knot DT_to_PD(struct DT_knot K) {
@@ -136,5 +141,33 @@ void directions_dfs(int crossing, int sign) {
 			/*Note that all of its neighbors will have the opposite sign*/
 			directions_dfs(neighbor, -sign);
 		}
+	}
+}
+
+/*Function which returns a copy of an array given the array and its size*/
+int* copy_array(int* array, int n) {
+	int* temp = (int*)safe_malloc((size_t)n * sizeof(int));
+	for (int i = 0; i < n; i++)
+		temp[i] = array[i];
+	return temp;
+}
+
+/*Function to return the position of the first occurence of an element in an array, and -1 otherwise*/
+int array_position(int* array, int size, int element) {
+	for (int i = 0; i < size; i++) {
+		if (array[i] == element)
+			return i;
+	}
+	return -1;
+}
+
+/*Function which reverses an array between a given start index and end index, inclusive*/
+void reverse_array(int* array, int start, int end) {
+	int start_index = start;
+	int end_index = end;
+	while (start_index < end_index) {
+		int temp = array[start_index];
+		array[start_index++] = array[end_index];
+		array[end_index--] = temp;
 	}
 }
