@@ -90,6 +90,7 @@ int main() {
     fig8.startcross = 1;
     fig8.ovorun = OVER;
     fig8.sign = 1;
+    //printing jones polynomial of the figure 8 knot, which is 1 - q^-2 + q^-4 - q^-6 + q^-8, when the all degrees are doubled
     printf("Jones polynomial of the figure 8 knot: ");
     struct laurent_polynomial jones_fig8 = JONES(fig8);
     print_polynomial(&jones_fig8, 'q');
@@ -112,16 +113,16 @@ int main() {
         five2.matrix[0][i] = (int*)malloc(5 * sizeof(int));
     }
     int five2_data[10][3] = {
-        {1, UNDER, -1},
-        {3, OVER, -1},
-        {4, UNDER, -1},
-        {5, OVER, -1},
-        {2, UNDER, -1},
-        {1, OVER, -1},
-        {5, UNDER, -1},
-        {4, OVER, -1},
-        {3, UNDER, -1},
-        {2, OVER, -1}
+        {1, UNDER, -1},// Crossing one, Under, Negative
+        {3, OVER, -1},// Crossing three, Over, Negative
+        {4, UNDER, -1},// Crossing four, Under, Negative
+        {5, OVER, -1},// Crossing five, Over, Negative
+        {2, UNDER, -1},// Crossing two, Under, Negative
+        {1, OVER, -1},// Crossing one, Over, Negative
+        {5, UNDER, -1},// Crossing 5, Under, Negative
+        {4, OVER, -1},// Crossing four, Over, Negative
+        {3, UNDER, -1},// Crossing three, Under, Negative
+        {2, OVER, -1}// Crossing two, Over, Negative
     };
     for (int i = 0; i < 10; i++) {
         for (int j = 0; j < 3; j++) {
@@ -131,6 +132,7 @@ int main() {
     five2.startcross = 1;
     five2.ovorun = OVER;
     five2.sign = 1;
+    //printing jones polynomial of the 5_2 knot, which is q^-6 - q^-8 + 2q^-10 - q^-12 + q^-14 - q^-16, when the all degrees are doubled
     printf("Jones polynomial of the 5_2 knot: ");
     struct laurent_polynomial jones_knot = JONES(five2);
     print_polynomial(&jones_knot, 'q');
