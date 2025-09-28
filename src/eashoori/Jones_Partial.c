@@ -18,7 +18,7 @@
  ******************************************************************************/
 
 #include "skein_template.h"
-
+//Implement recursion explained in paper.
 struct laurent_polynomial Jones_Partial(struct Gauss k1) {
     // Jones specialization
     int z_coeffs[] = {-1, 0, 1};

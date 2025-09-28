@@ -23,11 +23,11 @@
 Jones_Partial has some error in it. I need to rectify it...*/
 int writhe(struct Gauss k1) { //This one works.
     int counter, counter1, result;
-    result = 0;
-    for (counter = 0; counter < k1.components; counter++) {
-        for (counter1 = 0; counter1 < k1.sizecomp[counter]; counter1++) {
-            result += k1.matrix[counter][counter1][2];
+    result = 0; 
+    for (counter = 0; counter < k1.components; counter++) {// Iterate over components
+        for (counter1 = 0; counter1 < k1.sizecomp[counter]; counter1++) {//Iterate over crossings in each component
+            result += k1.matrix[counter][counter1][2]; //Add sign of crossing
         }
     }
-    return result / 2; //CROSSINGS HAPPEN TWICE!! I AM AN IDIOT!
+    return result / 2; //CROSSINGS HAPPEN TWICE!!
 }

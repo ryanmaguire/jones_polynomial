@@ -21,6 +21,6 @@
 
 struct laurent_polynomial JONES(struct Gauss k1) {//Pretty sure that this works....
     struct laurent_polynomial jones = Jones_Partial(k1);
-    scale_polynomial(&jones, -writhe(k1) * ALPHA_DEGREE);
+    scale_polynomial(&jones, -writhe(k1) * ALPHA_DEGREE);//Scale jones_partial by prefactor
     return jones;
 }

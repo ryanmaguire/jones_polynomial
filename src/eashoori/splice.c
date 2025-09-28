@@ -185,7 +185,7 @@ struct Gauss splice(struct Gauss k1) {
         }
     }
     int modcount, modcount1, modcount2;
-    int found = 0;
+    int found = 0;//THE FOLLOWING IS TO UPDATE STARTING CROSSING (explained in more detail in virtue)
     for (counter = 1; counter < modknot.components + 1; counter++) {
         if (found == 1) {
             break;
@@ -200,7 +200,7 @@ struct Gauss splice(struct Gauss k1) {
                 if (found == 1) {
                     break;
                 }
-                if (modknot.matrix[modcount][modcount1][0] != -1) {
+                if (modknot.matrix[modcount][modcount1][0] != -1) {//update starting crossing (explained in greater detail in virtue)
                     modknot.startcross = modknot.matrix[modcount][modcount1][0];
                     modknot.ovorun = modknot.matrix[modcount][modcount1][1];
                     modknot.sign = modknot.matrix[modcount][modcount1][2];
