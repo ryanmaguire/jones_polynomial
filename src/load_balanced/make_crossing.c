@@ -20,11 +20,16 @@
 #include "load_balanced.h"
 
 /*Function to make a crossing given its status and data for PD code*/
-struct crossing* make_crossing(int status, struct crossing** data) {
+struct crossing* make_crossing(int status, struct crossing** data, int *ports,int id) {
 	struct crossing* temp = (struct crossing*)safe_malloc(sizeof(struct crossing));
+	*temp->ports = safe_malloc(4*sizeof(int));
 	temp->status = status;
+	temp->id = id;
 	for (int i = 0; i < 4; i++) {
 		temp->data[i] = data[i];
+	}
+	for (int i = 0; i < 4; i++) {
+		temp->ports[i] = ports[i];
 	}
 	return temp;
 }

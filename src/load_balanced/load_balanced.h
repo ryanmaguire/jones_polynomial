@@ -19,7 +19,10 @@
  ******************************************************************************/
 #ifndef LOAD_BALANCED_H
 #define LOAD_BALANCED_H
-
+#define BACK 0
+#define RIGHT 1
+#define FORWARD 2
+#define LEFT 3
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -35,9 +38,12 @@ in councterclockwise order */
 struct crossing {
 	int status;
 	struct crossing* data[4];
+	int ports[4]; //Which port is connected to which neighboring crossing
+	int direction; //Current direction of travel when struct is reached
+	int id;
 };
 
-extern struct crossing* make_crossing(int status, struct crossing** data);
+extern struct crossing* make_crossing(int status, struct crossing** data, int *ports,int id);
 
 /*Struct for knot in PD notation; contains number of crossings and a pointer to its first 
 crossing */
@@ -46,6 +52,10 @@ struct knot {
 	struct crossing* first_crossing;
 };
 
+struct link{
+	int number_of_components;
+	struct knot* components;
+};
 
 extern struct knot make_knot(int number_of_crossings, struct crossing* first_crossing);
 #endif
