@@ -51,11 +51,5 @@ struct knot {
 	int number_of_crossings;
 	struct crossing* first_crossing;
 };
-
-struct link{
-	int number_of_components;
-	struct knot* components;
-};
-
 extern struct knot make_knot(int number_of_crossings, struct crossing* first_crossing);
 #endif
