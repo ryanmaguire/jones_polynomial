@@ -19,18 +19,36 @@
  ******************************************************************************/
 #ifndef LOAD_BALANCED_H
 #define LOAD_BALANCED_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
 #define BACK 0
 #define RIGHT 1
 #define FORWARD 2
 #define LEFT 3
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
+
+/*Swap two variables*/
+#define SWAP(t, x, y) t temp = x; x = y; y = temp
+
+/* booleans*/
+enum boolean { FALSE, TRUE };
 
 /*Functions to safely use malloc, calloc, and free*/
 extern void* safe_malloc(const size_t size);
 extern void* safe_calloc(const size_t n, const size_t size);
 #define SAFE_FREE(pointer) if (pointer) free(pointer); pointer = NULL
+
+/*Struct for laurent polynomial; stores coefficients, highet, and lowest degrees of polyonmial*/
+struct laurent_polynomial {
+	signed int lowest_degree;
+	signed int highest_degree;
+	signed int* coeffs;
+};
+
+extern struct laurent_polynomial initialize_polynomial(void);
+extern void print_polynomial(struct laurent_polynomial* P, char c);
 
 /*Struct for crossing in PD notation; first entry of data is the undercrossing which points at
 the crossing (when the knot is given an orientation), and then lists crossings adjacent to it
@@ -44,6 +62,8 @@ struct crossing {
 };
 
 extern struct crossing* make_crossing(int status, struct crossing** data, int *ports,int id);
+extern struct crossing* next_crossing(struct crossing* C, int direction);
+extern void reverse(struct crossing* C);
 
 /*Struct for knot in PD notation; contains number of crossings and a pointer to its first 
 crossing */
@@ -52,4 +72,5 @@ struct knot {
 	struct crossing* first_crossing;
 };
 extern struct knot make_knot(int number_of_crossings, struct crossing* first_crossing);
+extern void smooth_crossing(struct knot* K, struct crossing* C, int smoothing_type);
 #endif

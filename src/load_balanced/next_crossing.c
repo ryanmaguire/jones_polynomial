@@ -19,16 +19,7 @@
  ******************************************************************************/
  #include "load_balanced.h"
 
-void reverse(struct crossing* C) {
-	SWAP(struct crossing*, C->data[0], C->data[2]);
-	SWAP(struct crossing*, C->data[1], C->data[3]);
-	SWAP(int, C->ports[0], C->ports[2]);
-	SWAP(int, C->ports[1], C->ports[3]);
-
-	/*Make sure that ports connect correctly*/
-	for (int i = 0; i < 4; i++)
-		C->data[i]->ports[C->ports[i]] = i;
-
-	/*flip direction*/
-	C->direction = (C->direction + 2) % 4;
+struct crossing* next_crossing(struct crossing* C, int direction) {//Gives next crossing in given direction
+    C->data[direction]->direction = (C->ports[direction] + 2) % 4; //Set direction of travel when next crossing is reached
+    return C->data[direction];
 }

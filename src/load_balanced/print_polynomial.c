@@ -17,16 +17,38 @@
  *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-#include "load_balanced.h"
+ #include "load_balanced.h"
 
-/*Function to make a crossing given its status and data for PD code*/
-struct crossing* make_crossing(int status, struct crossing** data, int *ports,int id) {
-	struct crossing* temp = (struct crossing*)safe_malloc(sizeof(struct crossing));
-	temp->status = status;
-	temp->id = id;
-	for (int i = 0; i < 4; i++) {
-		temp->data[i] = data[i];
-		temp->ports[i] = ports[i];
+/*Function to print a laurent polynomial in a given variable*/
+void print_polynomial(struct laurent_polynomial* P, char c) {
+	/*Starting from the highest degree, print all the terms, with + and - signs as needed*/
+	for (int degree = P->highest_degree; degree >= P->lowest_degree; degree--) {
+		int coeff = P->coeffs[degree + DEGREE_SHIFT];
+		if (coeff == 0) {
+			if (degree == P->highest_degree)
+				printf("0");
+			continue;
+		}
+		if (coeff > 0) {
+			if (degree != P->highest_degree)
+				printf(" + ");
+			if (coeff > 1)
+				printf("%d", coeff);
+		}
+		else {
+			printf(" - ");
+			if (coeff < -1)
+				printf("%d", -coeff);
+		}
+		if (degree == 0) {
+			if (coeff == 1 || coeff == -1)
+				printf("1");
+		}
+		else {
+			putchar(c);
+			if (degree != 1)
+				printf("^%d", degree);
+		}
 	}
-	return temp;
+	printf("\n");
 }

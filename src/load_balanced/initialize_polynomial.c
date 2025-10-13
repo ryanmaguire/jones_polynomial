@@ -17,16 +17,14 @@
  *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-#include "load_balanced.h"
+ #include "load_balanced.h"
 
-/*Function to make a crossing given its status and data for PD code*/
-struct crossing* make_crossing(int status, struct crossing** data, int *ports,int id) {
-	struct crossing* temp = (struct crossing*)safe_malloc(sizeof(struct crossing));
-	temp->status = status;
-	temp->id = id;
-	for (int i = 0; i < 4; i++) {
-		temp->data[i] = data[i];
-		temp->ports[i] = ports[i];
-	}
+/*Function which returns a laurent polynomial initialized to the zero polynomial*/
+struct laurent_polynomial initialize_polynomial(void) {
+	/*Create struct for polynomial, set its lowest and highest degrees to zero, and then set
+	all of its coefficients to zero*/
+	struct laurent_polynomial temp;
+	temp.lowest_degree = temp.highest_degree = 0;
+	temp.coeffs = (int*)safe_calloc(MAX_POLY_SIZE, sizeof(int));
 	return temp;
 }
