@@ -30,7 +30,7 @@
 #define LEFT 3
 
 /*Swap two variables*/
-#define SWAP(t, x, y) t temp = x; x = y; y = temp
+#define SWAP(temp, x, y) temp = x; x = y; y = temp
 
 /* booleans*/
 enum boolean { FALSE, TRUE };
@@ -64,6 +64,7 @@ struct crossing {
 extern struct crossing* make_crossing(int status, struct crossing** data, int *ports,int id);
 extern struct crossing* next_crossing(struct crossing* C, int direction);
 extern void reverse(struct crossing* C);
+extern void delete_crossing(struct crossing* C, int direction);
 
 /*Struct for knot in PD notation; contains number of crossings and a pointer to its first 
 crossing */
@@ -73,4 +74,5 @@ struct knot {
 };
 extern struct knot make_knot(int number_of_crossings, struct crossing* first_crossing);
 extern void smooth_crossing(struct knot* K, struct crossing* C, int smoothing_type);
+extern void reidemeister_move_ii(struct knot* K);
 #endif

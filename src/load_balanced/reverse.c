@@ -20,10 +20,12 @@
  #include "load_balanced.h"
 
 void reverse(struct crossing* C) {
-	SWAP(struct crossing*, C->data[0], C->data[2]);
-	SWAP(struct crossing*, C->data[1], C->data[3]);
-	SWAP(int, C->ports[0], C->ports[2]);
-	SWAP(int, C->ports[1], C->ports[3]);
+	struct crossing* temp_crossing;
+	int temp_int;
+	SWAP(temp_crossing, C->data[0], C->data[2]);
+	SWAP(temp_crossing, C->data[1], C->data[3]);
+	SWAP(temp_int, C->ports[0], C->ports[2]);
+	SWAP(temp_int, C->ports[1], C->ports[3]);
 
 	/*Make sure that ports connect correctly*/
 	for (int i = 0; i < 4; i++)
