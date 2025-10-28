@@ -4,7 +4,7 @@ struct gamma gfind(struct knot k){
     int counter,counter1,counter2;
     for (counter = 0; counter < 2*k.number_of_crossings; counter++){
         for(counter1 = 0; counter1 < 4; counter1++){
-            if (curr->data[counter1] == curr->data[(counter1+1)%4] && ((curr->ports[counter1] -  curr->ports[(counter1+1)%4]+4)%4 == 1 ) && ((counter1 - curr->ports[counter1]+2)%2 == 1){
+            if (curr->data[counter1] == curr->data[(counter1+1)%4] && ((curr->ports[counter1] -  curr->ports[(counter1+1)%4]+4)%4 == 1 ) && ((counter1 - curr->ports[counter1]+2)%2 == 1)){
                if(curr->data[counter1]->data[(curr->ports[counter1]+2)%4] == curr->data[(counter1+1)%4]||curr->data[counter1]->data[(curr->ports[counter1]+2)%4] == curr->data[(counter1+3)%4]){
                      struct gamma g;
                      g.B.C1 = curr;

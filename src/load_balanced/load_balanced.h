@@ -29,6 +29,10 @@
 #define FORWARD 2
 #define LEFT 3
 
+#define NEXT(data_index) ((data_index + 1) % 4)
+#define OPP(data_index) ((data_index + 2) % 4)
+#define PREV(data_index) ((data_index + 3) % 4)
+
 /*Swap two variables*/
 #define SWAP(temp, x, y) temp = x; x = y; y = temp
 
