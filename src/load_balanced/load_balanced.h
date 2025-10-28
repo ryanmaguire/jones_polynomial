@@ -60,7 +60,18 @@ struct crossing {
 	int direction; //Current direction of travel when struct is reached
 	int id;
 };
-
+struct bigon{
+	struct crossing* C1;
+	struct crossing* C2;
+	int port1;
+	int port2;
+};
+struct gamma{
+	struct bigon B;
+	struct crossing *C3;
+	int port3;//Which things attach to the third crossing?
+	int port4;//Which things attach to the third crossing?
+};
 extern struct crossing* make_crossing(int status, struct crossing** data, int *ports,int id);
 extern struct crossing* next_crossing(struct crossing* C, int direction);
 extern void reverse(struct crossing* C);
