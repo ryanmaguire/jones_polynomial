@@ -20,6 +20,6 @@
  #include "load_balanced.h"
 
 struct crossing* next_crossing(struct crossing* C, int direction) {//Gives next crossing in given direction
-    C->data[direction]->direction = (C->ports[direction] + 2) % 4; //Set direction of travel when next crossing is reached
+    C->data[direction]->direction = OPP(C->ports[direction]); //Set direction of travel when next crossing is reached
     return C->data[direction];
 }
