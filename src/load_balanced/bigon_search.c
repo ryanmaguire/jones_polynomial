@@ -25,7 +25,7 @@
         struct crossing* current_crossing = L->first_crossing_in_components[component];
         int next_index = 2;
         do {
-            
+            /*Bigon code*/
             current_crossing = current_crossing->data[next_index];
             next_index = OPP(current_crossing->ports[next_index]);
         } while (current_crossing != L->first_crossing_in_components[component]);

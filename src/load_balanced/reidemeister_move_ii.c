@@ -22,17 +22,23 @@
 /* Function to scan for and perform all Type II Reidemeister moves */
 /* Leaves behind 0 in number_of_crossings_in_components if an unknot diagram is created */
 
+// Travelling along emphasized strands, from bottom to top
 //
-//     
+//      EXIT HERE
+//   same_far_crossing  diff_far_crossing
+//                 \\    /
+//                  \\  /
+//              next_crossing
+//                  /  \\
+//                 /    \\
+//                 \    //
+//                  \  //
+//             current_crossing
+//                 //   \
+//                //     \
+// same_prev_crossing   diff_prev_crossing
+//     ENTER HERE
 //
-//
-//
-//
-//
-//         current_crossing
-//           /
-//          /
-//     
 
 void reidemeister_move_ii(struct link* L)
 {

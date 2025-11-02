@@ -21,6 +21,25 @@
 
 /* Function to scan for and perform all Type I Reidemeister moves */
 /* Leaves behind 0 in number_of_crossings_in_components if an unknot diagram is created */
+
+//                                 _______________
+//                                /               \
+//                                |               |
+//  prev_crossing -------- current_crossing ------/
+//                                |
+//                                |
+//                           next_crossing
+
+// Alternative orientation
+
+//                           next_crossing
+//                                |
+//                                |
+//  prev_crossing -------- current_crossing ------\
+//                                |               |
+//                                \_______________/
+//                                
+
 void reidemeister_move_i(struct link* L) 
 {
     for (int component = 0; component < L->number_of_components; component++) {
