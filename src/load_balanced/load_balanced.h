@@ -24,39 +24,34 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define BACK 0
-#define RIGHT 1
-#define FORWARD 2
-#define LEFT 3
-
-#define NEXT(data_index_macro) ((data_index_macro + 1) % 4)
-#define OPP(data_index_macro) ((data_index_macro + 2) % 4)
-#define PREV(data_index_macro) ((data_index_macro + 3) % 4)
-
-/*Swap two variables*/
-#define SWAP(temp, x, y) temp = x; x = y; y = temp
+/* Swap two variables */
+#define SWAP(temp_SWAP_MACRO, x, y) temp_SWAP_MACRO = x; x = y; y = temp_SWAP_MACRO
 
 /* booleans*/
 enum boolean { FALSE, TRUE };
 
-/*Functions to safely use malloc, calloc, and free*/
+/* Functions to safely use malloc, calloc, and free */
 extern void* safe_malloc(const size_t size);
 extern void* safe_calloc(const size_t n, const size_t size);
-#define SAFE_FREE(pointer) if (pointer) free(pointer); pointer = NULL
+#define SAFE_FREE(pointer_SAFE_FREE_MACRO) if (pointer_SAFE_FREE_MACRO) {free(pointer_SAFE_FREE_MACRO);} pointer_SAFE_FREE_MACRO = NULL
 
-/*Struct for laurent polynomial; stores coefficients, highet, and lowest degrees of polyonmial*/
+#define MAX_CROSSINGS (32)
+#define MAX_POLY_SIZE (6 * MAX_CROSSINGS + 1)
+#define DEGREE_SHIFT (3 * MAX_CROSSINGS)
+
+/* Struct for laurent polynomial; stores coefficients, highet, and lowest degrees of polyonmial */
 struct laurent_polynomial {
 	signed int lowest_degree;
 	signed int highest_degree;
-	signed int* coeffs;
+	signed int coeffs[MAX_POLY_SIZE];
 };
 
 extern struct laurent_polynomial initialize_polynomial(void);
 extern void print_polynomial(struct laurent_polynomial* P, char c);
 
-/*Struct for crossing in PD notation; first entry of data is the undercrossing which points at
-the crossing (when the knot is given an orientation), and then lists crossings adjacent to it
-in councterclockwise order */
+/* Struct for crossing in PD notation; first entry of data is the undercrossing which points at
+	the crossing (when the knot is given an orientation), and then lists crossings adjacent to it
+	in councterclockwise order */
 //
 //      3
 //      |
@@ -65,20 +60,33 @@ in councterclockwise order */
 //      1
 //
 // All array numberings used below are consistent with the diagram above
+
+#define BACK 0
+#define RIGHT 1
+#define FRONT 2
+#define LEFT 3
+
+#define NEXT(data_index_NEXT_MACRO) ((data_index_NEXT_MACRO + 1) % 4) // next crossing (+1)
+#define OPP(data_index_OPP_MACRO) ((data_index_OPP_MACRO + 2) % 4) // opposite crossing (+2)
+#define PREV(data_index_PREV_MACRO) ((data_index_PREV_MACRO + 3) % 4) // previous crossing (-1, or +3)
+
+#define OVER_POS 1
+#define OVER_NEG 3
+
 struct crossing {
 	int status;
 	struct crossing* data[4]; // Array of pointers to neighboring crossings
 	int ports[4]; // Which port is connected to which neighboring crossing
-	int underdirection; // Current direction of understrand
-	int overdirection; // Gives sign (1 = positive, 3 = negative)
+	int overdirection; // Gives sign (OVER_POS = positive, OVER_NEG = negative)
 	int over_component; // Component containing overstrand
-	int under_component; // Component containing unders
+	int under_component; // Component containing understrand
 };
+extern void reverse_crossing(struct crossing* C);
 
 struct link {
-	int number_of_components;
-	int* number_of_crossings_in_components;
-	struct crossing** first_crossing_in_components; //Pointers to crossings
+	int number_of_components; // Link components
+	int number_of_crossings_in_components[MAX_CROSSINGS]; // Array of number of crossings in each link component
+	struct crossing* first_crossing_in_components[MAX_CROSSINGS]; // Array of pointers to a crossing in each link component
 };
 extern struct knot make_link(const int number_of_components, const int* number_of_crossings_in_components, const struct crossing** first_crossing_in_components);
 
@@ -86,13 +94,13 @@ extern void smooth_crossing(struct link* K, struct crossing* C, const int smooth
 extern void reidemeister_move_i(struct link* L);
 extern void reidemeister_move_ii(struct link* L);
 
-int writhe(struct link* L);
-int jones_polynomial(struct link* L);
-int kauffman_bracket_polynomial(struct link* L);
+extern int writhe(const struct link* L);
+extern int jones_polynomial(struct link* L);
+extern int kauffman_bracket_polynomial(struct link* L);
 
-int triple_search(struct link* L);
-int gamma_search(struct link* L);
-int bigon_search(struct link* L);
+extern int triple_search(const struct link* L);
+extern int gamma_search(const struct link* L);
+extern int bigon_search(const struct link* L);
 
 // main recursion function:
 //   takes in a link and a polynomial
@@ -106,6 +114,9 @@ int bigon_search(struct link* L);
 //		the location of the desired smoothing
 //   if it doesnt find the pattern, return -1
 
+//SMOOTHINGS:
+// 0 smoothing is K_0 if the thing is positive 
+// 1 smoothing is K_0 if the thing is negatived
 // 0 smoothing function:
 //    takes in a link and applies a 0 smoothing.
 // Case 1: over_component = under_component --> 
@@ -116,9 +127,13 @@ int bigon_search(struct link* L);
 // Case 1: over_component = under_component --> 
 	// 2 cases: K_0 smoothing splits, other smoothing keeps it as one component
 // Case 2: over component != undercomponent --> both smoothings merge
+// Now, iterate through each component and ensure that signs are good.
+	// First, check the crossing after and move on --> Start loop + check whether curr = crossing after.
+// Finally, if merge --> decrease # of components by 1, get rid of a crossing in the thing, and get rid of the component (shift).
+// if split --> increase # by 1. Add component to the end of the list.
+// if reconfig --> stay the same. Return neighbor for first_crossing of the component.
 
-
-struct bigon{
+/*struct bigon{
 	struct crossing* C1;
 	struct crossing* C2;
 	int port1;
@@ -144,4 +159,5 @@ crossing */
 extern struct knot make_knot(int number_of_crossings, struct crossing* first_crossing);
 extern void smooth_crossing(struct knot* K, struct crossing* C, int smoothing_type);
 extern void reidemeister_move_ii(struct knot* K);*/
+
 #endif
