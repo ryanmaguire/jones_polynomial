@@ -43,7 +43,7 @@ extern void* safe_calloc(const size_t n, const size_t size);
 struct laurent_polynomial {
 	signed int lowest_degree;
 	signed int highest_degree;
-	signed int coeffs[MAX_POLY_SIZE];
+	signed int* coeffs; // length = MAX_POLY_SIZE
 };
 
 extern struct laurent_polynomial initialize_polynomial(void);
@@ -81,12 +81,14 @@ struct crossing {
 	int over_component; // Component containing overstrand
 	int under_component; // Component containing understrand
 };
+extern struct crossing* make_crossing();
+extern void delete_crossing(struct crossing* C); // DOES NOT UPDATE NEIGHBORING CROSSINGS
 extern void reverse_crossing(struct crossing* C);
 
 struct link {
 	int number_of_components; // Link components
-	int number_of_crossings_in_components[MAX_CROSSINGS]; // Array of number of crossings in each link component
-	struct crossing* first_crossing_in_components[MAX_CROSSINGS]; // Array of pointers to a crossing in each link component
+	int* number_of_crossings_in_components; // Array of number of crossings in each link component, length = MAX_CROSSINGS
+	struct crossing** first_crossing_in_components; // Array of pointers to a crossing in each link component, length = MAX_CROSSINGS
 };
 extern struct knot make_link(const int number_of_components, const int* number_of_crossings_in_components, const struct crossing** first_crossing_in_components);
 
@@ -95,8 +97,8 @@ extern void reidemeister_move_i(struct link* L);
 extern void reidemeister_move_ii(struct link* L);
 
 extern int writhe(const struct link* L);
-extern int jones_polynomial(struct link* L);
-extern int kauffman_bracket_polynomial(struct link* L);
+extern struct laurent_polynomial jones_polynomial(struct link* L);
+extern struct laurent_polynomial kauffman_bracket_polynomial(struct link* L);
 
 extern int triple_search(const struct link* L);
 extern int gamma_search(const struct link* L);
