@@ -29,9 +29,9 @@
 #define FORWARD 2
 #define LEFT 3
 
-#define NEXT(data_index) ((data_index + 1) % 4)
-#define OPP(data_index) ((data_index + 2) % 4)
-#define PREV(data_index) ((data_index + 3) % 4)
+#define NEXT(data_index_macro) ((data_index_macro + 1) % 4)
+#define OPP(data_index_macro) ((data_index_macro + 2) % 4)
+#define PREV(data_index_macro) ((data_index_macro + 3) % 4)
 
 /*Swap two variables*/
 #define SWAP(temp, x, y) temp = x; x = y; y = temp
@@ -57,13 +57,54 @@ extern void print_polynomial(struct laurent_polynomial* P, char c);
 /*Struct for crossing in PD notation; first entry of data is the undercrossing which points at
 the crossing (when the knot is given an orientation), and then lists crossings adjacent to it
 in councterclockwise order */
+//
+//      3
+//      |
+// 0 -- | --> 2
+//      |
+//      1
+//
+// All array numberings used below are consistent with the diagram above
 struct crossing {
 	int status;
-	struct crossing* data[4];
-	int ports[4]; //Which port is connected to which neighboring crossing
-	int direction; //Current direction of travel when struct is reached
-	int id;
+	struct crossing* data[4]; // Array of pointers to neighboring crossings
+	int ports[4]; // Which port is connected to which neighboring crossing
+	int underdirection; // Current direction of understrand
+	int overdirection; // Gives sign (1 = positive, 3 = negative)
+	int over_component; // Component containing overstrand
+	int under_component; // Component containing unders
 };
+
+struct link {
+	int number_of_components;
+	int* number_of_crossings_in_components;
+	struct crossing** first_crossing_in_components; //Pointers to crossings
+};
+
+// main recursion function:
+//   takes in a link and a polynomial
+// runs through pattern search functions in order
+// as soon as a pattern search function returns >=0, call smoothing functions
+
+// each pattern search function:
+//   takes in a link, and searches through it
+//   if it finds the pattern, return the index of the link component where the
+//		pattern occurs and modify the corresponding element in first_crossing_in_components
+//		the location of the desired smoothing
+//   if it doesnt find the pattern, return -1
+
+// 0 smoothing function:
+//    takes in a link and applies a 0 smoothing.
+// Case 1: over_component = under_component --> 
+	// 2 cases: K_0 smoothing splits, other smoothing keeps it as one component
+// Case 2: over component != undercomponent --> both smoothings merge
+// 1 smoothing function:
+//	  takes in a link and applies a 1 smoothing.
+// Case 1: over_component = under_component --> 
+	// 2 cases: K_0 smoothing splits, other smoothing keeps it as one component
+// Case 2: over component != undercomponent --> both smoothings merge
+
+
 struct bigon{
 	struct crossing* C1;
 	struct crossing* C2;
