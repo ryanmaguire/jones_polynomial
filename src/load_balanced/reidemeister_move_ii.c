@@ -24,20 +24,25 @@
 
 // Travelling along emphasized strands, from bottom to top
 //
-//      EXIT HERE
-//   same_far_crossing  diff_far_crossing
-//                 \\    /
-//                  \\  /
-//              next_crossing
-//                  /  \\
-//                 /    \\
-//                 \    //
-//                  \  //
-//             current_crossing
-//                 //   \
-//                //     \
-// same_prev_crossing   diff_prev_crossing
-//     ENTER HERE
+//        EXIT HERE
+//   (same_far_crossing)  (diff_far_crossing)
+//                 \\        /
+//                  \\      /
+//          /\ far_index   /
+//                    \\  /
+//               (next_crossing)
+//                    /  \\
+//                   /    \\
+//                  /      \\
+//                  \      //
+//                   \   next_index /\
+//                    \  //
+//              (current_crossing)
+//                   //   \
+//                  //     \
+//                 //       \
+// (same_prev_crossing)   (diff_prev_crossing)
+//      ENTER HERE
 //
 
 void reidemeister_move_ii(struct link* L)
@@ -46,7 +51,27 @@ void reidemeister_move_ii(struct link* L)
         struct crossing* current_crossing = L->first_crossing_in_components[component];
         int next_index = 2;
         do {
-            if (current_crossing->data[next_index] == current_crossing) {
+            struct crossing* next_crossing = current_crossing->data[next_index];
+            int far_index = OPP(current_crossing->ports[next_index]);
+
+            if (
+                /* current_crossing is connect to next_crossing somewhere else */
+                (current_crossing->data[PREV(next_index)] == next_crossing || current_crossing->data[NEXT(next_index)] == next_crossing)
+                /* && the crossing signs are correct for an R2*/
+                && (next_index % 2) == (far_index % 2)
+            ) {
+                /* Set all the other relevant crossing names */
+                struct crossing* same_prev_crossing = current_crossing->data[OPP(next_index)];
+                struct crossing* diff_prev_crossing = // Find whichever one leads to somewhere else from current_crossing
+                    (current_crossing->data[NEXT(next_index)] == next_crossing) ? 
+                        current_crossing->data[PREV(next_index)] :
+                        current_crossing->data[NEXT(next_index)];
+                struct crossing* same_far_crossing = next_crossing->data[far_index];
+                struct crossing* diff_far_crossing = // Find whichever one leads to somewhere else from next_crossing
+                    (next_crossing->data[NEXT(far_index)] == current_crossing) ?
+                        next_crossing->data[PREV(far_index)] :
+                        next_crossing->data[NEXT(far_index)];
+
                 
             } else {
                 current_crossing = current_crossing->data[next_index];
