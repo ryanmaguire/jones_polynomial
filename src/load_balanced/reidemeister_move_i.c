@@ -22,22 +22,22 @@
 /* Function to scan for and perform all Type I Reidemeister moves */
 /* Leaves behind 0 in number_of_crossings_in_components if an unknot diagram is created */
 
-//                                 _______________
-//                                /               \
-//                                |               |
-//  prev_crossing -------- current_crossing ------/
+//                                 _________________________
+//                                /                         \
+//                                |                         |
+//  (prev_crossing)-------(current_crossing)--next_index>---/
 //                                |
 //                                |
-//                           next_crossing
+//                         (next_crossing)
 
 // Alternative orientation
 
-//                           next_crossing
+//                         (next_crossing)
 //                                |
 //                                |
-//  prev_crossing -------- current_crossing ------\
-//                                |               |
-//                                \_______________/
+//  (prev_crossing)-------(current_crossing)--next_index>---\
+//                                |                         |
+//                                \_________________________/
 //                                
 
 void reidemeister_move_i(struct link* L) 
