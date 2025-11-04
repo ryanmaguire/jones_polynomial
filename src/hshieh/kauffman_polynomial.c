@@ -18,6 +18,8 @@
  ******************************************************************************/
 
 #include "kauffman_implementation.h"
+#include "catalan_info.h"
+#include <stdio.h>
 
 /*Function to find the Kauffman bracket polynomial of a knot*/
 /*This function uses the algorithm from "Efficient Computation of the Kauffman Bracket" by Ellenberg et al., where we first take a 
@@ -28,7 +30,6 @@ tangle with g boundary points, the number of possible base tangles is C_{g/2}, t
 to a tangle and then smooth it, and the cutwidth of the graph at any time can be proven to be no more than C*sqrt(n), where C = 6 * sqrt(2) + 
 5 * sqrt(3). The mth Catalan number asymptotically is O(4^m), so this algorithm runs in O(n2^{C * sqrt(n)}). */
 struct laurent_polynomial kauffman_polynomial(struct knot* K) {
-	extern const int catalan[];
 	int n = K->number_of_crossings;
 	/*The array crossings_at_strand keeps track of the two crossings at every arc*/
 	int** crossings_at_strand = (int**)safe_malloc((2 * (size_t)n + 1) * sizeof(int*));
@@ -55,8 +56,8 @@ struct laurent_polynomial kauffman_polynomial(struct knot* K) {
 	crossings_times_touched[current_crossing] = 4;
 	for (int index = 0; index < 4; index++) {
 		int strand = K->crossings[current_crossing].data[index];
-		for (int crossing = 0; crossing < 2; crossing++) 
-			if (crossings_at_strand[strand][crossing] != current_crossing) 
+		for (int crossing = 0; crossing < 2; crossing++)
+			if (crossings_at_strand[strand][crossing] != current_crossing)
 				crossings_times_touched[crossings_at_strand[strand][crossing]]++;
 	}
 	int current_width = 4;
@@ -119,6 +120,7 @@ struct laurent_polynomial kauffman_polynomial(struct knot* K) {
 		old_width = current_width;
 		/*Width is changed by -2 * (number of strands present at crossing) + 4 */
 		current_width += -2 * strands_present + 4;
+		printf("current width: %d\n", current_width);
 		/*All of the C_{current width/2} current kauffman summands must be initially set to null*/
 		current_kauffman_summands = (struct kauffman_summand**)safe_malloc((size_t)catalan[current_width / 2] * sizeof(struct kauffman_summand*));
 		for (int index = 0; index < catalan[current_width / 2]; index++) 

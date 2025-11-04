@@ -33,8 +33,8 @@
 int main(void)
 {
     /*  Convert the string to a knot.                                         */
-    struct knot K = knot_from_gauss_code(FIGURE_EIGHT);
-
+    struct knot K = knot_from_gauss_code(T25_2_TORUS_KNOT);
+    
     /*  Compute the Jones polynomial. This is exponential in the number of    *
      *  crossings. For a very large input this will take a while. For a small *
      *  input like the figure-eight its instant.                              */

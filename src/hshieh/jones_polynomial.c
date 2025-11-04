@@ -33,7 +33,7 @@ struct laurent_polynomial jones_polynomial(struct knot* K) {
 			writhe--;
 	/*After finding the writhe, the normalized Kauffman bracket polynomial is (-A^3)^writhe * <L>, where
 	<L> is the Kauffman bracket polynomial */
-	/*The jones polynomial is found by substutituting A = t^{-1/4} into the normalized Kauffman bracket polynomial*/
+	/*The jones polynomial is found by substutituting A = q^{-1/4} into the normalized Kauffman bracket polynomial*/
 	int sign = (writhe % 2 == 0) ? 1 : -1;
 	struct laurent_polynomial jones_polynomial = initialize_polynomial();
 	for (int degree = kauffman_bracket_polynomial.lowest_degree; degree <= kauffman_bracket_polynomial.highest_degree; degree+= 4) 
