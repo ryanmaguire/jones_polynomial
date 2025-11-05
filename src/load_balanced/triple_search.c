@@ -19,25 +19,35 @@
  ******************************************************************************/
  #include "load_balanced.h"
 
-/* Function to compute the writhe of a link*/
-int writhe(const struct link* L) 
+/* Function to search for the first occurence of a triple */
+/* If found, returns the component number and sets the crossing as the first crossing of the component */
+/* If not found, L is unchanged and -1 is returned */
+
+int triple_search(const struct link* L) 
 {
-    int writhe = 0;
     for (int component = 0; component < L->number_of_components; component++) {
-        struct crossing* previous_crossing = NULL;
-        struct crossing* current_crossing = L->first_crossing_in_components[component];
+        if (L->number_of_crossings_in_components[component] <= 2) {
+            continue;
+        }
+
         int next_index = 2;
+        struct crossing* current_crossing = L->first_crossing_in_components[component];
+        struct crossing* previous_crossing = current_crossing->data[OPP(next_index)];
         do {
-            if (current_crossing->over_component >= component && current_crossing->under_component >= component) {
-                if (current_crossing->overdirection == OVER_POS)
-                    writhe++;
-                else
-                    writhe--;
+            struct crossing* next_crossing = current_crossing->data[next_index];
+            int far_index = OPP(current_crossing->ports[next_index]);
+
+            if (
+                
+            ) {
+                L->first_crossing_in_components[component] = current_crossing;
+                return component;
             }
             previous_crossing = current_crossing;
             current_crossing = current_crossing->data[next_index];
             next_index = OPP(previous_crossing->ports[next_index]);
         } while (L->number_of_crossings_in_components[component] > 0 && current_crossing != L->first_crossing_in_components[component]);
     }
-    return writhe;
+
+    return -1;
 }

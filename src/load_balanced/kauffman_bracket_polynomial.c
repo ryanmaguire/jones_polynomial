@@ -19,25 +19,11 @@
  ******************************************************************************/
  #include "load_balanced.h"
 
-/* Function to compute the writhe of a link*/
-int writhe(const struct link* L) 
+/* Main recursion function for computing the Kauffman Bracket Polynomial of a link */
+struct laurent_polynomial kauffman_bracket_polynomial(struct link* L)
 {
-    int writhe = 0;
-    for (int component = 0; component < L->number_of_components; component++) {
-        struct crossing* previous_crossing = NULL;
-        struct crossing* current_crossing = L->first_crossing_in_components[component];
-        int next_index = 2;
-        do {
-            if (current_crossing->over_component >= component && current_crossing->under_component >= component) {
-                if (current_crossing->overdirection == OVER_POS)
-                    writhe++;
-                else
-                    writhe--;
-            }
-            previous_crossing = current_crossing;
-            current_crossing = current_crossing->data[next_index];
-            next_index = OPP(previous_crossing->ports[next_index]);
-        } while (L->number_of_crossings_in_components[component] > 0 && current_crossing != L->first_crossing_in_components[component]);
+    while (reidemeister_move_i(L) || reidemeister_move_ii(L) || null_gamma(L) || null_triple(L)) {}
+    if (triple_search(L) != -1){
+        return kauffman_bracket_polynomial(triple_search(L));
     }
-    return writhe;
 }

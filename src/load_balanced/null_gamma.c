@@ -19,25 +19,56 @@
  ******************************************************************************/
  #include "load_balanced.h"
 
-/* Function to compute the writhe of a link*/
-int writhe(const struct link* L) 
+/* Function to scan for and perform all null gamma untwists */
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+enum boolean null_gamma(struct link* L) 
 {
-    int writhe = 0;
     for (int component = 0; component < L->number_of_components; component++) {
-        struct crossing* previous_crossing = NULL;
-        struct crossing* current_crossing = L->first_crossing_in_components[component];
+        if (L->number_of_crossings_in_components[component] <= 2) {
+            continue;
+        }
+
         int next_index = 2;
+        struct crossing* current_crossing = L->first_crossing_in_components[component];
+        struct crossing* previous_crossing = current_crossing->data[OPP(next_index)];
         do {
-            if (current_crossing->over_component >= component && current_crossing->under_component >= component) {
-                if (current_crossing->overdirection == OVER_POS)
-                    writhe++;
-                else
-                    writhe--;
+            struct crossing* next_crossing = current_crossing->data[next_index];
+            int far_index = OPP(current_crossing->ports[next_index]);
+
+            if (
+                (current_crossing->data[PREV(next_index)] == next_crossing || current_crossing->data[NEXT(next_index)] == next_crossing)
+                && (next_crossing->data[far_index] == previous_crossing)
+                && ((next_index % 2) != (far_index % 2) && (current_crossing->ports[OPP(next_index)] % 2) == (next_index % 2))
+            ) {
+                int former_crossing_index = previous_crossing->ports[OPP(current_crossing->ports[OPP(next_index)])];
+                struct crossing* former_crossing = previous_crossing->data[OPP(current_crossing->ports[OPP(next_index)])];
+
+                int very_far_crossing_index = previous_crossing->ports[OPP(next_crossing->ports[OPP(far_index)])];
+                struct crossing* very_far_crossing = previous_crossing->data[OPP(next_crossing->ports[OPP(far_index)])];
+
+                int side_crossing_index = 
+            } else {
+                previous_crossing = current_crossing;
+                current_crossing = current_crossing->data[next_index];
+                next_index = OPP(previous_crossing->ports[next_index]);
             }
-            previous_crossing = current_crossing;
-            current_crossing = current_crossing->data[next_index];
-            next_index = OPP(previous_crossing->ports[next_index]);
         } while (L->number_of_crossings_in_components[component] > 0 && current_crossing != L->first_crossing_in_components[component]);
     }
-    return writhe;
+
+    return -1;
 }
+

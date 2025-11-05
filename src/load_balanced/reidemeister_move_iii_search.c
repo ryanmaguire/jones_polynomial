@@ -19,53 +19,48 @@
  ******************************************************************************/
  #include "load_balanced.h"
 
-/* Function to search for the first occurence of a bigon */
+/* Function to search for the first occurence of a Type III Reidemeister move */
 /* If found, returns the component number and sets the crossing as the first crossing of the component */
 /* If not found, L is unchanged and -1 is returned */
 
-// next_crossing and current_crossing must have the same sign
+// next_crossing and current_crossing must share an over/under strand
+// essentially a bigon, but next_crossing meets previous_crossing again
 // Travelling along emphasized strands, from bottom to top
 //
-//           EXIT HERE
-//      (same_far_crossing)   (diff_far_crossing)
-//                     \\        /
-//                      \\      /
-//              /\ far_index   /
-//                        \\  /
-//                   (next_crossing)
-//                        /  \\
-//                       /    \\
-//                      /      \\
-//                      \      //
-//                       \   next_index /\
-//                        \  //
-//                  (current_crossing)
-//                       //   \
-//                      //     \
-//                     //       \
-// (same_previous_crossing)   (diff_previous_crossing)
-//      ENTER HERE
-//
-
-int bigon_search(const struct link* L) 
+//                                       (far crossing)    (former crossing)                
+//                                                  \\      /
+//                                                   \\    /
+//                                                    \\  /
+//                                              (current_crossing)
+//                                                    /  \\
+//                                                   /    \\     
+//                                            next_index   \\
+//                                                 /        \\
+//   (different former crossing)---(current_crossing)------(next_crossing)---(different far crossing)
+//                                               /            \\
+//                                          far_index          \\
+//                                             /                \\ 
+//                                            /                  \\
+//                  (still different former crossing)       (still different far crossing)
+int gamma_search(const struct link* L) 
 {
     for (int component = 0; component < L->number_of_components; component++) {
-        if (L->number_of_crossings_in_components[component] <= 1) {
+        if (L->number_of_crossings_in_components[component] <= 2) {
             continue;
         }
 
-        struct crossing* previous_crossing = NULL;
-        struct crossing* current_crossing = L->first_crossing_in_components[component];
         int next_index = 2;
+        struct crossing* current_crossing = L->first_crossing_in_components[component];
+        struct crossing* previous_crossing = current_crossing->data[OPP(next_index)];
         do {
             struct crossing* next_crossing = current_crossing->data[next_index];
             int far_index = OPP(current_crossing->ports[next_index]);
 
             if (
-                /* current_crossing connects to next_crossing somewhere else */
-                (current_crossing->data[PREV(next_index)] == next_crossing || current_crossing->data[NEXT(next_index)] == next_crossing)
-                /* && the crossing signs are correct for a bigon*/
-                && (next_index % 2) != (far_index % 2)
+                /* current_crossing and next_crossing share an adjacent crossing, which shares an over/under strand with next_crossing */
+                (current_crossing->data[PREV(next_index)] == next_crossing->data[PREV(far_index)] && (far_index % 2) != (next_crossing->ports[PREV(far_index)] % 2))
+                /* checking for crossings on other side of current_crossing and next_crossing*/
+                || (current_crossing->data[NEXT(next_index)] == next_crossing->data[NEXT(far_index)] && (far_index % 2) != (next_crossing->ports[NEXT(far_index)] % 2))
             ) {
                 L->first_crossing_in_components[component] = current_crossing;
                 return component;

@@ -74,13 +74,14 @@ extern void print_polynomial(struct laurent_polynomial* P, char c);
 #define OVER_NEG 3
 
 struct crossing {
-	int status;
+	int id;
 	struct crossing* data[4]; // Array of pointers to neighboring crossings
 	int ports[4]; // Which port is connected to which neighboring crossing
 	int overdirection; // Gives sign (OVER_POS = positive, OVER_NEG = negative)
 	int over_component; // Component containing overstrand
 	int under_component; // Component containing understrand
 };
+
 extern struct crossing* make_crossing();
 extern void delete_crossing(struct crossing* C); // DOES NOT UPDATE NEIGHBORING CROSSINGS
 extern void reverse_crossing(struct crossing* C);
@@ -91,17 +92,21 @@ struct link {
 	struct crossing** first_crossing_in_components; // Array of pointers to a crossing in each link component, length = MAX_CROSSINGS
 };
 extern struct knot make_link(const int number_of_components, const int* number_of_crossings_in_components, const struct crossing** first_crossing_in_components);
+extern struct link* copy_link(const struct link* L);
 
-extern void smooth_crossing(struct link* K, struct crossing* C, const int smoothing_type);
-extern void reidemeister_move_i(struct link* L);
-extern void reidemeister_move_ii(struct link* L);
+extern void smooth_crossing(struct link* L, struct crossing* C, const int smoothing_type);
+
+extern enum boolean reidemeister_move_i(struct link* L);
+extern enum boolean reidemeister_move_ii(struct link* L);
+extern enum boolean null_gamma(struct link* L);
+extern enum boolean null_triple(struct link* L);
 
 extern int writhe(const struct link* L);
 extern struct laurent_polynomial jones_polynomial(struct link* L);
 extern struct laurent_polynomial kauffman_bracket_polynomial(struct link* L);
 
 extern int triple_search(const struct link* L);
-extern int gamma_search(const struct link* L);
+extern int reidemeister_move_iii_search(struct link* L);
 extern int bigon_search(const struct link* L);
 
 // main recursion function:
