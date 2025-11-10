@@ -36,7 +36,7 @@
 //                                                   /    \\     
 //                                            next_index   \\
 //                                                 /        \\
-//   (different former crossing)---(current_crossing)------(next_crossing)---(different far crossing)
+//   (different former crossing)---(next_crossing)------(adjacent_crossing)---(different far crossing)
 //                                               /            \\
 //                                          far_index          \\
 //                                             /                \\ 

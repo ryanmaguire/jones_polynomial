@@ -48,6 +48,7 @@ struct laurent_polynomial {
 
 extern struct laurent_polynomial initialize_polynomial(void);
 extern void print_polynomial(struct laurent_polynomial* P, char c);
+extern struct laurent_polynomial multiply_polynomials(struct laurent_polynomial P, struct laurent_polynomial Q);
 
 /* Struct for crossing in PD notation; first entry of data is the undercrossing which points at
 	the crossing (when the knot is given an orientation), and then lists crossings adjacent to it
@@ -106,11 +107,12 @@ extern struct laurent_polynomial jones_polynomial(struct link* L);
 extern struct laurent_polynomial kauffman_bracket_polynomial(struct link* L);
 
 extern int triple_search(const struct link* L);
+extern int gamma_search(const struct link* L);
 extern int reidemeister_move_iii_search(struct link* L);
 extern int bigon_search(const struct link* L);
 
 // main recursion function:
-//   takes in a link and a polynomial
+//   takes in a link
 // runs through pattern search functions, calling them in order
 // as soon as a pattern search function returns >=0, call smoothing functions
 

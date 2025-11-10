@@ -21,20 +21,27 @@
 
 /* Function to scan for and perform all null gamma untwists */
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+/* If found, the null gamma is untwisted, and the function continues searching with the next crossing */
 
+// previous_crossing and current_crossing must share an over/under strand
+// next_crossing and previous_crossing also share an over/under strand
+// after twisting, a bigon is left
+//
+//                                  (very_far_crossing)    (former_crossing)                
+//                                                  \\      /
+//                                                   \\    /
+//                                                    \\  /
+//                                              (previous_crossing)
+//                                                    /  \\
+//                                                   /    \\     
+//                                            next_index   \\
+//                                                 /        \\
+//                (side_crossing)---(current_crossing)------(next_crossing)---(different_side_crossing)
+//                                                 \         //
+//                                               far_index  //      
+//                                                   \     //          
+//                                                    \   //             
+//                                                     \ //  
 enum boolean null_gamma(struct link* L) 
 {
     for (int component = 0; component < L->number_of_components; component++) {
@@ -54,11 +61,11 @@ enum boolean null_gamma(struct link* L)
                 && (next_crossing->data[far_index] == previous_crossing)
                 && ((next_index % 2) != (far_index % 2) && (current_crossing->ports[OPP(next_index)] % 2) == (next_index % 2))
             ) {
-                int former_crossing_index = previous_crossing->ports[OPP(current_crossing->ports[OPP(next_index)])];
-                struct crossing* former_crossing = previous_crossing->data[OPP(current_crossing->ports[OPP(next_index)])];
+                int former_crossing_index = OPP(current_crossing->ports[OPP(next_index)]);
+                struct crossing* former_crossing = previous_crossing->data[former_crossing_index];
 
-                int very_far_crossing_index = previous_crossing->ports[OPP(next_crossing->ports[OPP(far_index)])];
-                struct crossing* very_far_crossing = previous_crossing->data[OPP(next_crossing->ports[OPP(far_index)])];
+                int very_far_crossing_index = OPP(next_crossing->ports[OPP(far_index)]);
+                struct crossing* very_far_crossing = previous_crossing->data[very_far_crossing_index];
 
                 int side_crossing_index = 
                     (current_crossing->data[NEXT(next_index)] == next_crossing) ? 
@@ -70,7 +77,50 @@ enum boolean null_gamma(struct link* L)
                     (next_crossing->data[NEXT(far_index)] == current_crossing) ?
                         PREV(far_index) :
                         NEXT(far_index);
-                struct crossing* different_side_crossing = next_crossing->data[]
+                struct crossing* different_side_crossing = next_crossing->data[different_side_crossing_index];
+
+                int former_crossing_enter_index = previous_crossing->ports[former_crossing_index];
+                current_crossing->data[OPP(next_index)] = former_crossing;
+                current_crossing->ports[OPP(next_index)] = former_crossing_enter_index;
+                former_crossing->data[former_crossing_enter_index] = current_crossing;
+                former_crossing->ports[former_crossing_enter_index] = OPP(next_index);
+
+                int very_far_crossing_exit_index = previous_crossing->ports[very_far_crossing_index];
+                next_crossing->data[far_index] = very_far_crossing;
+                next_crossing->ports[far_index] = very_far_crossing_exit_index;
+                very_far_crossing->data[very_far_crossing_exit_index] = next_crossing;
+                very_far_crossing->ports[very_far_crossing_exit_index] = far_index;
+
+                int side_crossing_exit_index = current_crossing->ports[side_crossing_index];
+                current_crossing->data[side_crossing_index] = next_crossing;
+                current_crossing->ports[side_crossing_index] = different_side_crossing_index;
+                side_crossing->data[side_crossing_exit_index] = next_crossing;
+                side_crossing->ports[side_crossing_exit_index] = OPP(different_side_crossing_index);
+
+                int different_side_crossing_exit_index = next_crossing->ports[different_side_crossing_index];
+                next_crossing->data[different_side_crossing_index] = current_crossing;
+                next_crossing->ports[different_side_crossing_index] = side_crossing_index;
+                different_side_crossing->data[different_side_crossing_exit_index] = current_crossing;
+                different_side_crossing->ports[different_side_crossing_exit_index] = OPP(side_crossing_index);
+
+                int new_side_crossing_index = OPP(different_side_crossing_index);
+                next_crossing->data[new_side_crossing_index] = side_crossing;
+                next_crossing->ports[new_side_crossing_index] = side_crossing_exit_index;
+
+                int new_different_side_crossing_index = OPP(side_crossing_index);
+                current_crossing->data[new_different_side_crossing_index] = different_side_crossing;
+                current_crossing->ports[new_different_side_crossing_index] = different_side_crossing_exit_index;
+
+                L->number_of_crossings_in_components[component]--;
+                if (L->first_crossing_in_components[component] == previous_crossing) {
+                    L->first_crossing_in_components[component] = former_crossing;
+                }
+
+                next_index = OPP(very_far_crossing_exit_index);
+                delete_crossing(previous_crossing);
+                previous_crossing = next_crossing;
+                current_crossing = very_far_crossing;
+
             } else {
                 previous_crossing = current_crossing;
                 current_crossing = current_crossing->data[next_index];

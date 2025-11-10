@@ -24,7 +24,7 @@ Loop through every single link component and walk through the entire component
 Begin by setting all status to -1
 Then go back and loop again, numbering all the crossings from 0 to n-1 
 Allocate memory for an array A of length n*sizeof(struct crossing)
-The new crossing with number k will eventually have memory address A+k, so we don't care 
+The new crossing with number k will eventually have memory address A+k
 */
 
 /* Function to make a deep copy of a link */
