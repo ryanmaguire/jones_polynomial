@@ -66,61 +66,36 @@ struct laurent_polynomial kauffman_bracket_polynomial(struct link* L)
             moved_index++;
         }
     }
-    L->number_of_crossings_in_components -= number_of_unknots;
+    L->number_of_components -= number_of_unknots;
 
     // =================================================
     // TODO: remember to scale ALL outputs by multiplier
     // =================================================
 
+    int pattern_component; // Component in which pattern is located
+
     /* Check for triples, which have complexity type (4,1+R3) for types 1,2 or (3,1+bigon) for types 3,4 */ 
-    int triple_component = triple_search(L); // Component where the triple is located
-    if (triple_search(L) != -1) {
-        /* Make a deep copy of link L */
-        struct link *L_copy = copy_link(L);
-
-        /* Smooth respective crossings in both link copies */
-        smooth_crossing(L, L->first_crossing_in_components[triple_component], 0);
-        smooth_crossing(L_copy, L->first_crossing_in_components[triple_component], 1);
-
-        /* Recursion step */
-        struct laurent_polynomial polynomial_1 = kauffman_bracket_polynomial(L);
-        struct laurent_polynomial polynomial_2 = kauffman_bracket_polynomial(L_copy);
-
-        /* Evaluate polynomial according to KBP Skein relation */
-        return add_polynomials(multiply_polynomials(kauffman_bracket_polynomial(L),A)), multiply_polynomials(kauffman_bracket_polynomial(L_copy),A_inverse);
-    }
-    if (bigon_search(L) != -1) {
-        /* Make a deep copy of link L */
-        struct link *L_copy = copy_link(L);
-
-        /* Smooth respective crossings in both link copies */
-        smooth_crossing(L, L->first_crossing_in_components[triple_component], 0);
-        smooth_crossing(L_copy, L->first_crossing_in_components[triple_component], 1);
-
-        /* Recursion step */
-        struct laurent_polynomial_1 = kauffman_bracket_polynomial(L);
-
-        /* Evaluate polynomial according to KBP Skein relation */
-        return add_polynomials(multiply_polynomials (kauffman_bracket_polynomial(L),A)), multiply_polynomials(kauffman_bracket_polynomial(L_copy),A_inverse);
-    }
-    if (r3_search(L) != -1) {
-        /* Make a deep copy of link L */
-        struct link *L_copy = copy_link(L);
-
-        /* Smooth respective crossings in both link copies */
-        smooth_crossing(L, L->first_crossing_in_components[triple_component], 0);
-        smooth_crossing(L_copy, L->first_crossing_in_components[triple_component], 1);
-
-        /* Recursion step */
-        struct laurent_polynomial_1 = kauffman_bracket_polynomial(L);
-
-        /* Evaluate polynomial according to KBP Skein relation */
-        return add_polynomials(multiply_polynomials (kauffman_bracket_polynomial(L),A)), multiply_polynomials(kauffman_bracket_polynomial(L_copy),A_inverse);
-    }
-
+    if ((pattern_component = triple_search(L)) != -1) {}
     /* Check for R3 configurations, which have complexity type (3,1) */
-
+    else if ((pattern_component = r3_search(L)) != -1) {}
     /* Check for untwistable gammas, which have complexity type (2,1+bigon) */
-
+    else if ((pattern_component = gamma_search(L)) != -1) {}
     /* Check for bigons, which have complexity type (2,1) */
+    else if ((pattern_component = bigon_search(L)) != -1) {}
+    /* Otherwise pick a component and crossing at random */
+    else pattern_component = 0;
+
+    /* Make a deep copy of link L */
+    struct link *L_copy = copy_link(L);
+
+    /* Smooth respective crossings in both link copies */
+    smooth_crossing(L, L->first_crossing_in_components[pattern_component], 0);
+    smooth_crossing(L_copy, L->first_crossing_in_components[pattern_component], 1);
+
+    /* Recursion step */
+    struct laurent_polynomial polynomial_1 = kauffman_bracket_polynomial(L);
+    struct laurent_polynomial polynomial_2 = kauffman_bracket_polynomial(L_copy);
+
+    /* Evaluate polynomial according to KBP Skein relation */
+    return add_polynomials(multiply_polynomials(kauffman_bracket_polynomial(L),A)), multiply_polynomials(kauffman_bracket_polynomial(L_copy),A_inverse);
 }
