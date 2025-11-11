@@ -1,6 +1,6 @@
 //SMOOTHINGS:
 // 0 smoothing is L_0 if the thing is positive
-// 1 smoothing is L_0 if the thing is negatived
+// 1 smoothing is L_0 if the thing is negative
 // 0 smoothing function:
 //    takes in a link and applies a 0 smoothing.
 // Case 1: over_component = under_component -->
@@ -22,7 +22,7 @@
 
 void smooth_crossing(struct link *L, struct crossing* C, int type){
     if (C->over_component == C->under_component) {//If overstrand and understrand are the same
-        if (C->overdirection == OVER_POS) {// If positive (splits)
+        if ((C->overdirection == OVER_POS & type == 0) || (C->overdirection == OVER_NEG & type == 1)) {// If positive (splits)
             int overcomp = C->over_component;
             L->number_of_components++;//Increment number of components
             if (type == 0){
@@ -111,6 +111,7 @@ void smooth_crossing(struct link *L, struct crossing* C, int type){
             } while (!(current_crossing == C->data[3] && direction == OPP(C->ports[3])));
 			L->number_of_crossings_in_components[C->over_component] = counter2 / 2; // These counters are guaranteed to be even
 			L->number_of_crossings_in_components[L->number_of_components] = counter1 / 2;
+			delete_crossing(C);
         } else {// If negative (number of comps stays the same)
             if (type == 0){
                 C->data[0]->data[C->ports[0]] = C->data[1]; //Reattach Components
@@ -158,10 +159,11 @@ void smooth_crossing(struct link *L, struct crossing* C, int type){
             if (L->first_crossing_in_components[C->over_component] == C){
                 L->first_crossing_in_components[C->over_component] == C->data[1];
             }
+			delete_crossing(C);
         }
 	} 
 	else {
-        if (C->overdirection == OVER_POS){// If positive (merge, but no sign check needed)
+        if ((C->overdirection == OVER_POS & type == 0) || (C->overdirection == OVER_NEG & type == 1)){// If positive (merge, but no sign check needed)
             L->number_of_components -= 1;
             if (type == 0){
                 C->data[0]->data[C->ports[0]] = C->data[1]; //Reattach Components
@@ -232,6 +234,7 @@ void smooth_crossing(struct link *L, struct crossing* C, int type){
             }
 			int number = L->number_of_crossings_in_components[oldcomp]+L->number_of_crossings_in_components[newcomp]-1; //Working here
             L->number_of_crossings_in_components[newcomp] = number;
+			delete_crossing(C);
 	    }
         else {// If negative (merge, but sign check needed)
             L->number_of_components -= 1;
@@ -316,6 +319,7 @@ void smooth_crossing(struct link *L, struct crossing* C, int type){
             }
             int number = L->number_of_crossings_in_components[oldcomp]+L->number_of_crossings_in_components[newcomp]-1; //Working here
             L->number_of_crossings_in_components[newcomp] = number;
+			delete_crossing(C);
         }
     }
 }
