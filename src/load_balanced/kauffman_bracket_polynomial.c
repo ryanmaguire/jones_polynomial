@@ -77,7 +77,7 @@ struct laurent_polynomial kauffman_bracket_polynomial(struct link* L)
     /* Check for triples, which have complexity type (4,1+R3) for types 1,2 or (3,1+bigon) for types 3,4 */ 
     if ((pattern_component = triple_search(L)) != -1) {}
     /* Check for R3 configurations, which have complexity type (3,1) */
-    else if ((pattern_component = r3_search(L)) != -1) {}
+    else if ((pattern_component = reidemeister_move_iii_search(L)) != -1) {}
     /* Check for untwistable gammas, which have complexity type (2,1+bigon) */
     else if ((pattern_component = gamma_search(L)) != -1) {}
     /* Check for bigons, which have complexity type (2,1) */
