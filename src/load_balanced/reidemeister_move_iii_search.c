@@ -33,13 +33,13 @@
 //                                                    \\  /
 //                                              (current_crossing)
 //                                                    /  \\
-//                                                   /    \\     
+//                                                   /    \\
 //                                            next_index   \\
 //                                                 /        \\
 //   (different former crossing)---(next_crossing)------(adjacent_crossing)---(different far crossing)
 //                                               /            \\
 //                                          far_index          \\
-//                                             /                \\ 
+//                                             /                \\
 //                                            /                  \\
 //                  (still different former crossing)       (still different far crossing)
 int gamma_search(const struct link* L) 

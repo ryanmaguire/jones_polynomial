@@ -33,7 +33,7 @@
 //                                                    \\  /
 //                                              (previous_crossing)
 //                                                    /  \\
-//                                                   /    \\     
+//                                                   /    \\
 //                                            next_index   \\
 //                                                 /        \\
 //                (side_crossing)---(current_crossing)------(next_crossing)---(different_side_crossing)
