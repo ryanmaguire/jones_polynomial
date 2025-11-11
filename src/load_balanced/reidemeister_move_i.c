@@ -43,6 +43,7 @@
 enum boolean reidemeister_move_i(struct link* L) 
 {
     enum boolean found_something = FALSE;
+    
     for (int component = 0; component < L->number_of_components; component++) {
         if (L->number_of_crossings_in_components[component] <= 0) {
             continue;
@@ -64,7 +65,8 @@ enum boolean reidemeister_move_i(struct link* L)
                 previous_crossing->ports[previous_crossing_leave_index] = current_crossing->ports[next_index];
                 
                 /* Update next_crossing */
-                int next_crossing_enter_index = current_crossing->ports[next_index];
+                int current_to_next_index = OPP(current_crossing->ports[next_index]);
+                int next_crossing_enter_index = current_crossing->ports[current_to_next_index];
                 next_crossing->data[next_crossing_enter_index] = previous_crossing;
                 next_crossing->ports[next_crossing_enter_index] = current_crossing->ports[OPP(next_index)];
                 

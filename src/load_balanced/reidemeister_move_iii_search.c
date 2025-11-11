@@ -68,7 +68,12 @@ int gamma_search(const struct link* L)
             previous_crossing = current_crossing;
             current_crossing = current_crossing->data[next_index];
             next_index = OPP(previous_crossing->ports[next_index]);
-        } while (L->number_of_crossings_in_components[component] > 0 && current_crossing != L->first_crossing_in_components[component]);
+        } while (
+            /* Edge case check to make sure we aren't trying to do stuff to an unknot */
+            L->number_of_crossings_in_components[component] > 0 
+            /* Keep on looping until we go around the link */
+            && current_crossing != L->first_crossing_in_components[component]
+        );
     }
 
     return -1;

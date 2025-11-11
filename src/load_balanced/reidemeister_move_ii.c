@@ -106,7 +106,7 @@ enum boolean reidemeister_move_ii(struct link* L)
 
                 /* Update crossing counts in link component */
                 L->number_of_crossings_in_components[component] -= 2;
-                int other_component = -1;
+                int other_component;
                 if (current_crossing->over_component != component || current_crossing->under_component != component) {
                     /* Hack to calculate the index of the other component */
                     other_component = current_crossing->over_component + current_crossing->under_component - component;
@@ -124,7 +124,11 @@ enum boolean reidemeister_move_ii(struct link* L)
                         || next_crossing == L->first_crossing_in_components[other_component]
                     )
                 ) {
-                    L->first_crossing_in_components[component] = same_previous_crossing;
+                    /* Here, other_component must be distinct from component. This means that we aren't
+                     * trying to iterate through other_component right now, which means that we are safe
+                     * to move the first crossing for other_component to some arbitrary crossing in 
+                     * other_component. */
+                    L->first_crossing_in_components[other_component] = diff_previous_crossing;
                 }
 
                 next_index = OPP(next_crossing->ports[far_index]);

@@ -20,8 +20,8 @@
  #include "load_balanced.h"
 
 /* Function to scan for and perform all null gamma untwists */
-
 /* If found, the null gamma is untwisted, and the function continues searching with the next crossing */
+/* Leaves behind 0 in number_of_crossings_in_components if an unknot diagram is created */
 
 // previous_crossing and current_crossing must share an over/under strand
 // next_crossing and previous_crossing also share an over/under strand
@@ -44,6 +44,8 @@
 //                                                     \ //  
 enum boolean null_gamma(struct link* L) 
 {
+    enum boolean found_something = FALSE;
+
     for (int component = 0; component < L->number_of_components; component++) {
         if (L->number_of_crossings_in_components[component] <= 2) {
             continue;
@@ -121,14 +123,20 @@ enum boolean null_gamma(struct link* L)
                 previous_crossing = next_crossing;
                 current_crossing = very_far_crossing;
 
+                found_something = TRUE;
             } else {
                 previous_crossing = current_crossing;
                 current_crossing = current_crossing->data[next_index];
                 next_index = OPP(previous_crossing->ports[next_index]);
             }
-        } while (L->number_of_crossings_in_components[component] > 0 && current_crossing != L->first_crossing_in_components[component]);
+        } while (
+            /* Edge case check to make sure we aren't trying to do stuff to an unknot */
+            L->number_of_crossings_in_components[component] > 0 
+            /* Keep on looping until we go around the link */
+            && current_crossing != L->first_crossing_in_components[component]
+        );
     }
 
-    return -1;
+    return found_something;
 }
 
