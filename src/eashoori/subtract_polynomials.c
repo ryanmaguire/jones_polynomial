@@ -17,9 +17,20 @@
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
 
-#include "kauffman_implementation.h"
+#include "skein_template.h"
 
-/*Function to push element onto a stack*/
-void push_stack(struct stack* S, int element) {
-	S->elements[(S->free_position)++] = element;
+//returns the difference of two laurent polynomials - Hansen
+struct laurent_polynomial subtract_polynomials(struct laurent_polynomial P, struct laurent_polynomial Q) {
+	struct laurent_polynomial difference;
+	difference.lowest_degree = MIN(P.lowest_degree, Q.lowest_degree);
+	difference.highest_degree = MAX(P.highest_degree, Q.highest_degree);
+	difference.coeffs = (int*)malloc(MAX_POLY_SIZE * sizeof(int));
+	for (int degree = difference.lowest_degree; degree <= difference.highest_degree; degree++) {
+		difference.coeffs[degree + DEGREE_SHIFT] = 0;
+		if (degree >= P.lowest_degree && degree <= P.highest_degree)
+			difference.coeffs[degree + DEGREE_SHIFT] += P.coeffs[degree + DEGREE_SHIFT];
+		if (degree >= Q.lowest_degree && degree <= Q.highest_degree)
+			difference.coeffs[degree + DEGREE_SHIFT] -= Q.coeffs[degree + DEGREE_SHIFT];
+	}
+	return difference;
 }

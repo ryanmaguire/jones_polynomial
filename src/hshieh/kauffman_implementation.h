@@ -16,14 +16,17 @@
  *  You should have received a copy of the GNU General Public License along   *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-
 #ifndef KAUFFMAN_IMPL_H
 #define KAUFFMAN_IMPL_H
 
 #include <stdlib.h>
 
 /*The maximum possible number of crossings a knot can have for this algorithm */
+<<<<<<< HEAD
 #define MAX_CROSSINGS 200
+=======
+#define MAX_CROSSINGS (32)
+>>>>>>> 6ddc8c2d53e5eb935295a59768a6b7ee05b949c8
 /*The maximum size of the jones/kauffman bracket polynomial for such a knot, since for a knot 
 with n crossings, a hard limit for the smallest and largest degrees are -3n and 3n */
 #define MAX_POLY_SIZE (6 * MAX_CROSSINGS + 1)
@@ -61,7 +64,6 @@ struct crossing {
 	int data[4];
 };
 
-struct crossing make_crossing(int*);
 int crossing_position(int, struct crossing*);
 int is_crossing_consecutive(struct crossing*, int*, int, int);
 
@@ -125,15 +127,21 @@ void smooth_crossing(struct kauffman_summand*, int);
 void add_to_kauffman_summand(struct kauffman_summand*, struct kauffman_summand*);
 void add_to_kauffman_summand_collection(struct kauffman_summand**, struct kauffman_summand*);
 
-/*Struct for stack; stores elements of the stack and the next free position*/
-struct stack {
-	int* elements;
-	int free_position;
+/*Struct for knot in DT code; contains the DT code of the knot and the number of crossings*/
+struct DT_knot {
+	char* DT_code;
+	int number_of_crossings;
 };
 
+<<<<<<< HEAD
 struct stack make_stack(int);
 void push_stack(struct stack*, int);
 int pop_stack(struct stack*);
 int peek_stack(struct stack*);
 
+=======
+struct DT_knot make_DT_knot(char*);
+struct knot DT_to_PD(struct DT_knot);
+int DT_letter_to_number(char);
+>>>>>>> 6ddc8c2d53e5eb935295a59768a6b7ee05b949c8
 #endif

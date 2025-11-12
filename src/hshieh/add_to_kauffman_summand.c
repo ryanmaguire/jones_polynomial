@@ -16,32 +16,35 @@
  *  You should have received a copy of the GNU General Public License along   *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-
 #include "kauffman_implementation.h"
 
 /*Function to add the polynomial coefficient from a kauffman summand Q to another kauffman summand P*/
 void add_to_kauffman_summand(struct kauffman_summand* P, struct kauffman_summand* Q) {
 	/*The variable sign_change keeps track of whether P and Q have the same sign or not */
 	int sign_change = P->sign * Q->sign;
+
+	/*If P and Q have the same highest degree, add the coefficients of Q to P*/
 	if (P->highest_degree == Q->highest_degree) {
-		/*If P and Q have the same highest degree, add the coefficients of Q to P*/
 		for (int index = 0; index < P->number_of_coeffs; index++) 
 			P->coeffs[index] += sign_change * Q->coeffs[index];
 	}
+
+	/*If P has a highest degree than Q, find the difference, and then add the shifted coefficients from Q*/
 	else if (P->highest_degree > Q->highest_degree) {
-		/*If P has a highest degree than Q, find the difference, and then add the shifted coefficients from Q*/
 		int difference = (P->highest_degree - Q->highest_degree) / 4;
 		for (int index = 0; index < P->number_of_coeffs - difference; index++) 
 			P->coeffs[index + difference] += sign_change * Q->coeffs[index];
 	}
+
+	/*If Q has a higher degree than P, then shift the coefficients of P, and add the coefficients from Q*/
 	else if (P->highest_degree < Q->highest_degree) {
-		/*If Q has a higher degree than P, then shift the coefficients of P, and add the coefficients from Q*/
 		int difference = (Q->highest_degree - P->highest_degree) / 4;
 		for (int index = P->number_of_coeffs - 1; index >= 0; index--) {
 			P->coeffs[index] = sign_change * Q->coeffs[index];
 			if (index >= difference) 
 				P->coeffs[index] += P->coeffs[index - difference];
 		}
+
 		/*The highest degree of P must be changed in this case*/
 		P->highest_degree = Q->highest_degree;
 	}

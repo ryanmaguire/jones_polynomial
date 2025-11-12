@@ -17,12 +17,37 @@
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
 
-#include "kauffman_implementation.h"
+#include "skein_template.h"
 
-/*Function which pops the first element on a stack if there is one, and otherwise returns -1000*/
-int pop_stack(struct stack* S) {
-	if (S->free_position > 0) 
-		return S->elements[--S->free_position];
-	else
-		return -1000;
+//prints a laurent polynomial in a given variable - Hansen
+void print_polynomial(struct laurent_polynomial* P, char c) {
+	for (int degree = P->highest_degree; degree >= P->lowest_degree; degree--) {
+		int coeff = P->coeffs[degree + DEGREE_SHIFT];
+		if (coeff == 0) {
+			if (degree == P->highest_degree)
+				printf("0");
+			continue;
+		}
+		if (coeff > 0) {
+			if (degree != P->highest_degree)
+				printf(" + ");
+			if (coeff > 1)
+				printf("%d", coeff);
+		}
+		else {
+			printf(" - ");
+			if (coeff < -1)
+				printf("%d", -coeff);
+		}
+		if (degree == 0) {
+			if (coeff == 1 || coeff == -1)
+				printf("1");
+		}
+		else {
+			putchar(c);
+			if (degree != 1)
+				printf("^%d", degree);
+		}
+	}
+	printf("\n");
 }

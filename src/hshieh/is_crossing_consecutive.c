@@ -16,7 +16,6 @@
  *  You should have received a copy of the GNU General Public License along   *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-
 #include "kauffman_implementation.h"
 
 /*Function to check if all strands of a crossing at a certain tangle are at consecutive positions*/
@@ -25,6 +24,7 @@ int is_crossing_consecutive(struct crossing* C, int* boundary_point_positions, i
 	int crossing_strand_positions[4];
 	for (int index = 0; index < 4; index++) 
 		crossing_strand_positions[index] = boundary_point_positions[C->data[index]];
+
 	/*Check if it's possible to start at one of the strands, and then trace the other present points consecutively*/
 	for (int index = 0; index < 4; index++) {
 		int current_position = crossing_strand_positions[index];

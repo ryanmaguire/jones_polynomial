@@ -16,19 +16,19 @@
  *  You should have received a copy of the GNU General Public License along   *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-
 #include "kauffman_implementation.h"
 
 /*Function to adjust degree of laurent polynomial correctly*/
 void adjust_polynomial_degree(struct laurent_polynomial* P) {
+	/*The lowest degree of P is set to the lowest power at which the coefficient is nonzero*/
 	for (int index = 0; index < MAX_POLY_SIZE; index++)
-		/*The lowest degree of P is set to the lowest power at which the coefficient is nonzero*/
 		if (P->coeffs[index] != 0) {
 			P->lowest_degree = index - DEGREE_SHIFT;
 			break;
 		}
+
+	/*The highest degree of P is set to the highest power of P with a nonzero coefficient*/
 	for (int index = MAX_POLY_SIZE - 1; index >= 0; index--)
-		/*The highest degree of P is set to the highest power of P with a nonzero coefficient*/
 		if (P->coeffs[index] != 0) {
 			P->highest_degree = index - DEGREE_SHIFT;
 			break;

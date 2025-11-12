@@ -1,0 +1,43 @@
+/******************************************************************************
+ *                                  LICENSE                                   *
+ ******************************************************************************
+ *  This file is part of jones_polynomial.                                    *
+ *                                                                            *
+ *  jones_polynomial is free software: you can redistribute it and/or modify  *
+ *  it under the terms of the GNU General Public License as published by      *
+ *  the Free Software Foundation, either version 3 of the License, or         *
+ *  (at your option) any later version.                                       *
+ *                                                                            *
+ *  jones_polynomial is distributed in the hope that it will be useful,       *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of            *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the             *
+ *  GNU General Public License for more details.                              *
+ *                                                                            *
+ *  You should have received a copy of the GNU General Public License along   *
+ *
+ *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
+ ******************************************************************************/
+ #include "load_balanced.h"
+
+/* Function to compute the writhe of a link*/
+int writhe(const struct link* L) 
+{
+    int writhe = 0;
+    for (int component = 0; component < L->number_of_components; component++) {
+        struct crossing* previous_crossing = NULL;
+        struct crossing* current_crossing = L->first_crossing_in_components[component];
+        int next_index = 2;
+        do {
+            if (current_crossing->over_component >= component && current_crossing->under_component >= component) {
+                if (current_crossing->overdirection == OVER_POS)
+                    writhe++;
+                else
+                    writhe--;
+            }
+            previous_crossing = current_crossing;
+            current_crossing = current_crossing->data[next_index];
+            next_index = OPP(previous_crossing->ports[next_index]);
+        } while (L->number_of_crossings_in_components[component] > 0 && current_crossing != L->first_crossing_in_components[component]);
+    }
+    return writhe;
+}

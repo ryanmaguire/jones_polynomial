@@ -16,7 +16,6 @@
  *  You should have received a copy of the GNU General Public License along   *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-
 #include "kauffman_implementation.h"
 
 /*Function which returns the jones polynomial of a knot*/
@@ -31,6 +30,7 @@ struct laurent_polynomial jones_polynomial(struct knot* K) {
 			writhe++;
 		else
 			writhe--;
+
 	/*After finding the writhe, the normalized Kauffman bracket polynomial is (-A^3)^writhe * <L>, where
 	<L> is the Kauffman bracket polynomial */
 	/*The jones polynomial is found by substutituting A = q^{-1/4} into the normalized Kauffman bracket polynomial*/

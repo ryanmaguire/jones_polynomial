@@ -16,7 +16,6 @@
  *  You should have received a copy of the GNU General Public License along   *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-
 #include "kauffman_implementation.h"
 
 /*Function to insert a boundary point on a tangle*/
@@ -28,6 +27,7 @@ struct boundary_point* insert_boundary_point(int strand_number, struct boundary_
 	temp->strand_pair = strand_pair;
 	temp->previous = previous;
 	temp->next = next;
+
 	/*If strand pair/previous/next are not null, pair the other boundary points accordingly*/
 	if (strand_pair != NULL)
 		strand_pair->strand_pair = temp;

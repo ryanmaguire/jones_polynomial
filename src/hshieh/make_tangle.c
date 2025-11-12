@@ -16,7 +16,6 @@
  *  You should have received a copy of the GNU General Public License along   *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-
 #include "kauffman_implementation.h"
 
 /*Function to make tangle from the number of boundary points, struct for the first boundary point, and crossing if one is present*/
@@ -26,6 +25,8 @@ struct specialized_tangle make_tangle(int number_of_boundary_points, struct boun
 	temp.number_of_boundary_points = number_of_boundary_points;
 	temp.first_boundary_point = first_boundary_point;
 	temp.has_crossing = has_crossing;
+
+	/*If the tangle has a crossing, set its crossing points to the given, and otherwise set it equal to null*/
 	if (has_crossing == YES)
 		temp.crossing_points = crossing_points;
 	else

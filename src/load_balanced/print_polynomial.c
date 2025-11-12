@@ -14,15 +14,42 @@
  *  GNU General Public License for more details.                              *
  *                                                                            *
  *  You should have received a copy of the GNU General Public License along   *
+ *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
+ #include "load_balanced.h"
 
-#include "kauffman_implementation.h"
-
-/*Function which returns the first element on top of the stack if there is one, and otherwise returns -1000*/
-int peek_stack(struct stack* S) {
-	if (S->free_position > 0)
-		return S->elements[S->free_position - 1];
-	else
-		return -1000;
+/*Function to print a laurent polynomial in a given variable*/
+void print_polynomial(struct laurent_polynomial* P, char c) 
+{
+	/*Starting from the highest degree, print all the terms, with + and - signs as needed*/
+	for (int degree = P->highest_degree; degree >= P->lowest_degree; degree--) {
+		int coeff = P->coeffs[degree + DEGREE_SHIFT];
+		if (coeff == 0) {
+			if (degree == P->highest_degree)
+				printf("0");
+			continue;
+		}
+		if (coeff > 0) {
+			if (degree != P->highest_degree)
+				printf(" + ");
+			if (coeff > 1)
+				printf("%d", coeff);
+		}
+		else {
+			printf(" - ");
+			if (coeff < -1)
+				printf("%d", -coeff);
+		}
+		if (degree == 0) {
+			if (coeff == 1 || coeff == -1)
+				printf("1");
+		}
+		else {
+			putchar(c);
+			if (degree != 1)
+				printf("^%d", degree);
+		}
+	}
+	printf("\n");
 }

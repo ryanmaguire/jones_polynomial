@@ -17,12 +17,27 @@
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
 
-#include "kauffman_implementation.h"
+#include "skein_template.h"
 
-/*Function to make a crossing in PD code given an array of 4 arcs at the crossing*/
-struct crossing make_crossing(int* data) {
-	struct crossing temp;
-	for (int index = 0; index < 4; index++)
-		temp.data[index] = data[index];
-	return temp;
+int isitsmaller(struct Gauss k1) {
+    int counter, counter1, counter2;
+    int cases = 1; //zero if crossing is a real crossing in a knot, one if it is some intersection between two knots
+    int mat1, col1, mat2, col2;
+    for (counter = 0; counter < k1.components; counter++) { //iterate through components
+        counter2 = 0; //initialize counter2 to zero every time I get here.
+        for (counter1 = 0; counter1 < k1.sizecomp[counter]; counter1++) { //loop through the columns of each matrix
+            if (k1.matrix[counter][counter1][0] == k1.startcross) {//check if it is the right crossing
+                counter2++;//if it is, increment counter 2.
+            }
+            if (counter2 == 2) {//if counter2 has been incremented twice, it means that the crossing is not an interaction between two knots
+                cases = 0;//set cases to zero.
+                break;
+            }
+        }
+        if (counter2 == 2) {//if counter2 has been incremented twice-> not an interaction between two knots
+            cases = 0;//thus, we can set cases to zero.
+            break;
+        }
+    }
+    return cases;
 }

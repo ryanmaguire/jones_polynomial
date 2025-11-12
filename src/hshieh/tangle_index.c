@@ -16,9 +16,16 @@
  *  You should have received a copy of the GNU General Public License along   *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-
 #include "kauffman_implementation.h"
 #include "catalan_info.h"
+<<<<<<< HEAD
+=======
+
+/*Functions to push, pop, and peek from a stack*/
+void push_stack(int*, int*, int);
+int pop_stack(int*, int*);
+int peek_stack(int*, int*);
+>>>>>>> 6ddc8c2d53e5eb935295a59768a6b7ee05b949c8
 
 /*Function to find the index associated to a tangle*/
 /*For every tangle with no crossings, imagine straightening out the boundary into a line, where the leftmost point
@@ -32,6 +39,7 @@ inclusive.*/
 int tangle_index(struct specialized_tangle* T) {
 	struct boundary_point* BP = T->first_boundary_point;
 	int width = T->number_of_boundary_points;
+
 	/*The array point_pairs keeps track of which boundary point is paired with which other one, while the array 
 	dist_to_pair keeps track of the list described above*/
 	int* adjusted_points = (int*)safe_malloc((2 * MAX_CROSSINGS + 1) * sizeof(int));
@@ -51,17 +59,24 @@ int tangle_index(struct specialized_tangle* T) {
 		}
 		BP = BP->next;
 	}
+
 	safe_free(adjusted_points);
 	safe_free(point_pairs);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6ddc8c2d53e5eb935295a59768a6b7ee05b949c8
 	/*To find the index of the tangle, we use a stack, which keeps tracks of strand pairs which are nested between 
 	other pairs of strands, and an element from the list is added to the stack if it is positive, as it indicates
 	that there is at least one pair of strands nested between that pair. If there is an element at the top, then the
 	catalan prefixes array counts the number of tangles with that element at the top which are lexicographically
 	smaller than the current tangle. */
-	struct stack pair_starts = make_stack(pairs + 1);
-	struct stack pair_distances = make_stack(pairs + 1);
-	push_stack(&pair_starts, -1);
-	push_stack(&pair_distances, pairs);
+	int* pair_starts_stack = (int*)safe_malloc(((size_t)pairs + 1) * sizeof(int));
+	int pair_starts_free_position = 0;
+	int* pair_distances_stack = (int*)safe_malloc(((size_t)pairs + 1) * sizeof(int));
+	int pair_distances_free_position = 0;
+	push_stack(pair_starts_stack, &pair_starts_free_position, -1);
+	push_stack(pair_distances_stack, &pair_distances_free_position, pairs);
 	int* tangle_index_summands = (int*)safe_malloc((size_t)pairs * sizeof(int));
 	int* tangle_index_multipliers = (int*)safe_malloc((size_t)pairs * sizeof(int));
 	int* tangle_index_dividers = (int*)safe_malloc((size_t)pairs * sizeof(int));
@@ -69,19 +84,19 @@ int tangle_index(struct specialized_tangle* T) {
 		tangle_index_multipliers[index] = tangle_index_dividers[index] = 1;
 	for (int index = 0; index < pairs; index++) {
 		int current_dist = dist_to_pair[index];
-		tangle_index_summands[index] = catalan_prefix[peek_stack(&pair_starts) + peek_stack(&pair_distances) - index + 1][current_dist];
-		while (peek_stack(&pair_starts) + peek_stack(&pair_distances) == index) {
-			int start = pop_stack(&pair_starts);
-			pop_stack(&pair_distances);
+		tangle_index_summands[index] = catalan_prefix[peek_stack(pair_starts_stack, &pair_starts_free_position) + peek_stack(pair_distances_stack, &pair_distances_free_position) - index + 1][current_dist];
+		while (peek_stack(pair_starts_stack, &pair_starts_free_position) + peek_stack(pair_distances_stack, &pair_distances_free_position) == index) {
+			int start = pop_stack(pair_starts_stack, &pair_starts_free_position);
+			pop_stack(pair_distances_stack, &pair_distances_free_position);
 			if (start == -1)
 				break;
-			int extra_pairs = peek_stack(&pair_starts) + peek_stack(&pair_distances) - index;
+			int extra_pairs = peek_stack(pair_starts_stack, &pair_starts_free_position) + peek_stack(pair_distances_stack, &pair_distances_free_position) - index;
 			tangle_index_multipliers[start] *= catalan[extra_pairs];
 			tangle_index_dividers[index] *= catalan[extra_pairs];
 		}
 		if (current_dist > 0) {
-			push_stack(&pair_starts, index);
-			push_stack(&pair_distances, current_dist);
+			push_stack(pair_starts_stack, &pair_starts_free_position, index);
+			push_stack(pair_distances_stack, &pair_distances_free_position, current_dist);
 		}
 	}
 	safe_free(dist_to_pair);
@@ -96,4 +111,25 @@ int tangle_index(struct specialized_tangle* T) {
 	safe_free(tangle_index_multipliers);
 	safe_free(tangle_index_dividers);
 	return tangle_index;
+}
+
+/*Function to push element onto a stack*/
+void push_stack(int* stack_elements, int* free_position, int element) {
+	stack_elements[(*free_position)++] = element;
+}
+
+/*Function which pops the first element on a stack if there is one, and otherwise returns -1000*/
+int pop_stack(int* stack_elements, int* free_position) {
+	if (*free_position > 0)
+		return stack_elements[--*free_position];
+	else
+		return -1000;
+}
+
+/*Function which returns the first element on top of the stack if there is one, and otherwise returns -1000*/
+int peek_stack(int* stack_elements, int* free_position) {
+	if (*free_position > 0)
+		return stack_elements[*free_position - 1];
+	else
+		return -1000;
 }
