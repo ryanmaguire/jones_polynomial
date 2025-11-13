@@ -20,6 +20,6 @@
 #define A_AND_A_INVERSE_H
 #ifndef A_AND_A_INVERSE_H
 
-extern int A[], A_inverse[];
+extern const int A[], A_inverse[];
 
 #endif
