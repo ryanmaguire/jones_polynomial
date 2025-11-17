@@ -48,7 +48,7 @@
 //                                                         /                         \
 //                                                        /                           \
 //                                                       /                             \
-//                                            (bottom_left_crossing)        (bottom_right_crossing_)
+//                                            (bottom_left_crossing)        (bottom_right_crossing)
 //
 
 enum boolean null_triple(struct link* L) 

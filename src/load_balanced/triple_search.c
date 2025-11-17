@@ -23,10 +23,39 @@
 /* If found, returns the component number and sets the crossing as the first crossing of the component */
 /* If not found, L is unchanged and -1 is returned */
 
+// Travelling along emphasized strands, from left to right
+//        
+//                                             (top_left_crossing)           (top_right_crossing)
+//                                                       \                             /
+//                                                        \                           /
+//                                                         \                         /
+//                                       /\ top_middle_to_left_index         top_middle_to_right_index /\
+//                                                            \                   /
+//                                                            (top_middle_crossing)
+//                                                            /                   \
+//                                                          /                       \
+//                                                        /                           \
+//                                         /\ current_to_top_index             next_to_top_index /\
+//                                                     /                                 \
+// ENTER HERE ===(previous_crossing)=====(current_crossing)== next_index > ===========(next_crossing)== far_index > =====(far_crossing)=== EXIT HERE
+//                                                     \                                 /
+//                                      \/ current_to_bottom_index             next_to_bottom_index \/
+//                                                        \                           /
+//                                                          \                       /
+//                                                            \                   /
+//                                                           (bottom_middle_crossing)
+//                                                            /                   \
+//                                    \/ bottom_middle_to_left_index         bottom_middle_to_right_index \/
+//                                                         /                         \
+//                                                        /                           \
+//                                                       /                             \
+//                                            (bottom_left_crossing)        (bottom_right_crossing)
+//
+
 int triple_search(const struct link* L) 
 {
     for (int component = 0; component < L->number_of_components; component++) {
-        if (L->number_of_crossings_in_components[component] <= 2) {
+        if (L->number_of_crossings_in_components[component] <= 2) { // change later
             continue;
         }
 
@@ -36,13 +65,53 @@ int triple_search(const struct link* L)
         do {
             struct crossing* next_crossing = current_crossing->data[next_index];
             int far_index = OPP(current_crossing->ports[next_index]);
+            
+            // Arbitrary assignment of top crossings vs bottom crossings in the diagram
+            int next_to_top_index = NEXT(far_index);
+            int next_to_bottom_index = OPP(next_to_top_index);
 
+            struct crossing* top_middle_crossing = next_crossing->data[next_to_top_index];
+            struct crossing* bottom_middle_crossing = next_crossing->data[next_to_bottom_index];
+
+            /* Check whether we have a gamma at all */
             if (
-                
+                /* Does current_crossing connect to top_middle_crossing and bottom_middle_crossing in some order? */
+                (
+                    current_crossing->data[NEXT(next_index)] == top_middle_crossing 
+                    && current_crossing->data[PREV(next_index)] == bottom_middle_crossing
+                )
+                ||
+                (
+                    current_crossing->data[PREV(next_index)] == top_middle_crossing 
+                    && current_crossing->data[NEXT(next_index)] == bottom_middle_crossing
+                )
             ) {
-                L->first_crossing_in_components[component] = current_crossing;
-                return component;
-            }
+                /* Great - we have a gamma! Let's first check if its of type 1 or 2, either positive or negative. */
+                if (next_index % 2 == far_index % 2) {
+                    L->first_crossing_in_components[component] = top_middle_crossing;
+                    return component;
+                }
+
+                /* Otherwise, we need to check that it is not of null type 4 (which doesn't simplify well at all). 
+                 * To do this, we first need some more infrastructure. */
+                
+                int current_to_top_index = // Find which one leads to top_middle_crossing
+                    (current_crossing->data[NEXT(next_index)] == top_middle_crossing) ? 
+                        NEXT(next_index) :
+                        PREV(next_index);
+                int current_to_bottom_index = OPP(current_to_top_index);
+
+                /* Set up some of the strand indices */
+                int top_middle_to_right_index = OPP(current_crossing->ports[current_to_top_index]);
+                int bottom_middle_to_right_index = OPP(current_crossing->ports[current_to_bottom_index]);
+                
+                /* Check whether this gamma is not null type 4 */
+                if (top_middle_to_right_index % 2 != bottom_middle_to_right_index % 2) {
+                    L->first_crossing_in_components[component] = current_crossing;
+                    return component;
+                }
+            } 
+
             previous_crossing = current_crossing;
             current_crossing = current_crossing->data[next_index];
             next_index = OPP(previous_crossing->ports[next_index]);
