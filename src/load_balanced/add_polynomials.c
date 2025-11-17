@@ -20,18 +20,18 @@
  #include "load_balanced.h"
 
 /* Function to add Laurent polynomials */
-struct laurent_polynomial add_polynomials(struct laurent_polynomial P, struct laurent_polynomial Q) 
+struct laurent_polynomial* add_polynomials(struct laurent_polynomial* P, struct laurent_polynomial* Q)
 {
-	struct laurent_polynomial sum;
-	sum.lowest_degree = MIN(P.lowest_degree, Q.lowest_degree);
-	sum.highest_degree = MAX(P.highest_degree, Q.highest_degree);
-	sum.coeffs = (int*)malloc(MAX_POLY_SIZE * sizeof(int));
-	for (int degree = sum.lowest_degree; degree <= sum.highest_degree; degree++) {
-		sum.coeffs[degree + DEGREE_SHIFT] = 0;
-		if (degree >= P.lowest_degree && degree <= P.highest_degree)
-			sum.coeffs[degree + DEGREE_SHIFT] += P.coeffs[degree + DEGREE_SHIFT];
-		if (degree >= Q.lowest_degree && degree <= Q.highest_degree)
-			sum.coeffs[degree + DEGREE_SHIFT] += Q.coeffs[degree + DEGREE_SHIFT];
+	struct laurent_polynomial* sum = (struct laurent_polynomial*) safe_malloc(sizeof(struct laurent_polynomial));
+	sum->lowest_degree = MIN(P->lowest_degree, Q->lowest_degree);
+	sum->highest_degree = MAX(P->highest_degree, Q->highest_degree);
+	sum->coeffs = (int*) safe_malloc(MAX_POLY_SIZE * sizeof(int));
+	for (int degree = sum->lowest_degree; degree <= sum->highest_degree; degree++) {
+		sum->coeffs[degree + DEGREE_SHIFT] = 0;
+		if (degree >= P->lowest_degree && degree <= P->highest_degree)
+			sum->coeffs[degree + DEGREE_SHIFT] += P->coeffs[degree + DEGREE_SHIFT];
+		if (degree >= Q->lowest_degree && degree <= Q->highest_degree)
+			sum->coeffs[degree + DEGREE_SHIFT] += Q->coeffs[degree + DEGREE_SHIFT];
 	}
 	return sum;
 }

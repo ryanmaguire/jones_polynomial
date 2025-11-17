@@ -22,7 +22,7 @@
 /* Main recursion function for computing the Kauffman Bracket Polynomial of a link */
 /* Complexity types (to a depth of 2) are compared at https://www.desmos.com/calculator/2cyj8icufr */
 /* In particular, the current pattern ordering is valid for all alpha >= 1.619 > phi */
-struct laurent_polynomial kauffman_bracket_polynomial(struct link* L)
+struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
 {
     /* Loop through all reidemeister moves and generalized reidemeister moves until no more can be performed */
     while (reidemeister_move_i(L) || reidemeister_move_ii(L) || null_gamma(L) || null_triple(L)) {}
@@ -37,10 +37,10 @@ struct laurent_polynomial kauffman_bracket_polynomial(struct link* L)
     if (number_of_unknots == L->number_of_components) {
         /* If we remove unknots until we have one remaining, we get number_of_unknots - 1 as our exponent for A^2+A^-2 */
         int exponent = number_of_unknots - 1;
-        struct laurent_polynomial result;
-        result.coeffs = a_squared_a_inv_squared_powers + exponent;
-        result.lowest_degree = -2 * exponent;
-        result.highest_degree = 2 * exponent;
+        struct laurent_polynomial* result = (struct laurent_polynomial*) safe_malloc(sizeof(struct laurent_polynomial));
+        result->coeffs = a_squared_a_inv_squared_powers + exponent;
+        result->lowest_degree = -2 * exponent;
+        result->highest_degree = 2 * exponent;
         
         /* Free memory of L */
         /* All components of L must now be unknots, so there are no crossings to free */
@@ -52,10 +52,10 @@ struct laurent_polynomial kauffman_bracket_polynomial(struct link* L)
     }
 
     /* Otherwise, check for individual unknot diagrams and remove them */
-    struct laurent_polynomial multiplier;
-    multiplier.coeffs = a_squared_a_inv_squared_powers + number_of_unknots;
-    multiplier.lowest_degree = -2 * number_of_unknots;
-    multiplier.highest_degree = 2 * number_of_unknots;
+    struct laurent_polynomial* multiplier = (struct laurent_polynomial*) safe_malloc(sizeof(struct laurent_polynomial));
+    multiplier->coeffs = a_squared_a_inv_squared_powers + number_of_unknots;
+    multiplier->lowest_degree = -2 * number_of_unknots;
+    multiplier->highest_degree = 2 * number_of_unknots;
 
     /* Linear time run through the components */
     int scanning_index = 0; // Current (old) index that we are looking att
@@ -68,10 +68,6 @@ struct laurent_polynomial kauffman_bracket_polynomial(struct link* L)
         }
     }
     L->number_of_components -= number_of_unknots;
-
-    // =================================================
-    // TODO: remember to scale ALL outputs by multiplier
-    // =================================================
 
     int pattern_component; // Component in which pattern is located
 
@@ -94,30 +90,30 @@ struct laurent_polynomial kauffman_bracket_polynomial(struct link* L)
     smooth_crossing(L_copy, L->first_crossing_in_components[pattern_component], 1);
 
     /* Recursion step */
-    struct laurent_polynomial polynomial_1 = kauffman_bracket_polynomial(L);
-    struct laurent_polynomial polynomial_2 = kauffman_bracket_polynomial(L_copy);
+    struct laurent_polynomial* polynomial_1 = kauffman_bracket_polynomial(L);
+    struct laurent_polynomial* polynomial_2 = kauffman_bracket_polynomial(L_copy);
 
     /* We will now evaluate the final polynomial according to KBP Skein relation */
 
     /* First, compute the two individual terms - notice that multiplying or dividing by 
      * A is just shifting the coeffs up or down by 1 index */
-    polynomial_1.highest_degree++;
-    polynomial_1.lowest_degree++;
-    polynomial_2.highest_degree--;
-    polynomial_2.lowest_degree--;
+    polynomial_1->highest_degree++;
+    polynomial_1->lowest_degree++;
+    polynomial_2->highest_degree--;
+    polynomial_2->lowest_degree--;
 
     /* Now, add them */
-    struct laurent_polynomial sum_of_two_polynomials = add_polynomials(polynomial_1, polynomial_2);
+    struct laurent_polynomial* sum_of_two_polynomials = add_polynomials(polynomial_1, polynomial_2);
     
     /* Finally, scale by multiplier */
-    struct laurent_polynomial result = multiply_polynomials(sum_of_two_polynomials, multiplier);
+    struct laurent_polynomial* result = multiply_polynomials(sum_of_two_polynomials, multiplier);
 
     /* We never actually need to free L or L_copy because they will get passed down
      * the recursion and eventually freed by the base case */
     /* However, we do need to free polynomials 1 and 2 */
-    SAFE_FREE(polynomial_1.coeffs);
-    SAFE_FREE(polynomial_2.coeffs);
-    SAFE_FREE(sum_of_two_polynomials.coeffs);
+    delete_polynomial(polynomial_1);
+    delete_polynomial(polynomial_2);
+    delete_polynomial(sum_of_two_polynomials);
 
     /* We are done. */
     return result;

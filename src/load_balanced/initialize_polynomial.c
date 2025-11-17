@@ -20,12 +20,12 @@
  #include "load_balanced.h"
 
 /*Function which returns a laurent polynomial initialized to the zero polynomial*/
-struct laurent_polynomial initialize_polynomial(void) 
+struct laurent_polynomial* initialize_polynomial(void) 
 {
 	/*Create struct for polynomial, set its lowest and highest degrees to zero, and then set
 	all of its coefficients to zero*/
-	struct laurent_polynomial temp;
-	temp.lowest_degree = temp.highest_degree = 0;
-	temp.coeffs = (int*)safe_calloc(MAX_POLY_SIZE, sizeof(int));
+	struct laurent_polynomial* temp = (struct laurent_polynomial*) safe_malloc(sizeof(struct laurent_polynomial));
+	temp->lowest_degree = temp->highest_degree = 0;
+	temp->coeffs = (int*) safe_calloc(MAX_POLY_SIZE, sizeof(int));
 	return temp;
 }

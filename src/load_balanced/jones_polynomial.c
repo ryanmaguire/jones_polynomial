@@ -20,15 +20,17 @@
  #include "load_balanced.h"
 
  /* Function to return the Jones polynomial of a link */
- struct laurent_polynomial jones_polynomial(struct link* L) 
+ struct laurent_polynomial* jones_polynomial(struct link* L) 
  {
     int w = writhe(L);
-    struct laurent_polynomial kauffman_bracket = kauffman_bracket_polynomial(L);
-    struct laurent_polynomial jones_polynomial = initialize_polynomial();
+    struct laurent_polynomial* kauffman_bracket = kauffman_bracket_polynomial(L);
+    struct laurent_polynomial* jones_polynomial = initialize_polynomial();
     int sign = (w % 2 == 0) ? 1 : -1;
-	for (int degree = kauffman_bracket.lowest_degree; degree <= kauffman_bracket.highest_degree; degree+= 4) 
-		jones_polynomial.coeffs[-(degree - 3 * w)/4 + DEGREE_SHIFT] = sign * kauffman_bracket.coeffs[degree + DEGREE_SHIFT];
-	jones_polynomial.lowest_degree = -(kauffman_bracket.highest_degree - 3 * w) / 4;
-	jones_polynomial.highest_degree = -(kauffman_bracket.lowest_degree - 3 * w) / 4;
+	for (int degree = kauffman_bracket->lowest_degree; degree <= kauffman_bracket->highest_degree; degree+= 4) 
+		jones_polynomial->coeffs[-(degree - 3 * w)/4 + DEGREE_SHIFT] = sign * kauffman_bracket->coeffs[degree + DEGREE_SHIFT];
+	jones_polynomial->lowest_degree = -(kauffman_bracket->highest_degree - 3 * w) / 4;
+	jones_polynomial->highest_degree = -(kauffman_bracket->lowest_degree - 3 * w) / 4;
+
+    delete_polynomial(kauffman_bracket);    
     return jones_polynomial;
  }

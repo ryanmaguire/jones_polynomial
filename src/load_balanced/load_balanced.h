@@ -49,13 +49,14 @@ struct laurent_polynomial {
 	signed int* coeffs; // length = MAX_POLY_SIZE
 };
 
-extern struct laurent_polynomial initialize_polynomial(void);
+extern struct laurent_polynomial* initialize_polynomial(void);
+extern void delete_polynomial(struct laurent_polynomial* P);
 extern void print_polynomial(struct laurent_polynomial* P, char c);
 /* =======================================================================
  * TODO: SHOULD P AND Q BE CONST HERE?
  * ======================================================================= */
-extern struct laurent_polynomial add_polynomials(struct laurent_polynomial P, struct laurent_polynomial Q);
-extern struct laurent_polynomial multiply_polynomials(struct laurent_polynomial P, struct laurent_polynomial Q);
+extern struct laurent_polynomial* add_polynomials(struct laurent_polynomial* P, struct laurent_polynomial* Q);
+extern struct laurent_polynomial* multiply_polynomials(struct laurent_polynomial* P, struct laurent_polynomial* Q);
 
 /* Struct for crossing in PD notation; first entry of data is the undercrossing which points at
 	the crossing (when the knot is given an orientation), and then lists crossings adjacent to it
@@ -110,8 +111,8 @@ extern enum boolean null_gamma(struct link* L);
 extern enum boolean null_triple(struct link* L);
 
 extern int writhe(const struct link* L);
-extern struct laurent_polynomial jones_polynomial(struct link* L);
-extern struct laurent_polynomial kauffman_bracket_polynomial(struct link* L);
+extern struct laurent_polynomial* jones_polynomial(struct link* L);
+extern struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L);
 
 extern int triple_search(const struct link* L);
 extern int gamma_search(const struct link* L);

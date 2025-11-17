@@ -38,15 +38,15 @@
 //
 
 int gamma_search(const struct link* L){
-    int counter;//Which component are we searching?
+    int component;//Which component are we searching?
     struct crossing* current_crossing;//Current crossing in search
     struct crossing* next_crossing;//Next crossing in search
     int direction;//Direction of travel in search
     int found = 0;//Have we found gammas yet? 0 = no, 1 = yes
     int dir;// Direction from current_crossing two second crossing of gamma
-    for (counter = 0; counter < L->number_of_components; counter++){//Iterate over components
-        current_crossing = L->first_crossing_in_components[counter];//Current crossing should be in the counter-th component
-        direction = (current_crossing->over_component == counter) ? 1 : 0;//Make sure that you're going in the right direction
+    for (component = 0; component < L->number_of_components; component++){//Iterate over components
+        current_crossing = L->first_crossing_in_components[component];//Current crossing should be in the current component
+        direction = (current_crossing->over_component == component) ? 1 : 0;//Make sure that you're going in the right direction
         do {
             for (dir = 0; dir <4; dir++){//Check all four directions from current crossing
                 if (current_crossing->data[dir]->data[(current_crossing->ports[dir]+1)%4] == current_crossing && (dir + current_crossing->ports[dir])%2 == 1){//Bigon??
@@ -57,13 +57,13 @@ int gamma_search(const struct link* L){
                 }
             }
             if (found == 1){//If we've found a gamma
-                L->first_crossing_in_components[counter] = current_crossing;//Set first crossing of component to current crossing (for easy passing to smoothing function)
-                return counter;//Return component number
+                L->first_crossing_in_components[component] = current_crossing;//Set first crossing of component to current crossing (for easy passing to smoothing function)
+                return component;//Return component number
             }
             next_crossing = current_crossing->data[direction];//Get next crossing
             direction = OPP(current_crossing->ports[direction]);//Update direction
             current_crossing = next_crossing;// Move to next crossing
-        } while (!(current_crossing == L->first_crossing_in_components[counter] && direction == ((current_crossing->over_component == counter) ? 1 : 0))&& L->number_of_crossings_in_components[component] > 0);//End if we've looped all the way around the component
+        } while (!(current_crossing == L->first_crossing_in_components[component] && direction == ((current_crossing->over_component == component) ? 1 : 0))&& L->number_of_crossings_in_components[component] > 0);//End if we've looped all the way around the component
     }
     if (found == 0){
         return -1;

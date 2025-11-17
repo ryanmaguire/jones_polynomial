@@ -19,17 +19,9 @@
  ******************************************************************************/
  #include "load_balanced.h"
 
- /* Functions to multiply Laurent polynomials */
-struct laurent_polynomial* multiply_polynomials(struct laurent_polynomial* P, struct laurent_polynomial* Q) 
+/* Function to free memory associated with a laurent_polynomial struct */
+void delete_polynomial(struct laurent_polynomial* P)
 {
-	struct laurent_polynomial* product = (struct laurent_polynomial*) safe_malloc(sizeof(struct laurent_polynomial));
-	product->lowest_degree = P->lowest_degree + Q->lowest_degree;
-	product->highest_degree = P->highest_degree + Q->highest_degree;
-	product->coeffs = (int*) safe_malloc(MAX_POLY_SIZE * sizeof(int));
-	for (int degree = product->lowest_degree; degree <= product->highest_degree; degree++)
-		product->coeffs[degree + DEGREE_SHIFT] = 0;
-	for (int P_degree = P->lowest_degree; P_degree <= P->highest_degree; P_degree++)
-		for (int Q_degree = Q->lowest_degree; Q_degree <= Q->highest_degree; Q_degree++)
-			product->coeffs[P_degree + Q_degree + DEGREE_SHIFT] += P->coeffs[P_degree + DEGREE_SHIFT] * Q->coeffs[Q_degree + DEGREE_SHIFT];
-	return product;
+    SAFE_FREE(P->coeffs);
+    SAFE_FREE(P);
 }

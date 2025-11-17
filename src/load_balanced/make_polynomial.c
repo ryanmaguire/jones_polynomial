@@ -26,7 +26,7 @@ struct laurent_polynomial make_polynomial(int lowest_degree, int highest_degree,
 	struct laurent_polynomial temp;
 	temp.lowest_degree = lowest_degree;
 	temp.highest_degree = highest_degree;
-	temp.coeffs = (int*)malloc(MAX_POLY_SIZE * sizeof(int));
+	temp.coeffs = (int*) safe_malloc(MAX_POLY_SIZE * sizeof(int));
 	for (int degree = lowest_degree; degree <= highest_degree; degree++)
 		temp.coeffs[degree + DEGREE_SHIFT] = coeffs[degree - lowest_degree];
 	return temp;
