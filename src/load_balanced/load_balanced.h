@@ -24,6 +24,9 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "a_and_a_inverse.h"
+#include "a_squared_plus_a_inverse_squared.h"
+
 /* Swap two variables */
 #define SWAP(temp_SWAP_MACRO, x, y) temp_SWAP_MACRO = x; x = y; y = temp_SWAP_MACRO
 
@@ -48,6 +51,10 @@ struct laurent_polynomial {
 
 extern struct laurent_polynomial initialize_polynomial(void);
 extern void print_polynomial(struct laurent_polynomial* P, char c);
+/* =======================================================================
+ * TODO: SHOULD P AND Q BE CONST HERE?
+ * ======================================================================= */
+extern struct laurent_polynomial add_polynomials(struct laurent_polynomial P, struct laurent_polynomial Q);
 extern struct laurent_polynomial multiply_polynomials(struct laurent_polynomial P, struct laurent_polynomial Q);
 
 /* Struct for crossing in PD notation; first entry of data is the undercrossing which points at

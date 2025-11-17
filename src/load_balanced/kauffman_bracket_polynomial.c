@@ -26,7 +26,6 @@ struct laurent_polynomial kauffman_bracket_polynomial(struct link* L)
 {
     /* Loop through all reidemeister moves and generalized reidemeister moves until no more can be performed */
     while (reidemeister_move_i(L) || reidemeister_move_ii(L) || null_gamma(L) || null_triple(L)) {}
-    struct laurent_polynomial A;
 
     /* Count number of unknot diagrams in link */
     int number_of_unknots = 0;
@@ -36,9 +35,12 @@ struct laurent_polynomial kauffman_bracket_polynomial(struct link* L)
 
     /* Deal with the case where the link is now a union of unknot diagrams */
     if (number_of_unknots == L->number_of_components) {
-        // ==========================================================================================================================
-        // TODO: take a^2+a^-2 and raise it to the power of number_of_unknots, we should definitely precompute all the powers of this
-        // ==========================================================================================================================
+        /* If we remove unknots until we have one remaining, we get number_of_unknots - 1 as our exponent for A^2+A^-2 */
+        int exponent = number_of_unknots - 1;
+        struct laurent_polynomial result;
+        result.coeffs = a_squared_a_inv_squared_powers + exponent;
+        result.lowest_degree = -2 * exponent;
+        result.highest_degree = 2 * exponent;
         
         /* Free memory of L */
         /* All components of L must now be unknots, so there are no crossings to free */
@@ -46,16 +48,15 @@ struct laurent_polynomial kauffman_bracket_polynomial(struct link* L)
         SAFE_FREE(L->number_of_crossings_in_components);
         SAFE_FREE(L);
 
-        // ===================
-        // TODO: return result
-        // ===================
+        return result;
     }
 
-    /* Otherwise, check for individual unknot diagrams */
+    /* Otherwise, check for individual unknot diagrams and remove them */
     struct laurent_polynomial multiplier;
-    // ==========================================================================================================================
-    // TODO: take a^2+a^-2 and raise it to the power of number_of_unknots, we should definitely precompute all the powers of this
-    // ==========================================================================================================================
+    multiplier.coeffs = a_squared_a_inv_squared_powers + number_of_unknots;
+    multiplier.lowest_degree = -2 * number_of_unknots;
+    multiplier.highest_degree = 2 * number_of_unknots;
+
     /* Linear time run through the components */
     int scanning_index = 0; // Current (old) index that we are looking att
     int moved_index = 0; // New index that we will put non-unknot components into
@@ -96,6 +97,28 @@ struct laurent_polynomial kauffman_bracket_polynomial(struct link* L)
     struct laurent_polynomial polynomial_1 = kauffman_bracket_polynomial(L);
     struct laurent_polynomial polynomial_2 = kauffman_bracket_polynomial(L_copy);
 
-    /* Evaluate polynomial according to KBP Skein relation */
-    return add_polynomials(multiply_polynomials(kauffman_bracket_polynomial(L),A)), multiply_polynomials(kauffman_bracket_polynomial(L_copy),A_inverse);
+    /* We will now evaluate the final polynomial according to KBP Skein relation */
+
+    /* First, compute the two individual terms - notice that multiplying or dividing by 
+     * A is just shifting the coeffs up or down by 1 index */
+    polynomial_1.highest_degree++;
+    polynomial_1.lowest_degree++;
+    polynomial_2.highest_degree--;
+    polynomial_2.lowest_degree--;
+
+    /* Now, add them */
+    struct laurent_polynomial sum_of_two_polynomials = add_polynomials(polynomial_1, polynomial_2);
+    
+    /* Finally, scale by multiplier */
+    struct laurent_polynomial result = multiply_polynomials(sum_of_two_polynomials, multiplier);
+
+    /* We never actually need to free L or L_copy because they will get passed down
+     * the recursion and eventually freed by the base case */
+    /* However, we do need to free polynomials 1 and 2 */
+    SAFE_FREE(polynomial_1.coeffs);
+    SAFE_FREE(polynomial_2.coeffs);
+    SAFE_FREE(sum_of_two_polynomials.coeffs);
+
+    /* We are done. */
+    return result;
 }
