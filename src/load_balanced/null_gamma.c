@@ -51,6 +51,9 @@ enum boolean null_gamma(struct link* L)
             continue;
         }
 
+        // This will be decremented by 1 if the crossing will be visitied twice, by 2 otherwise
+        int crossings_left_to_visit = 2 * L->number_of_crossings_in_components[component]; 
+
         int next_index = 2;
         struct crossing* current_crossing = L->first_crossing_in_components[component];
         struct crossing* previous_crossing = current_crossing->data[OPP(next_index)];
@@ -118,6 +121,8 @@ enum boolean null_gamma(struct link* L)
                     L->first_crossing_in_components[component] = former_crossing;
                 }
 
+                crossings_left_to_visit -= 2;
+
                 next_index = OPP(very_far_crossing_exit_index);
                 delete_crossing(previous_crossing);
                 previous_crossing = next_crossing;
@@ -125,16 +130,17 @@ enum boolean null_gamma(struct link* L)
 
                 found_something = TRUE;
             } else {
+                if (current_crossing->over_component == current_crossing->under_component) {
+                    crossings_left_to_visit -= 1;
+                } else {
+                    crossings_left_to_visit -= 2;
+                }
+
                 previous_crossing = current_crossing;
                 current_crossing = current_crossing->data[next_index];
                 next_index = OPP(previous_crossing->ports[next_index]);
             }
-        } while (
-            /* Edge case check to make sure we aren't trying to do stuff to an unknot */
-            L->number_of_crossings_in_components[component] > 0 
-            /* Keep on looping until we go around the link */
-            && current_crossing != L->first_crossing_in_components[component]
-        );
+        } while (L->number_of_crossings_in_components[component] > 0 && crossings_left_to_visit > 0);
     }
 
     return found_something;
