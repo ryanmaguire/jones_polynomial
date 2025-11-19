@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "stdio.h": "c",
-        "array": "c",
-        "vector": "c"
-    }
-}

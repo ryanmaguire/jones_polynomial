@@ -28,7 +28,7 @@
 #include "a_squared_plus_a_inverse_squared.h"
 
 /* Swap two variables */
-#define SWAP(temp_SWAP_MACRO, x, y) temp_SWAP_MACRO = x; x = y; y = temp_SWAP_MACRO
+#define SWAP(type, x, y) do {type my_temp = x; x = y; y = my_temp;} while (0)
 
 /* booleans*/
 enum boolean { FALSE, TRUE };
