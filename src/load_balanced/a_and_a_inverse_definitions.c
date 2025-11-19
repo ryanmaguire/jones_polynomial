@@ -17,8 +17,8 @@
  *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-#include "a_and_a_inverse.h"
 #include "load_balanced.h"
+#include "a_and_a_inverse.h"
 
 /* Storing coefficients of A */
 const int A[MAX_POLY_SIZE] = {
