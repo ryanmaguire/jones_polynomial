@@ -145,7 +145,7 @@ void smooth_crossing(struct link *L, struct crossing* C, int type){
                 current_crossing = next_crossing;
                 if (direction == 0) {
                     current_crossing->overdirection = OPP(current_crossing->overdirection);//Switch sign of crossing as I swap the strand
-                    SWAP(struct *crossing, current_crossing->data[0], current_crossing->data[2]);
+                    SWAP(struct crossing*, current_crossing->data[0], current_crossing->data[2]);
                     SWAP(int, current_crossing->ports[0], current_crossing->ports[2]);
                     current_crossing->data[0]->ports[current_crossing->ports[0]] = 0;
                     current_crossing->data[2]->ports[current_crossing->ports[2]] = 2;
@@ -289,7 +289,7 @@ void smooth_crossing(struct link *L, struct crossing* C, int type){
                 }
 				if (direction == 0){
                     current_crossing->overdirection = OPP(current_crossing->overdirection);//Switch sign of crossing as I swap the strand
-                    SWAP(struct *crossing, current_crossing->data[0], current_crossing->data[2]);
+                    SWAP(struct crossing*, current_crossing->data[0], current_crossing->data[2]);
                     SWAP(int, C->ports[0], C->ports[2]);
                     current_crossing->data[0]->ports[current_crossing->ports[0]] = 0;
                     current_crossing->data[2]->ports[current_crossing->ports[2]] = 2;
