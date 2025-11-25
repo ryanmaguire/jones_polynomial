@@ -20,7 +20,7 @@
 #include "load_balanced.h"
 
 /* Function to make a crossing given its ID, data, port info, overdirection, and over & under components */
-struct crossing* make_crossing(const int id, const struct crossing** data, const int* ports, const int overdirection, const int over_component, const int under_component) 
+struct crossing* make_crossing(const int id, struct crossing** const data, const int* ports, const int overdirection, const int over_component, const int under_component) 
 {
 	struct crossing* temp = (struct crossing*)safe_malloc(sizeof(struct crossing));
 	temp->id = id;

@@ -55,16 +55,25 @@ struct link* copy_link(const struct link* L)
             continue;
         }
 
+        // This will be decremented by 1 if the crossing will be visitied twice, by 2 otherwise
+        int crossings_left_to_visit = 2 * L->number_of_crossings_in_components[component]; 
+
         struct crossing* previous_crossing = NULL;
         struct crossing* current_crossing = L->first_crossing_in_components[component];
         int next_index = 2;
         do {
             current_crossing->id = -1;
 
+            if (current_crossing->over_component == current_crossing->under_component) {
+                crossings_left_to_visit -= 1;
+            } else {
+                crossings_left_to_visit -= 2;
+            }
+
             previous_crossing = current_crossing;
             current_crossing = current_crossing->data[next_index];
             next_index = OPP(previous_crossing->ports[next_index]);
-        } while (current_crossing != L->first_crossing_in_components[component]);
+        } while (crossings_left_to_visit > 0);
     }
 
     /* Assign ids to every crossing from 0 to n-1, inclusive */
@@ -74,6 +83,9 @@ struct link* copy_link(const struct link* L)
             continue;
         }
 
+        // This will be decremented by 1 if the crossing will be visitied twice, by 2 otherwise
+        int crossings_left_to_visit = 2 * L->number_of_crossings_in_components[component]; 
+
         struct crossing* previous_crossing = NULL;
         struct crossing* current_crossing = L->first_crossing_in_components[component];
         int next_index = 2;
@@ -82,10 +94,16 @@ struct link* copy_link(const struct link* L)
                 current_crossing->id = current_id++;
             }
 
+            if (current_crossing->over_component == current_crossing->under_component) {
+                crossings_left_to_visit -= 1;
+            } else {
+                crossings_left_to_visit -= 2;
+            }
+
             previous_crossing = current_crossing;
             current_crossing = current_crossing->data[next_index];
             next_index = OPP(previous_crossing->ports[next_index]);
-        } while (current_crossing != L->first_crossing_in_components[component]);
+        } while (crossings_left_to_visit > 0);
     }
 
     /* We now know the total number of crossings */
@@ -101,6 +119,9 @@ struct link* copy_link(const struct link* L)
         if (L->number_of_crossings_in_components[component] == 0) {
             continue;
         }
+
+        // This will be decremented by 1 if the crossing will be visitied twice, by 2 otherwise
+        int crossings_left_to_visit = 2 * L->number_of_crossings_in_components[component]; 
 
         struct crossing* previous_crossing = NULL;
         struct crossing* current_crossing = L->first_crossing_in_components[component];
@@ -129,10 +150,16 @@ struct link* copy_link(const struct link* L)
                 copied_crossing->under_component = current_crossing->under_component;
             }
 
+            if (current_crossing->over_component == current_crossing->under_component) {
+                crossings_left_to_visit -= 1;
+            } else {
+                crossings_left_to_visit -= 2;
+            }
+
             previous_crossing = current_crossing;
             current_crossing = current_crossing->data[next_index];
             next_index = OPP(previous_crossing->ports[next_index]);
-        } while (current_crossing != L->first_crossing_in_components[component]);
+        } while (crossings_left_to_visit > 0);
 
         /* Now, current_crossing = L->first_crossing_in_components[component], so we can do this: */
         M->first_crossing_in_components[component] = new_crossings_address + current_crossing->id;

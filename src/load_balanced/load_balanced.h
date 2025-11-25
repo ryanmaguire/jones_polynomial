@@ -92,7 +92,7 @@ struct crossing {
 	int under_component; // Component containing understrand
 };
 
-extern struct crossing* make_crossing(const int id, const struct crossing** data, const int* ports, const int overdirection, const int over_component, const int under_component);
+extern struct crossing* make_crossing(const int id, struct crossing** const data, const int* ports, const int overdirection, const int over_component, const int under_component);
 extern void delete_crossing(struct crossing* C); // DOES NOT UPDATE NEIGHBORING CROSSINGS
 extern void reverse_crossing(struct crossing* C); //Do we need this function? -Hansen
 
@@ -101,7 +101,7 @@ struct link {
 	int* number_of_crossings_in_components; // Array of number of crossings in each link component, length = MAX_CROSSINGS
 	struct crossing** first_crossing_in_components; // Array of pointers to a crossing in each link component, length = MAX_CROSSINGS
 };
-extern struct link* make_link(const int number_of_components, const int* number_of_crossings_in_components, const struct crossing** first_crossing_in_components);
+extern struct link* make_link(const int number_of_components, int* const number_of_crossings_in_components, struct crossing** const first_crossing_in_components);
 extern struct link* copy_link(const struct link* L);
 
 extern void smooth_crossing(struct link* L, struct crossing* C, const int smoothing_type);
@@ -129,6 +129,6 @@ struct PD_knot {
 	struct PD_crossing* crossings;
 };
 
-struct PD_knot* make_PD_knot(const int number_of_crossings, const struct PD_crossing* crossings);
+struct PD_knot* make_PD_knot(const int number_of_crossings, struct PD_crossing* crossings);
 struct link* PD_to_algorithm_knot(const struct PD_knot* K);
 #endif

@@ -20,7 +20,7 @@
 #include "load_balanced.h"
 
 /* Function to make a PD knot given its number of crossings and crossing PD code */
-struct PD_knot* make_PD_knot(const int number_of_crossings, const struct PD_crossing* crossings) 
+struct PD_knot* make_PD_knot(const int number_of_crossings, struct PD_crossing* crossings) 
 {
 	struct PD_knot* temp = (struct PD_knot*)safe_malloc(sizeof(struct PD_knot));
 	temp->number_of_crossings = number_of_crossings;

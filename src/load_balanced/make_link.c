@@ -20,10 +20,11 @@
 #include "load_balanced.h"
 
 /* Function to make a link given its number of components, number of crossings in each component, and first crossing in each component */
-struct link* make_link(const int number_of_components, const int* number_of_crossings_in_components, const struct crossing** first_crossing_in_components) 
+struct link* make_link(const int number_of_components, int* const number_of_crossings_in_components, struct crossing** const first_crossing_in_components) 
 {
 	struct link* temp = (struct link*)safe_malloc(sizeof(struct link));
 	temp->number_of_components = number_of_components;
 	temp->number_of_crossings_in_components = number_of_crossings_in_components;
 	temp->first_crossing_in_components = first_crossing_in_components;
+	return temp;
 }
