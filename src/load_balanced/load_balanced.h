@@ -130,7 +130,7 @@ struct PD_crossing {
 
 struct PD_knot {
 	int number_of_crossings;
-	struct crossing* crossings;
+	struct PD_crossing* crossings;
 };
 
 struct PD_knot* make_PD_knot(const int number_of_crossings, const struct PD_crossing* crossings);

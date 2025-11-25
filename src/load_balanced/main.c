@@ -21,5 +21,11 @@
 
 int main() 
 {
+	/* Starting to run tests with trefoil */
+	struct PD_crossing trefoil_PD_crossings[] = { {{1, 5, 2, 4}}, {{3, 1, 4, 6}}, {{5, 3, 6, 2}} };
+	struct PD_knot trefoil_PD = { 3, trefoil_PD_crossings };
+
+	struct link* trefoil = PD_to_algorithm_knot(&trefoil_PD);
+	printf("writhe: %d\n", writhe(trefoil));
 	return 0;
 }
