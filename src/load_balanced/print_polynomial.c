@@ -20,7 +20,7 @@
  #include "load_balanced.h"
 
 /*Function to print a laurent polynomial in a given variable*/
-void print_polynomial(struct laurent_polynomial* P, char c) 
+void print_polynomial(const struct laurent_polynomial* P, char c) 
 {
 	/*Starting from the highest degree, print all the terms, with + and - signs as needed*/
 	for (int degree = P->highest_degree; degree >= P->lowest_degree; degree--) {

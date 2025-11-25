@@ -55,11 +55,7 @@ struct laurent_polynomial {
 
 extern struct laurent_polynomial* initialize_polynomial(void);
 extern void delete_polynomial(struct laurent_polynomial* P);
-extern void print_polynomial(struct laurent_polynomial* P, char c);
-/* =======================================================================
- * TODO: SHOULD P AND Q BE CONST HERE?
- * I think so, changed it - Hansen
- * ======================================================================= */
+extern void print_polynomial(const struct laurent_polynomial* P, char c);
 extern struct laurent_polynomial* add_polynomials(const struct laurent_polynomial* P, const struct laurent_polynomial* Q);
 extern struct laurent_polynomial* multiply_polynomials(const struct laurent_polynomial* P, const struct laurent_polynomial* Q);
 
