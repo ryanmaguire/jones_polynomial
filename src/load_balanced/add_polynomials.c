@@ -20,7 +20,7 @@
  #include "load_balanced.h"
 
 /* Function to add Laurent polynomials */
-struct laurent_polynomial* add_polynomials(struct laurent_polynomial* P, struct laurent_polynomial* Q)
+struct laurent_polynomial* add_polynomials(const struct laurent_polynomial* P, const struct laurent_polynomial* Q)
 {
 	struct laurent_polynomial* sum = (struct laurent_polynomial*) safe_malloc(sizeof(struct laurent_polynomial));
 	sum->lowest_degree = MIN(P->lowest_degree, Q->lowest_degree);

@@ -14,18 +14,16 @@
  *  GNU General Public License for more details.                              *
  *                                                                            *
  *  You should have received a copy of the GNU General Public License along   *
+ *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-
-/*  All typedef's and function prototypes are provided here.                  */
 #include "load_balanced.h"
 
-/* Function to make a Laurent polynomial based off its highest degree, lowest degree, and array of coefficients */
-struct laurent_polynomial* make_polynomial(int lowest_degree, int highest_degree, int* coeffs) 
+/* Function to make a PD knot given its number of crossings and crossing PD code */
+struct PD_knot* make_PD_knot(const int number_of_crossings, const struct PD_crossing* crossings) 
 {
-	struct laurent_polynomial* temp = (struct laurent_polynomial*)safe_malloc(sizeof(struct laurent_polynomial));
-	temp->lowest_degree = lowest_degree;
-	temp->highest_degree = highest_degree;
-	temp->coeffs = coeffs;
+	struct PD_knot* temp = (struct PD_knot*)safe_malloc(sizeof(struct PD_knot));
+	temp->number_of_crossings = number_of_crossings;
+	temp->crossings = crossings;
 	return temp;
 }

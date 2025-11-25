@@ -20,7 +20,7 @@
  #include "load_balanced.h"
 
  /* Functions to multiply Laurent polynomials */
-struct laurent_polynomial* multiply_polynomials(struct laurent_polynomial* P, struct laurent_polynomial* Q) 
+struct laurent_polynomial* multiply_polynomials(const struct laurent_polynomial* P, const struct laurent_polynomial* Q) 
 {
 	struct laurent_polynomial* product = (struct laurent_polynomial*) safe_malloc(sizeof(struct laurent_polynomial));
 	product->lowest_degree = P->lowest_degree + Q->lowest_degree;

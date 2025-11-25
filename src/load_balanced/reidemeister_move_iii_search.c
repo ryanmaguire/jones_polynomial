@@ -42,7 +42,7 @@
 //                                             /                \\
 //                                            /                  \\
 //                  (still different former crossing)       (still different far crossing)
-int gamma_search(const struct link* L) 
+int reidemeister_move_iii_search(const struct link* L) 
 {
     for (int component = 0; component < L->number_of_components; component++) {
         if (L->number_of_crossings_in_components[component] <= 2) {

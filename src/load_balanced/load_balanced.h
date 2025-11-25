@@ -27,6 +27,10 @@
 #include "a_and_a_inverse.h"
 #include "a_squared_plus_a_inverse_squared.h"
 
+/* Minimum and maximum macros */
+#define MAX(a, b) ((a > b) ? a : b)
+#define MIN(a, b) ((a < b) ? a : b)
+
 /* Swap two variables */
 #define SWAP(type, x, y) do {type my_temp = x; x = y; y = my_temp;} while (0)
 
@@ -54,9 +58,10 @@ extern void delete_polynomial(struct laurent_polynomial* P);
 extern void print_polynomial(struct laurent_polynomial* P, char c);
 /* =======================================================================
  * TODO: SHOULD P AND Q BE CONST HERE?
+ * I think so, changed it - Hansen
  * ======================================================================= */
-extern struct laurent_polynomial* add_polynomials(struct laurent_polynomial* P, struct laurent_polynomial* Q);
-extern struct laurent_polynomial* multiply_polynomials(struct laurent_polynomial* P, struct laurent_polynomial* Q);
+extern struct laurent_polynomial* add_polynomials(const struct laurent_polynomial* P, const struct laurent_polynomial* Q);
+extern struct laurent_polynomial* multiply_polynomials(const struct laurent_polynomial* P, const struct laurent_polynomial* Q);
 
 /* Struct for crossing in PD notation; first entry of data is the undercrossing which points at
 	the crossing (when the knot is given an orientation), and then lists crossings adjacent to it
@@ -91,16 +96,16 @@ struct crossing {
 	int under_component; // Component containing understrand
 };
 
-extern struct crossing* make_crossing();
+extern struct crossing* make_crossing(const int id, const struct crossing** data, const int* ports, const int overdirection, const int over_component, const int under_component);
 extern void delete_crossing(struct crossing* C); // DOES NOT UPDATE NEIGHBORING CROSSINGS
-extern void reverse_crossing(struct crossing* C);
+extern void reverse_crossing(struct crossing* C); //Do we need this function? -Hansen
 
 struct link {
 	int number_of_components; // Link components
 	int* number_of_crossings_in_components; // Array of number of crossings in each link component, length = MAX_CROSSINGS
 	struct crossing** first_crossing_in_components; // Array of pointers to a crossing in each link component, length = MAX_CROSSINGS
 };
-extern struct knot make_link(const int number_of_components, const int* number_of_crossings_in_components, const struct crossing** first_crossing_in_components);
+extern struct link* make_link(const int number_of_components, const int* number_of_crossings_in_components, const struct crossing** first_crossing_in_components);
 extern struct link* copy_link(const struct link* L);
 
 extern void smooth_crossing(struct link* L, struct crossing* C, const int smoothing_type);
@@ -119,4 +124,15 @@ extern int gamma_search(const struct link* L);
 extern int reidemeister_move_iii_search(struct link* L);
 extern int bigon_search(const struct link* L);
 
+struct PD_crossing {
+	int data[4];
+};
+
+struct PD_knot {
+	int number_of_crossings;
+	struct crossing* crossings;
+};
+
+struct PD_knot* make_PD_knot(const int number_of_crossings, const struct PD_crossing* crossings);
+struct link* PD_to_algorithm_knot(const struct PD_knot* K);
 #endif

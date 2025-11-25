@@ -20,7 +20,8 @@
 //For number of crossings in components, 
 #include "load_balanced.h"
 
-void smooth_crossing(struct link *L, struct crossing* C, int type){
+void smooth_crossing(struct link *L, struct crossing* C, int type)
+{
     if (C->over_component == C->under_component) {//If overstrand and understrand are the same
         if ((C->overdirection == OVER_POS & type == 0) || (C->overdirection == OVER_NEG & type == 1)) {// If positive (splits)
             int overcomp = C->over_component;

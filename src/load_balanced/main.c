@@ -14,18 +14,12 @@
  *  GNU General Public License for more details.                              *
  *                                                                            *
  *  You should have received a copy of the GNU General Public License along   *
+ *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-
-/*  All typedef's and function prototypes are provided here.                  */
 #include "load_balanced.h"
 
-/* Function to make a Laurent polynomial based off its highest degree, lowest degree, and array of coefficients */
-struct laurent_polynomial* make_polynomial(int lowest_degree, int highest_degree, int* coeffs) 
+int main() 
 {
-	struct laurent_polynomial* temp = (struct laurent_polynomial*)safe_malloc(sizeof(struct laurent_polynomial));
-	temp->lowest_degree = lowest_degree;
-	temp->highest_degree = highest_degree;
-	temp->coeffs = coeffs;
-	return temp;
+	return 0;
 }

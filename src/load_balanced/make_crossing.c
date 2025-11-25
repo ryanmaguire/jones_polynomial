@@ -14,18 +14,22 @@
  *  GNU General Public License for more details.                              *
  *                                                                            *
  *  You should have received a copy of the GNU General Public License along   *
+ *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-
-/*  All typedef's and function prototypes are provided here.                  */
 #include "load_balanced.h"
 
-/* Function to make a Laurent polynomial based off its highest degree, lowest degree, and array of coefficients */
-struct laurent_polynomial* make_polynomial(int lowest_degree, int highest_degree, int* coeffs) 
+/* Function to make a crossing given its ID, data, port info, overdirection, and over & under components */
+struct crossing* make_crossing(const int id, const struct crossing** data, const int* ports, const int overdirection, const int over_component, const int under_component) 
 {
-	struct laurent_polynomial* temp = (struct laurent_polynomial*)safe_malloc(sizeof(struct laurent_polynomial));
-	temp->lowest_degree = lowest_degree;
-	temp->highest_degree = highest_degree;
-	temp->coeffs = coeffs;
+	struct crossing* temp = (struct crossing*)safe_malloc(sizeof(struct crossing));
+	temp->id = id;
+	for (int i = 0; i < 4; i++) {
+		temp->data[i] = data[i];
+		temp->ports[i] = ports[i];
+	}
+	temp->overdirection = overdirection;
+	temp->over_component = over_component;
+	temp->under_component = under_component;
 	return temp;
 }
