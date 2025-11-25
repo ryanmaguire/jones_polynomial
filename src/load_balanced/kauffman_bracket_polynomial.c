@@ -37,8 +37,10 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     if (number_of_unknots == L->number_of_components) {
         /* If we remove unknots until we have one remaining, we get number_of_unknots - 1 as our exponent for A^2+A^-2 */
         int exponent = number_of_unknots - 1;
-        struct laurent_polynomial* result = (struct laurent_polynomial*) safe_malloc(sizeof(struct laurent_polynomial));
-        result->coeffs = a_squared_a_inv_squared_powers[exponent];
+        struct laurent_polynomial* result = initialize_polynomial();
+        for (int i = 0; i < MAX_POLY_SIZE; i++) { // Copy these terms over
+            result->coeffs[i] = a_squared_a_inv_squared_powers[exponent][i];
+        }
         result->lowest_degree = -2 * exponent;
         result->highest_degree = 2 * exponent;
         
@@ -52,8 +54,10 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     }
 
     /* Otherwise, check for individual unknot diagrams and remove them */
-    struct laurent_polynomial* multiplier = (struct laurent_polynomial*) safe_malloc(sizeof(struct laurent_polynomial));
-    multiplier->coeffs = a_squared_a_inv_squared_powers[number_of_unknots];
+    struct laurent_polynomial* multiplier = initialize_polynomial();
+    for (int i = 0; i < MAX_POLY_SIZE; i++) { // Copy these terms over
+        multiplier->coeffs[i] = a_squared_a_inv_squared_powers[number_of_unknots][i];
+    }
     multiplier->lowest_degree = -2 * number_of_unknots;
     multiplier->highest_degree = 2 * number_of_unknots;
 
