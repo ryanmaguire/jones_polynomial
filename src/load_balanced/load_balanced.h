@@ -121,7 +121,7 @@ extern struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L);
 
 extern int triple_search(const struct link* L);
 extern int gamma_search(const struct link* L);
-extern int reidemeister_move_iii_search(struct link* L);
+extern int reidemeister_move_iii_search(const struct link* L);
 extern int bigon_search(const struct link* L);
 
 struct PD_crossing {
