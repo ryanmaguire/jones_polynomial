@@ -99,8 +99,7 @@ enum boolean remove_twist(struct kauffman_summand* const P, struct boundary_poin
 				pair_strands(BP->next->next->strand_pair, BP->next->next->next->strand_pair);
 			}
 			for (int index = 0; index < 4; index++) {
-				delete_boundary_point(BP);
-				BP = BP->next;
+				BP = delete_boundary_point(BP);
 			}
 			if (has_first_boundary_point) {
 				if (P->basis_tangle->number_of_boundary_points > 4) 
@@ -129,8 +128,7 @@ enum boolean remove_twist(struct kauffman_summand* const P, struct boundary_poin
 				pair_strands(BP->strand_pair, BP->next->next->next->strand_pair);
 			}
 			for (int index = 0; index < 4; index++) {
-				delete_boundary_point(BP);
-				BP = BP->next;
+				BP = delete_boundary_point(BP);
 			}
 			if (has_first_boundary_point) {
 				if (P->basis_tangle->number_of_boundary_points > 4) 
@@ -151,8 +149,7 @@ enum boolean remove_twist(struct kauffman_summand* const P, struct boundary_poin
 
 			pair_strands(BP->strand_pair, BP->next->strand_pair);
 			for (int index = 0; index < 4; index++) {
-				delete_boundary_point(BP);
-				BP = BP->next;
+				BP = delete_boundary_point(BP);
 			}
 			if (has_first_boundary_point) {
 				if (P->basis_tangle->number_of_boundary_points > 4) 

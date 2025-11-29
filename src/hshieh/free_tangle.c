@@ -18,17 +18,18 @@
  ******************************************************************************/
 #include "kauffman_implementation.h"
 
-/*Function to delete a bounadry point from a tangle and return the next boundary point*/
-struct boundary_point* delete_boundary_point(const struct boundary_point* BP) {
-	/*Since the set of boundary points is a doubly linked list, simply put the previous
-	point's next strand as the strand after BP, and the next point's previous strand as
-	the strand before BP (as long as previous/next is not null)*/
-	struct boundary_point* next_BP = BP->next;
-	if (BP->previous != NULL)
-		BP->previous->next = next_BP;
-	if (BP->next != NULL)
-		BP->next->previous = BP->previous;
-	SAFE_FREE(BP);
-	return next_BP;
+/*Function to free all memory associated to a tangle, returns NULL */
+extern void free_tangle(struct specialized_tangle* T) {
+	/* First, free all boundary points in the tangle */
+	struct boundary_point* current = T->first_boundary_point;
+	struct boundary_point* next;
+	int boundary_points_visited = 0;
+	while (boundary_points_visited++ < T->number_of_boundary_points) {
+		next = current->next;
+		SAFE_FREE(current);
+		current = next;
+	}
 
+	/* Now, free T itself */
+	SAFE_FREE(T);
 }

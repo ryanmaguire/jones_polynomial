@@ -67,17 +67,17 @@ void add_crossing(struct kauffman_summand* const P, const struct crossing* const
 		else if (strands_present == 3) {
 			pair_strands(BP->strand_pair, BP->next->next->strand_pair);
 			for (int index = 0; index < 3; index++) {
+				P->basis_tangle->crossing_points[(pos + index) % 4] = BP->strand_pair;
 				if (index == 1) {
 					BP->strand_number = C->data[(pos + 3) % 4];
 					P->basis_tangle->crossing_points[(pos + 3) % 4] = BP;
 					if (has_first_boundary_point)
 						P->basis_tangle->first_boundary_point = BP;
+					BP = BP->next;
 				}
 				else {
-					delete_boundary_point(BP);
+					BP = delete_boundary_point(BP);
 				}
-				P->basis_tangle->crossing_points[(pos + index) % 4] = BP->strand_pair;
-				BP = BP->next;
 			}
 		}
 
@@ -88,8 +88,7 @@ void add_crossing(struct kauffman_summand* const P, const struct crossing* const
 				if (index < 2)
 					pair_strands(BP->strand_pair, BP->next->next->strand_pair);
 				P->basis_tangle->crossing_points[(pos + index) % 4] = BP->strand_pair;
-				delete_boundary_point(BP);
-				BP = BP->next;
+				BP = delete_boundary_point(BP);
 			}
 			if (has_first_boundary_point) {
 				if (P->basis_tangle->number_of_boundary_points > 4) 

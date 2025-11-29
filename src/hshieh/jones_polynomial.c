@@ -40,5 +40,6 @@ struct laurent_polynomial* jones_polynomial(const struct knot* const K) {
 		jones_polynomial->coeffs[-(degree - 3 * writhe)/4 + DEGREE_SHIFT] = sign * kauffman_bracket_polynomial->coeffs[degree + DEGREE_SHIFT];
 	jones_polynomial->lowest_degree = -(kauffman_bracket_polynomial->highest_degree - 3 * writhe) / 4;
 	jones_polynomial->highest_degree = -(kauffman_bracket_polynomial->lowest_degree - 3 * writhe) / 4;
+	free_polynomial(kauffman_bracket_polynomial);
 	return jones_polynomial;
 }

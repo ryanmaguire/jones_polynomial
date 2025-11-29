@@ -93,6 +93,8 @@ int tangle_index(const struct specialized_tangle* const T) {
 		}
 	}
 	SAFE_FREE(dist_to_pair);
+	SAFE_FREE(pair_starts_stack);
+	SAFE_FREE(pair_distances_stack);
 	int tangle_index = 0;
 	int current_multiplier = 1;
 	for (int index = 0; index < pairs; index++) {

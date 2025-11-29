@@ -192,6 +192,7 @@ struct laurent_polynomial* kauffman_polynomial(const struct knot* const K) {
 	struct laurent_polynomial* kauffman_polynomial = initialize_polynomial();
 	for (int index = 0; index <= n; index++) 
 		kauffman_polynomial->coeffs[P->highest_degree - 4 * index + DEGREE_SHIFT] = P->sign * P->coeffs[index];
+	free_kauffman_summand(P);
 	adjust_polynomial_degree(kauffman_polynomial);
 	return kauffman_polynomial;
 }

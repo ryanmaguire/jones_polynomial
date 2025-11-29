@@ -89,6 +89,7 @@ struct knot* DT_to_PD(const struct DT_knot* const K) {
 		for (int other_crossing = 0; other_crossing < n; other_crossing++) 
 			if (counts[other_crossing] == 1)
 				intersections[crossing - 1][intersection_counts[crossing - 1]++] = other_crossing;
+		SAFE_FREE(counts);
 	}
 
 	/*Any two crossings which intersect each other must have opposite direction (right/left handed). Note 
@@ -127,6 +128,17 @@ struct knot* DT_to_PD(const struct DT_knot* const K) {
 		for (int index = 0; index < 4; index++)
 			temp->crossings[crossing - 1].data[index] = crossing_labels[(index_shift + index) % 4];
 	}
+	SAFE_FREE(gauss_input);
+	SAFE_FREE(original_edgelist);
+	SAFE_FREE(edgelist);
+	SAFE_FREE(chords);
+	for (int index = 0; index < n; index++) {
+		SAFE_FREE(intersections[index]);
+	}
+	SAFE_FREE(intersections);
+	SAFE_FREE(intersection_counts);
+	SAFE_FREE(visited);
+	SAFE_FREE(directions);
 	return temp;
 }
 

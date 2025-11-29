@@ -19,7 +19,7 @@
 #include "kauffman_implementation.h"
 
 /*Function to adjust degree of laurent polynomial correctly*/
-void adjust_polynomial_degree(struct laurent_polynomial* P) {
+void adjust_polynomial_degree(struct laurent_polynomial* const P) {
 	/*The lowest degree of P is set to the lowest power at which the coefficient is nonzero*/
 	for (int index = 0; index < MAX_POLY_SIZE; index++)
 		if (P->coeffs[index] != 0) {

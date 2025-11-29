@@ -51,8 +51,9 @@ struct laurent_polynomial {
 };
 
 extern struct laurent_polynomial* initialize_polynomial(void);
-extern void adjust_polynomial_degree(struct laurent_polynomial* P);
+extern void adjust_polynomial_degree(struct laurent_polynomial* const P);
 extern void print_polynomial(const struct laurent_polynomial* const P, const char c);
+extern void free_polynomial(struct laurent_polynomial* P);
 
 /*Struct for crossing in PD notation; first entry of data is the undercrossing which points at
 the crossing (when the knot is given an orientation), and then lists arcs in clockwise order
@@ -85,7 +86,7 @@ struct boundary_point {
 };
 
 extern struct boundary_point* insert_boundary_point(const int strand_number, struct boundary_point* const strand_pair, struct boundary_point* const previous, struct boundary_point* const next);
-extern void delete_boundary_point(const struct boundary_point* const BP);
+extern struct boundary_point* delete_boundary_point(const struct boundary_point* BP);
 extern void pair_strands(struct boundary_point* const BP1, struct boundary_point* const BP2);
 extern void swap_strand_pairs(struct boundary_point* const BP1, struct boundary_point* const BP2);
 
@@ -102,6 +103,7 @@ struct specialized_tangle {
 extern struct specialized_tangle* make_tangle(const int number_of_boundary_points, struct boundary_point* const first_boundary_point, const enum boolean has_crossing, struct boundary_point** const crossing_points);
 extern struct specialized_tangle* copy_tangle(const struct specialized_tangle* const T);
 extern int tangle_index(const struct specialized_tangle* const T);
+extern void free_tangle(struct specialized_tangle* T);
 
 /*Struct for summand when expressing the kauffman bracket polynomial of a portion of a knot diagram
 (where we express the summand as a polynomial times a basis tangle); contains data for the number of
@@ -123,6 +125,7 @@ extern void remove_circle(struct kauffman_summand* const P);
 extern void smooth_crossing(struct kauffman_summand* const P, const int smoothing);
 extern void add_to_kauffman_summand(struct kauffman_summand* const P, const struct kauffman_summand* const Q);
 extern void add_to_kauffman_summand_collection(struct kauffman_summand** const summand_collection, struct kauffman_summand* const P);
+extern void free_kauffman_summand(struct kauffman_summand* P);
 
 /*Struct for knot in DT code; contains the DT code of the knot and the number of crossings*/
 struct DT_knot {

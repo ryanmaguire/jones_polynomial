@@ -18,17 +18,9 @@
  ******************************************************************************/
 #include "kauffman_implementation.h"
 
-/*Function to delete a bounadry point from a tangle and return the next boundary point*/
-struct boundary_point* delete_boundary_point(const struct boundary_point* BP) {
-	/*Since the set of boundary points is a doubly linked list, simply put the previous
-	point's next strand as the strand after BP, and the next point's previous strand as
-	the strand before BP (as long as previous/next is not null)*/
-	struct boundary_point* next_BP = BP->next;
-	if (BP->previous != NULL)
-		BP->previous->next = next_BP;
-	if (BP->next != NULL)
-		BP->next->previous = BP->previous;
-	SAFE_FREE(BP);
-	return next_BP;
-
+ /* Function to free all the memory in a polynomial */
+void free_polynomial(struct laurent_polynomial* P) {
+	/* Free coefficients, and then free the polynomial itself */
+	SAFE_FREE(P->coeffs);
+	SAFE_FREE(P);
 }

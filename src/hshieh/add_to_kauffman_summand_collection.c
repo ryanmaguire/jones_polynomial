@@ -28,6 +28,8 @@ void add_to_kauffman_summand_collection(struct kauffman_summand** const summand_
 		summand_collection[index] = P;
 
 	/*Otherwise, add P to the current kauffman summand at the index*/
-	else 
+	else {
 		add_to_kauffman_summand(summand_collection[index], P);
+		free_kauffman_summand(P);
+	}
 }
