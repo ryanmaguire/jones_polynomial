@@ -19,7 +19,7 @@
 #include "kauffman_implementation.h"
 
 /*Function to check if all strands of a crossing at a certain tangle are at consecutive positions*/
-int is_crossing_consecutive(struct crossing* C, int* boundary_point_positions, int strands_present, int tangle_width) {
+int is_crossing_consecutive(const struct crossing* const C, const int* const boundary_point_positions, const int strands_present, const int tangle_width) {
 	/*First, set the crossing strand positions to the corresponding positions of boundary points on the tangle*/
 	int crossing_strand_positions[4];
 	for (int index = 0; index < 4; index++) 
@@ -36,7 +36,7 @@ int is_crossing_consecutive(struct crossing* C, int* boundary_point_positions, i
 			current_position = (current_position + 1) % tangle_width;
 		}
 		if (current_index == (index + strands_present)  % 4)
-			return YES;
+			return TRUE;
 	}
-	return NO;
+	return FALSE;
 }

@@ -19,9 +19,9 @@
 #include "kauffman_implementation.h"
 
 /*Function which adds a kaufman summand to a collection/array of kauffman summands */
-void add_to_kauffman_summand_collection(struct kauffman_summand** summand_collection, struct kauffman_summand* P) {
+void add_to_kauffman_summand_collection(struct kauffman_summand** const summand_collection, struct kauffman_summand* const P) {
 	/*First, find the index of the basis tangle from the kauffman summand*/
-	int index = tangle_index(&P->basis_tangle);
+	int index = tangle_index(P->basis_tangle);
 
 	/*If the current entry at the index is null, then nothing has been added yet, so set it equal to P*/
 	if (summand_collection[index] == NULL) 

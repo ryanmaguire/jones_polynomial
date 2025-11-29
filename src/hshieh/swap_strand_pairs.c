@@ -19,7 +19,7 @@
 #include "kauffman_implementation.h"
 
 /*Function which swaps the strand pairs of two boundary points*/
-void swap_strand_pairs(struct boundary_point* BP1, struct boundary_point* BP2) {
+void swap_strand_pairs(struct boundary_point* const BP1, struct boundary_point* const BP2) {
 	/*Store BP1's strand pair in a temporary variable, then pair BP1 with BP2's strand pair,
 	and then pair BP2 with temp*/
 	struct boundary_point* temp = BP1->strand_pair;

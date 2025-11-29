@@ -19,7 +19,7 @@
 #include "kauffman_implementation.h"
 
 /*Function to delete a bounadry point from a tangle*/
-void delete_boundary_point(struct boundary_point* BP) {
+void delete_boundary_point(const struct boundary_point* const BP) {
 	/*Since the set of boundary points is a doubly linked list, simply put the previous
 	point's next strand as the strand after BP, and the next point's previous strand as
 	the strand before BP (as long as previous/next is not null)*/

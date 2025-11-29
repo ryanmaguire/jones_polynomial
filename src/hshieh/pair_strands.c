@@ -19,7 +19,7 @@
 #include "kauffman_implementation.h"
 
 /*Function to pair strands from two boundary points together*/
-void pair_strands(struct boundary_point* BP1, struct boundary_point* BP2) {
+void pair_strands(struct boundary_point* const BP1, struct boundary_point* const BP2) {
 	BP1->strand_pair = BP2;
 	BP2->strand_pair = BP1;
 }

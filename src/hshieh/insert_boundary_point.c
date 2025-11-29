@@ -19,10 +19,10 @@
 #include "kauffman_implementation.h"
 
 /*Function to insert a boundary point on a tangle*/
-struct boundary_point* insert_boundary_point(int strand_number, struct boundary_point* strand_pair, struct boundary_point* previous, struct boundary_point* next) {
+struct boundary_point* insert_boundary_point(const int strand_number, struct boundary_point* const strand_pair, struct boundary_point* const previous, struct boundary_point* const next) {
 	/*Allocate space for point and set its strand number, strand pair, previous strand, and next strand
 	to the given inputs*/
-	struct boundary_point* temp = (struct boundary_point*)safe_malloc(sizeof(struct boundary_point));
+	struct boundary_point* temp = safe_malloc(sizeof(struct boundary_point));
 	temp->strand_number = strand_number;
 	temp->strand_pair = strand_pair;
 	temp->previous = previous;

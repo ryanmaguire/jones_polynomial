@@ -19,13 +19,13 @@
 #include "kauffman_implementation.h"
 
 /*Function to copy an entire kauffman summand*/
-struct kauffman_summand* copy_kauffman_summand(struct kauffman_summand* P) {
+struct kauffman_summand* copy_kauffman_summand(const struct kauffman_summand* const P) {
 	/*After allocating space for the summand, the number of coefficients, degree, coefficients, and sign are copied,
 	and then the basis tangle is copied using the function to copy tangles*/
-	struct kauffman_summand* temp = (struct kauffman_summand*)safe_malloc(sizeof(struct kauffman_summand));
+	struct kauffman_summand* temp = safe_malloc(sizeof(struct kauffman_summand));
 	temp->number_of_coeffs = P->number_of_coeffs;
 	temp->highest_degree = P->highest_degree;
-	temp->coeffs = (int*)safe_malloc((size_t)temp->number_of_coeffs * sizeof(int));
+	temp->coeffs = safe_malloc((size_t)temp->number_of_coeffs * sizeof(int));
 	for (int index = 0; index < temp->number_of_coeffs; index++)
 		temp->coeffs[index] = P->coeffs[index];
 	temp->sign = P->sign;

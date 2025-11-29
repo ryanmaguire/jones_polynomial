@@ -20,11 +20,11 @@
 #include <string.h>
 
 /*Function which makes a DT knot given the DT code as a string*/
-struct DT_knot make_DT_knot(char* DT_code) {
+struct DT_knot* make_DT_knot(const char* const DT_code) {
 	/*Length of the string is the number of crossings, and the string is copied to the knot*/
-	struct DT_knot temp;
-	temp.number_of_crossings = (int)strlen(DT_code);
-	temp.DT_code = (char*)safe_malloc((size_t)temp.number_of_crossings + 1);
-	strcpy_s(temp.DT_code, (size_t)temp.number_of_crossings + 1, DT_code);
+	struct DT_knot* temp = safe_malloc(sizeof(struct DT_knot));
+	temp->number_of_crossings = (int)strlen(DT_code);
+	temp->DT_code = safe_malloc((size_t)temp->number_of_crossings + 1);
+	strcpy_s(temp->DT_code, (size_t)temp->number_of_crossings + 1, DT_code);
 	return temp;
 }

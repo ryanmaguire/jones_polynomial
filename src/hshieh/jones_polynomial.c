@@ -19,10 +19,10 @@
 #include "kauffman_implementation.h"
 
 /*Function which returns the jones polynomial of a knot*/
-struct laurent_polynomial jones_polynomial(struct knot* K) {
+struct laurent_polynomial* jones_polynomial(const struct knot* const K) {
 	/*Start with the Kauffman bracket polynomial of the knot
 	To find the jones polynomial, first find the writhe, which is the sum of the signs of every crossing*/
-	struct laurent_polynomial kauffman_bracket_polynomial = kauffman_polynomial(K);
+	struct laurent_polynomial* kauffman_bracket_polynomial = kauffman_polynomial(K);
 	int n = K->number_of_crossings;
 	int writhe = 0;
 	for (int crossing = 0; crossing < n; crossing++) 
@@ -35,10 +35,10 @@ struct laurent_polynomial jones_polynomial(struct knot* K) {
 	<L> is the Kauffman bracket polynomial */
 	/*The jones polynomial is found by substutituting A = q^{-1/4} into the normalized Kauffman bracket polynomial*/
 	int sign = (writhe % 2 == 0) ? 1 : -1;
-	struct laurent_polynomial jones_polynomial = initialize_polynomial();
-	for (int degree = kauffman_bracket_polynomial.lowest_degree; degree <= kauffman_bracket_polynomial.highest_degree; degree+= 4) 
-		jones_polynomial.coeffs[-(degree - 3 * writhe)/4 + DEGREE_SHIFT] = sign * kauffman_bracket_polynomial.coeffs[degree + DEGREE_SHIFT];
-	jones_polynomial.lowest_degree = -(kauffman_bracket_polynomial.highest_degree - 3 * writhe) / 4;
-	jones_polynomial.highest_degree = -(kauffman_bracket_polynomial.lowest_degree - 3 * writhe) / 4;
+	struct laurent_polynomial* jones_polynomial = initialize_polynomial();
+	for (int degree = kauffman_bracket_polynomial->lowest_degree; degree <= kauffman_bracket_polynomial->highest_degree; degree+= 4) 
+		jones_polynomial->coeffs[-(degree - 3 * writhe)/4 + DEGREE_SHIFT] = sign * kauffman_bracket_polynomial->coeffs[degree + DEGREE_SHIFT];
+	jones_polynomial->lowest_degree = -(kauffman_bracket_polynomial->highest_degree - 3 * writhe) / 4;
+	jones_polynomial->highest_degree = -(kauffman_bracket_polynomial->lowest_degree - 3 * writhe) / 4;
 	return jones_polynomial;
 }

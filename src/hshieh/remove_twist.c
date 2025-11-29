@@ -20,7 +20,7 @@
 
 /*Function to remove twist, if adding a crossing to the current basis tangle of a kauffman summand would result in a twist, also 
 returns whether or not adding the crossing will produce a twist*/
-int remove_twist(struct kauffman_summand *P, struct boundary_point* BP, struct crossing* C, int num_present, int position, int has_first_boundary_point) {
+enum boolean remove_twist(struct kauffman_summand* const P, struct boundary_point* BP, const struct crossing* const C, const int num_present, const int position, const enum boolean has_first_boundary_point) {
 	if (num_present == 2) {
 		/*If two strands are present, then check if these two strands are pairs*/
 		if (BP->strand_pair->strand_number == C->data[(position + 1) % 4]) {
@@ -33,10 +33,10 @@ int remove_twist(struct kauffman_summand *P, struct boundary_point* BP, struct c
 
 			BP->strand_number = C->data[(position + 3) % 4];
 			BP->strand_pair->strand_number = C->data[(position + 2) % 4];
-			return YES;
+			return TRUE;
 		}
 		else {
-			return NO;
+			return FALSE;
 		}
 	}
 
@@ -54,9 +54,9 @@ int remove_twist(struct kauffman_summand *P, struct boundary_point* BP, struct c
 			delete_boundary_point(BP->previous->previous);
 			delete_boundary_point(BP->previous);
 			BP->strand_number = C->data[(position + 3) % 4];
-			if (has_first_boundary_point == YES)
-				P->basis_tangle.first_boundary_point = BP;
-			return YES;
+			if (has_first_boundary_point)
+				P->basis_tangle->first_boundary_point = BP;
+			return TRUE;
 		}
 		/*Also check if the last two strands are paired together*/
 		else if (BP->next->strand_pair->strand_number == C->data[(position + 2) % 4]) {
@@ -70,12 +70,12 @@ int remove_twist(struct kauffman_summand *P, struct boundary_point* BP, struct c
 			delete_boundary_point(BP->next->next);
 			delete_boundary_point(BP->next);
 			BP->strand_number = C->data[(position + 3) % 4];
-			if (has_first_boundary_point == YES)
-				P->basis_tangle.first_boundary_point = BP;
-			return YES;
+			if (has_first_boundary_point)
+				P->basis_tangle->first_boundary_point = BP;
+			return TRUE;
 		}
 		else {
-			return NO;
+			return FALSE;
 		}
 	}
 
@@ -92,7 +92,7 @@ int remove_twist(struct kauffman_summand *P, struct boundary_point* BP, struct c
 			/*If the last two strands are also paired together, then the tangle now has a circle,
 				which needs to be removed as long as P has at least one more boundary point*/
 			if (BP->next->next->strand_pair->strand_number == C->data[(position + 3) % 4]) {
-				if (P->basis_tangle.number_of_boundary_points > 4)
+				if (P->basis_tangle->number_of_boundary_points > 4)
 					remove_circle(P);
 			}
 			else {
@@ -102,13 +102,13 @@ int remove_twist(struct kauffman_summand *P, struct boundary_point* BP, struct c
 				delete_boundary_point(BP);
 				BP = BP->next;
 			}
-			if (has_first_boundary_point == YES) {
-				if (P->basis_tangle.number_of_boundary_points > 4) 
-					P->basis_tangle.first_boundary_point = BP;
+			if (has_first_boundary_point) {
+				if (P->basis_tangle->number_of_boundary_points > 4) 
+					P->basis_tangle->first_boundary_point = BP;
 				else 
-					P->basis_tangle.first_boundary_point = NULL;
+					P->basis_tangle->first_boundary_point = NULL;
 			}
-			return YES;
+			return TRUE;
 		}
 		/*Otherwise, check if the middle two strands are paired together*/
 		else if (BP->next->strand_pair->strand_number == C->data[(position + 2) % 4]) {
@@ -122,7 +122,7 @@ int remove_twist(struct kauffman_summand *P, struct boundary_point* BP, struct c
 			/*The first and last strands could also be paired together, and if they are, removed
 				the circle that is formed as long as there are still more boundary points left*/
 			if (BP->strand_pair->strand_number == C->data[(position + 3) % 4]) {
-				if (P->basis_tangle.number_of_boundary_points > 4)
+				if (P->basis_tangle->number_of_boundary_points > 4)
 					remove_circle(P);
 			}
 			else {
@@ -132,13 +132,13 @@ int remove_twist(struct kauffman_summand *P, struct boundary_point* BP, struct c
 				delete_boundary_point(BP);
 				BP = BP->next;
 			}
-			if (has_first_boundary_point == YES) {
-				if (P->basis_tangle.number_of_boundary_points > 4) 
-					P->basis_tangle.first_boundary_point = BP;
+			if (has_first_boundary_point) {
+				if (P->basis_tangle->number_of_boundary_points > 4) 
+					P->basis_tangle->first_boundary_point = BP;
 				else 
-					P->basis_tangle.first_boundary_point = NULL;
+					P->basis_tangle->first_boundary_point = NULL;
 			}
-			return YES;
+			return TRUE;
 		}
 		/*It could also be the case that only the last two strands are paired together*/
 		else if (BP->next->next->strand_pair->strand_number == C->data[(position + 3) % 4]) {
@@ -154,21 +154,21 @@ int remove_twist(struct kauffman_summand *P, struct boundary_point* BP, struct c
 				delete_boundary_point(BP);
 				BP = BP->next;
 			}
-			if (has_first_boundary_point == YES) {
-				if (P->basis_tangle.number_of_boundary_points > 4) 
-					P->basis_tangle.first_boundary_point = BP;
+			if (has_first_boundary_point) {
+				if (P->basis_tangle->number_of_boundary_points > 4) 
+					P->basis_tangle->first_boundary_point = BP;
 				else 
-					P->basis_tangle.first_boundary_point = NULL;
+					P->basis_tangle->first_boundary_point = NULL;
 			}
-			return YES;
+			return TRUE;
 		}
 		else {
-			return NO;
+			return FALSE;
 		}
 	}
 
 	/*If only one strand is present, it is impossible for there to be a twist*/
 	else {
-		return NO;
+		return FALSE;
 	}
 }

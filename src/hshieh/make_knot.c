@@ -19,10 +19,10 @@
 #include "kauffman_implementation.h"
 
 /*Function to make a knot given the number of crossings, and array of its crossings*/
-struct knot make_knot(int number_of_crossings, struct crossing* crossings) {
+struct knot* make_knot(const int number_of_crossings, struct crossing* const crossings) {
 	/*After creating the struct variable, the number of crossings and crossings are copied over*/
-	struct knot temp;
-	temp.number_of_crossings = number_of_crossings;
-	temp.crossings = crossings;
+	struct knot* temp = safe_malloc(sizeof(struct knot));
+	temp->number_of_crossings = number_of_crossings;
+	temp->crossings = crossings;
 	return temp;
 }

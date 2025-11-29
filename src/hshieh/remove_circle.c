@@ -19,7 +19,7 @@
 #include "kauffman_implementation.h"
 
 /*Function to adjust a kauffman summand after removing a circle from the tangle*/
-void remove_circle(struct kauffman_summand* P) {
+void remove_circle(struct kauffman_summand* const P) {
 	/*When a circle is removed, the polynomial coefficient is multiplied by -(A^2 + A^-2)*/
 	P->sign *= -1;
 	P->highest_degree += 2;

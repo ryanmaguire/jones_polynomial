@@ -19,13 +19,13 @@
 #include "kauffman_implementation.h"
 
 /*Function to make a kauffman summand given the number of coefficients, highest degree, coefficients, sign, and tangle for it*/
-struct kauffman_summand make_kauffman_summand(int number_of_coeffs, int highest_degree, int* coeffs, int sign, struct specialized_tangle B) {
+struct kauffman_summand* make_kauffman_summand(const int number_of_coeffs, const int highest_degree, int* const coeffs, const int sign, struct specialized_tangle* const B) {
 	/*Struct variable is created, and all variables in the struct are set equal to the input*/
-	struct kauffman_summand temp;
-	temp.number_of_coeffs = number_of_coeffs;
-	temp.highest_degree = highest_degree;
-	temp.coeffs = coeffs;
-	temp.sign = sign;
-	temp.basis_tangle = B;
+	struct kauffman_summand* temp = safe_malloc(sizeof(struct kauffman_summand));
+	temp->number_of_coeffs = number_of_coeffs;
+	temp->highest_degree = highest_degree;
+	temp->coeffs = coeffs;
+	temp->sign = sign;
+	temp->basis_tangle = B;
 	return temp;
 }

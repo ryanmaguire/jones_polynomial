@@ -18,14 +18,11 @@
  ******************************************************************************/
 #include "kauffman_implementation.h"
 #include "catalan_info.h"
-<<<<<<< HEAD
-=======
 
 /*Functions to push, pop, and peek from a stack*/
 void push_stack(int*, int*, int);
 int pop_stack(int*, int*);
 int peek_stack(int*, int*);
->>>>>>> 6ddc8c2d53e5eb935295a59768a6b7ee05b949c8
 
 /*Function to find the index associated to a tangle*/
 /*For every tangle with no crossings, imagine straightening out the boundary into a line, where the leftmost point
@@ -36,15 +33,15 @@ of boundary points between points 1 and 4, 0 pairs between points 2 and 3, and 0
 of the tangle is the number of possible lists (as described above), of which there are C_{number of boundary points/2}, which are
 lexicographically smaller than the current list. The index is always between 0 and C_{number of boundary points/2} - 1, 
 inclusive.*/
-int tangle_index(struct specialized_tangle* T) {
+int tangle_index(const struct specialized_tangle* const T) {
 	struct boundary_point* BP = T->first_boundary_point;
 	int width = T->number_of_boundary_points;
 
 	/*The array point_pairs keeps track of which boundary point is paired with which other one, while the array 
 	dist_to_pair keeps track of the list described above*/
-	int* adjusted_points = (int*)safe_malloc((2 * MAX_CROSSINGS + 1) * sizeof(int));
-	int* point_pairs = (int*)safe_malloc((size_t)width * sizeof(int));
-	int* dist_to_pair = (int*)safe_malloc((size_t)width / 2 * sizeof(int));
+	int* adjusted_points = safe_malloc((2 * MAX_CROSSINGS + 1) * sizeof(int));
+	int* point_pairs = safe_malloc((size_t)width * sizeof(int));
+	int* dist_to_pair = safe_malloc((size_t)width / 2 * sizeof(int));
 	int pairs = 0;
 	for (int index = 0; index < width; index++) {
 		if (BP->strand_pair->strand_number < 0) {
@@ -60,26 +57,22 @@ int tangle_index(struct specialized_tangle* T) {
 		BP = BP->next;
 	}
 
-	safe_free(adjusted_points);
-	safe_free(point_pairs);
-<<<<<<< HEAD
-=======
-
->>>>>>> 6ddc8c2d53e5eb935295a59768a6b7ee05b949c8
+	SAFE_FREE(adjusted_points);
+	SAFE_FREE(point_pairs);
 	/*To find the index of the tangle, we use a stack, which keeps tracks of strand pairs which are nested between 
 	other pairs of strands, and an element from the list is added to the stack if it is positive, as it indicates
 	that there is at least one pair of strands nested between that pair. If there is an element at the top, then the
 	catalan prefixes array counts the number of tangles with that element at the top which are lexicographically
 	smaller than the current tangle. */
-	int* pair_starts_stack = (int*)safe_malloc(((size_t)pairs + 1) * sizeof(int));
+	int* pair_starts_stack = safe_malloc(((size_t)pairs + 1) * sizeof(int));
 	int pair_starts_free_position = 0;
-	int* pair_distances_stack = (int*)safe_malloc(((size_t)pairs + 1) * sizeof(int));
+	int* pair_distances_stack = safe_malloc(((size_t)pairs + 1) * sizeof(int));
 	int pair_distances_free_position = 0;
 	push_stack(pair_starts_stack, &pair_starts_free_position, -1);
 	push_stack(pair_distances_stack, &pair_distances_free_position, pairs);
-	int* tangle_index_summands = (int*)safe_malloc((size_t)pairs * sizeof(int));
-	int* tangle_index_multipliers = (int*)safe_malloc((size_t)pairs * sizeof(int));
-	int* tangle_index_dividers = (int*)safe_malloc((size_t)pairs * sizeof(int));
+	int* tangle_index_summands = safe_malloc((size_t)pairs * sizeof(int));
+	int* tangle_index_multipliers = safe_malloc((size_t)pairs * sizeof(int));
+	int* tangle_index_dividers = safe_malloc((size_t)pairs * sizeof(int));
 	for (int index = 0; index < pairs; index++) 
 		tangle_index_multipliers[index] = tangle_index_dividers[index] = 1;
 	for (int index = 0; index < pairs; index++) {
@@ -99,7 +92,7 @@ int tangle_index(struct specialized_tangle* T) {
 			push_stack(pair_distances_stack, &pair_distances_free_position, current_dist);
 		}
 	}
-	safe_free(dist_to_pair);
+	SAFE_FREE(dist_to_pair);
 	int tangle_index = 0;
 	int current_multiplier = 1;
 	for (int index = 0; index < pairs; index++) {
@@ -107,9 +100,9 @@ int tangle_index(struct specialized_tangle* T) {
 		current_multiplier *= tangle_index_multipliers[index];
 		current_multiplier /= tangle_index_dividers[index];
 	}
-	safe_free(tangle_index_summands);
-	safe_free(tangle_index_multipliers);
-	safe_free(tangle_index_dividers);
+	SAFE_FREE(tangle_index_summands);
+	SAFE_FREE(tangle_index_multipliers);
+	SAFE_FREE(tangle_index_dividers);
 	return tangle_index;
 }
 

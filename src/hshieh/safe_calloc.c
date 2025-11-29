@@ -19,7 +19,7 @@
 #include "kauffman_implementation.h"
 
 /*Function to safely calloc a pointer with a certain amount of memory*/
-void* safe_calloc(size_t n, size_t size) {
+void* safe_calloc(const size_t n, const size_t size) {
 	/*After allocating the pointer, check that is it not null; if it is, then exit the program*/
 	void* allocated_pointer = calloc(n, size);
 	if (allocated_pointer == NULL)

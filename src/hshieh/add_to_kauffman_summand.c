@@ -19,7 +19,7 @@
 #include "kauffman_implementation.h"
 
 /*Function to add the polynomial coefficient from a kauffman summand Q to another kauffman summand P*/
-void add_to_kauffman_summand(struct kauffman_summand* P, struct kauffman_summand* Q) {
+void add_to_kauffman_summand(struct kauffman_summand* const P, const struct kauffman_summand* const Q) {
 	/*The variable sign_change keeps track of whether P and Q have the same sign or not */
 	int sign_change = P->sign * Q->sign;
 

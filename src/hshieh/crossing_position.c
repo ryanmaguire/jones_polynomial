@@ -19,7 +19,7 @@
 #include "kauffman_implementation.h"
 
 /*Function to return the index of a strand number at a certain crossing*/
-int crossing_position(int strand_number, struct crossing* C) {
+int crossing_position(const int strand_number, const struct crossing* const C) {
 	/*If the strand is present at the crossing, then return the index, and otherwise return -1*/
 	for (int index = 0; index < 4; index++)
 		if (C->data[index] == strand_number)

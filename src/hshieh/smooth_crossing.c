@@ -19,24 +19,25 @@
 #include "kauffman_implementation.h"
 
 /*Function to smooth crossing in a kauffman summand*/
-void smooth_crossing(struct kauffman_summand* P, int smoothing) {
+void smooth_crossing(struct kauffman_summand* const P, const int smoothing) {
 	/*For zero-smoothing, increase the highest degree of P by 1, and then pair each of
 		the overcrossings with the arc to their right*/
 	if (smoothing == 0) {
 		P->highest_degree++;
-		pair_strands(P->basis_tangle.crossing_points[1], P->basis_tangle.crossing_points[2]);
-		pair_strands(P->basis_tangle.crossing_points[3], P->basis_tangle.crossing_points[0]);
+		pair_strands(P->basis_tangle->crossing_points[1], P->basis_tangle->crossing_points[2]);
+		pair_strands(P->basis_tangle->crossing_points[3], P->basis_tangle->crossing_points[0]);
 	}
 
 	/*For one-smoothing, decrease the highest degree of P by 1, and then pair each of
 		the overcrossings with the arc on their left*/
 	else if (smoothing == 1) {
 		P->highest_degree--;
-		pair_strands(P->basis_tangle.crossing_points[1], P->basis_tangle.crossing_points[0]);
-		pair_strands(P->basis_tangle.crossing_points[3], P->basis_tangle.crossing_points[2]);
+		pair_strands(P->basis_tangle->crossing_points[1], P->basis_tangle->crossing_points[0]);
+		pair_strands(P->basis_tangle->crossing_points[3], P->basis_tangle->crossing_points[2]);
 	}
 
-	/*Change the basis the tangle of P to have no crossing*/
-	P->basis_tangle.has_crossing = NO;
-	P->basis_tangle.crossing_points = NULL;
+	/*Change the basis tangle of P to have no crossing*/
+	P->basis_tangle->has_crossing = FALSE;
+	for (int i = 0; i < 4; i++)
+		P->basis_tangle->crossing_points[i] = NULL;
 }
