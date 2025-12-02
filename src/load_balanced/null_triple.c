@@ -77,7 +77,7 @@ enum boolean null_triple(struct link* L)
             struct crossing* top_middle_crossing = next_crossing->data[next_to_top_index];
             struct crossing* bottom_middle_crossing = next_crossing->data[next_to_bottom_index];
 
-            /* Check whether we have a gamma at all */
+            /* Check whether we have a triple at all */
             if (
                 /* Does current_crossing connect to top_middle_crossing and bottom_middle_crossing in some order? */
                 (
@@ -90,7 +90,7 @@ enum boolean null_triple(struct link* L)
                     && current_crossing->data[NEXT(next_index)] == bottom_middle_crossing
                 )
             ) {
-                /* Great - we have a gamma! Let's set up some more infrastructure. */
+                /* Great - we have a triple! Let's set up some more infrastructure. */
 
                 struct crossing* far_crossing = next_crossing->data[far_index];
                 
@@ -106,7 +106,7 @@ enum boolean null_triple(struct link* L)
                 int top_middle_to_left_index = OPP(next_crossing->ports[next_to_top_index]);
                 int bottom_middle_to_left_index = OPP(next_crossing->ports[next_to_bottom_index]);
                 
-                /* Check whether this gamma is a simplifiable null gamma */
+                /* Check whether this triple is a simplifiable null triple */
                 if (
                     /* The vertical strand through current_crossing is all over or all under */
                     (
@@ -148,7 +148,7 @@ enum boolean null_triple(struct link* L)
                     /* We will loop through this as needed anyways, and it's like impossible to avoid
                      * an OBOE because there's no knowing what direction a future traversal of the
                      * knot will use, so there if top_middle_crossing and bottom_middle_crossing are
-                     * involved in the current component then we might miss one null gamma check */
+                     * involved in the current component then we might miss one null triple check */
                     if (
                         top_middle_crossing == L->first_crossing_in_components[component_1] 
                         || bottom_middle_crossing == L->first_crossing_in_components[component_1]
