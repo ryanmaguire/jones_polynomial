@@ -23,7 +23,7 @@
 void smooth_crossing(struct link *L, struct crossing* C, int type)
 {
     if (C->over_component == C->under_component) {//If overstrand and understrand are the same
-        if ((C->overdirection == OVER_POS & type == 0) || (C->overdirection == OVER_NEG & type == 1)) {// If positive (splits)
+        if ((C->overdirection == OVER_POS && type == 0) || (C->overdirection == OVER_NEG && type == 1)) {// If positive (splits)
             int overcomp = C->over_component;
             L->number_of_components++;//Increment number of components
             if (type == 0){
@@ -163,7 +163,7 @@ void smooth_crossing(struct link *L, struct crossing* C, int type)
 			delete_crossing(C);
         }
 	} else {
-        if ((C->overdirection == OVER_POS & type == 0) || (C->overdirection == OVER_NEG & type == 1)){// If positive (merge, but no sign check needed)
+        if ((C->overdirection == OVER_POS && type == 0) || (C->overdirection == OVER_NEG && type == 1)){// If positive (merge, but no sign check needed)
             L->number_of_components -= 1;
             if (type == 0){
                 C->data[0]->data[C->ports[0]] = C->data[1]; //Reattach Components
