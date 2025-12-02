@@ -94,7 +94,7 @@ struct crossing {
 
 extern struct crossing* make_crossing(const int id, struct crossing** const data, const int* ports, const int overdirection, const int over_component, const int under_component);
 extern void delete_crossing(struct crossing* C); // DOES NOT UPDATE NEIGHBORING CROSSINGS
-extern void reverse_crossing(struct crossing* C); //Do we need this function? -Hansen
+extern void pair_crossings(struct crossing* const C1, const int c1_index, struct crossing* const C2, const int c2_index);
 
 struct link {
 	int number_of_components; // Link components

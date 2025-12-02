@@ -76,7 +76,7 @@ int triple_search(const struct link* L)
             struct crossing* top_middle_crossing = next_crossing->data[next_to_top_index];
             struct crossing* bottom_middle_crossing = next_crossing->data[next_to_bottom_index];
 
-            /* Check whether we have a gamma at all */
+            /* Check whether we have a triple at all */
             if (
                 /* Does current_crossing connect to top_middle_crossing and bottom_middle_crossing in some order? */
                 (
@@ -89,7 +89,7 @@ int triple_search(const struct link* L)
                     && current_crossing->data[NEXT(next_index)] == bottom_middle_crossing
                 )
             ) {
-                /* Great - we have a gamma! Let's first check if its of type 1 or 2, either positive or negative. */
+                /* Great - we have a triple! Let's first check if its of type 1 or 2, either positive or negative. */
                 if (next_index % 2 == far_index % 2) {
                     L->first_crossing_in_components[component] = top_middle_crossing;
                     return component;
@@ -108,12 +108,12 @@ int triple_search(const struct link* L)
                 int top_middle_to_right_index = OPP(current_crossing->ports[current_to_top_index]);
                 int bottom_middle_to_right_index = OPP(current_crossing->ports[current_to_bottom_index]);
                 
-                /* Check whether this gamma is not null type 4 */
+                /* Check whether this triple is not null type 4 */
                 if (top_middle_to_right_index % 2 != bottom_middle_to_right_index % 2) {
                     L->first_crossing_in_components[component] = current_crossing;
                     return component;
                 }
-            } 
+            }
 
             if (current_crossing->over_component == current_crossing->under_component) {
                 crossings_left_to_visit -= 1;
