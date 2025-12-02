@@ -78,7 +78,7 @@ void smooth_crossing(struct link *L, struct crossing* C, int type)
                 current_crossing = next_crossing;
             } while (!(current_crossing == C->data[3] && direction == OPP(C->ports[3])));
 			L->first_crossing_in_components[C->over_component]=C->data[3];
-			int counter1;
+			int counter1 = 0;
 			current_crossing = C;
             next_crossing = C->data[1];
             direction = OPP(C->ports[1]);
@@ -94,7 +94,7 @@ void smooth_crossing(struct link *L, struct crossing* C, int type)
 					counter1 += 2;
 				}
             } while (!(current_crossing == C->data[1] && direction == OPP(C->ports[1])));
-			int counter2;
+			int counter2 = 0;
 			current_crossing = C;
             next_crossing = C->data[3];
             direction = OPP(C->ports[3]);
