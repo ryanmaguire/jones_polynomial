@@ -173,44 +173,112 @@ enum boolean null_triple(struct link* L)
                     previous_crossing->ports[previous_crossing_leave_index] = OPP(far_index);
 
                     /* Update far_crossing */
-                    int far_crossing_leave_index = next_crossing->ports[far_index];
-                    far_crossing->data[far_crossing_leave_index] = current_crossing;
-                    far_crossing->ports[far_crossing_leave_index] = next_index;
+                    int far_crossing_enter_index = next_crossing->ports[far_index];
+                    far_crossing->data[far_crossing_enter_index] = current_crossing;
+                    far_crossing->ports[far_crossing_enter_index] = next_index;
 
                     /* Update current_crossing */
-                    current_crossing->data[next_index] = far_crossing;
-                    current_crossing->ports[next_index] = far_crossing_leave_index;
                     current_crossing->data[OPP(next_index)] = next_crossing;
                     current_crossing->ports[OPP(next_index)] = far_index;
+                    /* Weird edge case where the triple wraps back */
+                    if (far_crossing == top_middle_crossing) {
+                        current_crossing->data[next_index] = current_crossing;
+                        current_crossing->ports[next_index] = current_to_top_index;
+                    } else if (far_crossing == bottom_middle_crossing) {
+                        current_crossing->data[next_index] = current_crossing;
+                        current_crossing->ports[next_index] = current_to_bottom_index;
+                    } else {
+                        current_crossing->data[next_index] = far_crossing;
+                        current_crossing->ports[next_index] = far_crossing_enter_index;
+                    }
 
                     /* Update next_crossing */
                     next_crossing->data[far_index] = current_crossing;
                     next_crossing->ports[far_index] = OPP(next_index);
-                    next_crossing->data[OPP(far_index)] = previous_crossing;
-                    next_crossing->ports[OPP(far_index)] = previous_crossing_leave_index;
+                    /* Weird edge case where the triple wraps back */
+                    if (previous_crossing == top_middle_crossing) {
+                        next_crossing->data[OPP(far_index)] = next_crossing;
+                        next_crossing->ports[OPP(far_index)] = next_to_top_index;
+                    } else if (previous_crossing == bottom_middle_crossing) {
+                        next_crossing->data[OPP(far_index)] = next_crossing;
+                        next_crossing->ports[OPP(far_index)] = next_to_bottom_index;
+                    } else {
+                        next_crossing->data[OPP(far_index)] = previous_crossing;
+                        next_crossing->ports[OPP(far_index)] = previous_crossing_leave_index;
+                    }
 
                     /* We will now route the remaining crossings away from top_middle_crossing and bottom_middle_crossing */
                     /* Recall that current_crossing and next_crossing have now switched */
 
                     /* Update top_right_crossing */
-                    int top_right_crossing_leave_index = top_middle_crossing->ports[top_middle_to_right_index];
-                    top_right_crossing->data[top_right_crossing_leave_index] = current_crossing;
-                    top_right_crossing->ports[top_right_crossing_leave_index] = current_to_top_index;
+                    int top_right_crossing_enter_index = top_middle_crossing->ports[top_middle_to_right_index];
+                    top_right_crossing->data[top_right_crossing_enter_index] = current_crossing;
+                    top_right_crossing->ports[top_right_crossing_enter_index] = current_to_top_index;
 
                     /* Update top_left_crossing */
-                    int top_left_crossing_leave_index = top_middle_crossing->ports[top_middle_to_left_index];
-                    top_left_crossing->data[top_left_crossing_leave_index] = next_crossing;
-                    top_left_crossing->ports[top_left_crossing_leave_index] = next_to_top_index;
+                    int top_left_crossing_enter_index = top_middle_crossing->ports[top_middle_to_left_index];
+                    top_left_crossing->data[top_left_crossing_enter_index] = next_crossing;
+                    top_left_crossing->ports[top_left_crossing_enter_index] = next_to_top_index;
 
                     /* Update bottom_right_crossing*/
-                    int bottom_right_crossing_leave_index = bottom_middle_crossing->ports[bottom_middle_to_right_index];
-                    bottom_right_crossing->data[bottom_right_crossing_leave_index] = current_crossing;
-                    bottom_right_crossing->ports[bottom_right_crossing_leave_index] = current_to_bottom_index;
+                    int bottom_right_crossing_enter_index = bottom_middle_crossing->ports[bottom_middle_to_right_index];
+                    bottom_right_crossing->data[bottom_right_crossing_enter_index] = current_crossing;
+                    bottom_right_crossing->ports[bottom_right_crossing_enter_index] = current_to_bottom_index;
 
                     /* Update bottom_left_crossing*/
-                    int bottom_left_crossing_leave_index = bottom_middle_crossing->ports[bottom_middle_to_left_index];
-                    bottom_left_crossing->data[bottom_left_crossing_leave_index] = next_crossing;
-                    bottom_left_crossing->ports[bottom_left_crossing_leave_index] = next_to_bottom_index;
+                    int bottom_left_crossing_enter_index = bottom_middle_crossing->ports[bottom_middle_to_left_index];
+                    bottom_left_crossing->data[bottom_left_crossing_enter_index] = next_crossing;
+                    bottom_left_crossing->ports[bottom_left_crossing_enter_index] = next_to_bottom_index;
+
+                    /* Update the vertical ports of current_crossing */
+                    /* Weird edge case where there's a loop */
+                    if (top_right_crossing == top_middle_crossing) {
+                        assert(top_right_crossing == top_left_crossing);
+                        current_crossing->data[current_to_top_index] = next_crossing;
+                        current_crossing->ports[current_to_top_index] = next_to_top_index;
+                    } else if (top_right_crossing == next_crossing) {
+                        current_crossing->data[current_to_top_index] = current_crossing;
+                        current_crossing->ports[current_to_top_index] = next_index;
+                    } else {
+                        current_crossing->data[current_to_top_index] = top_right_crossing;
+                        current_crossing->ports[current_to_top_index] = top_right_crossing_enter_index;
+                    }
+                    if (bottom_right_crossing == bottom_middle_crossing) {
+                        assert(bottom_right_crossing == bottom_left_crossing);
+                        current_crossing->data[current_to_bottom_index] = next_crossing;
+                        current_crossing->ports[current_to_bottom_index] = next_to_bottom_index;
+                    } else if (bottom_right_crossing == next_crossing) {
+                        current_crossing->data[current_to_bottom_index] = current_crossing;
+                        current_crossing->ports[current_to_bottom_index] = next_index;
+                    } else {
+                        current_crossing->data[current_to_bottom_index] = bottom_right_crossing;
+                        current_crossing->ports[current_to_bottom_index] = bottom_right_crossing_enter_index;
+                    }
+
+                    /* Update the vertical ports of next_crossing */
+                    /* Weird edge case where there's a loop */
+                    if (top_left_crossing == top_middle_crossing) {
+                        assert(top_right_crossing == top_left_crossing);
+                        next_crossing->data[next_to_top_index] = current_crossing;
+                        next_crossing->ports[next_to_top_index] = current_to_top_index;
+                    } else if (top_left_crossing == current_crossing) {
+                        next_crossing->data[next_to_top_index] = next_crossing;
+                        next_crossing->ports[next_to_top_index] = OPP(far_index);
+                    } else {
+                        next_crossing->data[next_to_top_index] = top_left_crossing;
+                        next_crossing->ports[next_to_top_index] = top_left_crossing_enter_index;
+                    }
+                    if (bottom_left_crossing == bottom_middle_crossing) {
+                        assert(bottom_right_crossing == bottom_left_crossing);
+                        next_crossing->data[next_to_bottom_index] = current_crossing;
+                        next_crossing->ports[next_to_bottom_index] = current_to_bottom_index;
+                    } else if (bottom_left_crossing == current_crossing) {
+                        next_crossing->data[next_to_bottom_index] = next_crossing;
+                        next_crossing->ports[next_to_bottom_index] = OPP(far_index);
+                    } else {
+                        next_crossing->data[next_to_bottom_index] = bottom_left_crossing;
+                        next_crossing->ports[next_to_bottom_index] = bottom_left_crossing_enter_index;
+                    }
 
                     delete_crossing(top_middle_crossing);
                     delete_crossing(bottom_middle_crossing);

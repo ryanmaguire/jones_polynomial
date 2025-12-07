@@ -31,14 +31,25 @@ int main()
 	struct PD_crossing six_three_knot_PD_crossings[] = { {{4,2,5,1}}, {{8,4,9,3}}, {{12,9,1,10}}, {{10,5,11,6}}, {{6,11,7,12}}, {{2,8,3,7}} };
 	struct PD_knot six_three_PD = {6, six_three_knot_PD_crossings};
 
-	struct PD_crossing eight_21_knot_PD_crossings[] = { {{1,4,2,5}}, {{3,8,4,9}}, {{12,6,13,5}}, {{13,16,14,1}}, {{9,14,10,15}}, {{15,10,16,11}}, {{6,12,7,11}}, {{7,2,8,3}} };
+	struct PD_crossing eight_21_knot_PD_crossings[] = { {{1,5,2,4}}, {{3,9,4,8}}, {{12,5,13,6}}, {{13,1,14,16}}, {{9,15,10,14}}, {{15,11,16,10}}, {{6,11,7,12}}, {{7,3,8,2}} };
 	struct PD_knot eight_21_PD = {8, eight_21_knot_PD_crossings};
 
 	struct PD_crossing nine_43_knot_PD_crossings[] = { {{4,2,5,1}}, {{10,6,11,5}}, {{8,3,9,4}}, {{2,9,3,10}}, {{14,8,15,7}}, {{15,1,16,18}}, {{11,17,12,16}}, {{17,13,18,12}}, {{6,14,7,13}} };
 	struct PD_knot nine_43_PD = {9, nine_43_knot_PD_crossings};
 
+	struct PD_crossing test_PD_crossings[] = { {{6,2,7,1}}, {{7,2,8,3}}, {{5,4,4,3}}, {{5,8,6,1}} };
+	struct PD_knot test_PD = {4, test_PD_crossings};
+
 	struct link* trefoil = PD_to_algorithm_knot(&trefoil_PD);
 	printf("writhe: %d\n", writhe(trefoil));
+
+	struct link* test_knot = PD_to_algorithm_knot(&test_PD);
+	print_link(test_knot, TRUE);
+	null_triple(test_knot);
+	printf("\n%d\n", test_knot->number_of_crossings_in_components[0]);
+	print_link(test_knot, FALSE);
+	//printf("triple %d", triple_search(test_knot));
+	return 0;
 
 	/*struct link* nine_43_knot = PD_to_algorithm_knot(&nine_43_PD);
 	struct laurent_polynomial* test_polynomial_nine_43 = jones_polynomial(nine_43_knot);
@@ -60,9 +71,9 @@ int main()
 	print_polynomial(test_polynomial_six_three, 'q');
 	delete_polynomial(test_polynomial_six_three);*/
 
-	struct laurent_polynomial* test_polynomial = jones_polynomial(trefoil);
+	/*struct laurent_polynomial* test_polynomial = jones_polynomial(trefoil);
 	print_polynomial(test_polynomial, 'q');
-	delete_polynomial(test_polynomial);
+	delete_polynomial(test_polynomial);*/
 
 	return 0;
 }
