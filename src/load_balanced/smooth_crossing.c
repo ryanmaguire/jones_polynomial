@@ -22,46 +22,46 @@
 #include "load_balanced.h"
 
 
-void smooth_crossing(struct link *L, struct crossing* C, int type)
+void smooth_crossing(struct link *L, struct crossing* C, int type)//Type 0 means 0-smoothing, type 1 means 1-smoothing
 {
-    int crossing_0_pair, crossing_2_pair;
-    if (type == 0) {
-        crossing_0_pair = 1;
-        crossing_2_pair = 3;
-    } else {
-        crossing_0_pair = 3;
-        crossing_2_pair = 1;
+    int crossing_0_pair, crossing_2_pair; //Variables to hold which crossings to pair
+    if (type == 0) {//If 0-smoothing
+        crossing_0_pair = 1;//Pair crossing 0 with crossing 1
+        crossing_2_pair = 3;//Pair crossing 2 with crossing 3
+    } else {// If 1-smoothing
+        crossing_0_pair = 3;// Pair crossing 0 with crossing 3
+        crossing_2_pair = 1;// Pair crossing 2 with crossing 1
     }
-    pair_crossings(C->data[0], C->ports[0], C->data[crossing_0_pair], C->ports[crossing_0_pair]);
-    pair_crossings(C->data[2], C->ports[2], C->data[crossing_2_pair], C->ports[crossing_2_pair]);
+    pair_crossings(C->data[0], C->ports[0], C->data[crossing_0_pair], C->ports[crossing_0_pair]);//Pair the crossings
+    pair_crossings(C->data[2], C->ports[2], C->data[crossing_2_pair], C->ports[crossing_2_pair]);//Pair the crossings
     if (C->over_component == C->under_component) {//If overstrand and understrand are the same
         if ((C->overdirection == OVER_POS && type == 0) || (C->overdirection == OVER_NEG && type == 1)) {// If positive (splits)
-            int overcomp = C->over_component;
+            int overcomp = C->over_component;//Get component number
             L->number_of_components++;//Increment number of components
             /* Reattach components */
            
             struct crossing* current_crossing = C; // current_crossing is a pointer to a crossing
             struct crossing* next_crossing = C->data[1];//next_crossing is a pointer to a different crossing.
-            int direction = OPP(C->ports[1]);
-            current_crossing = next_crossing;
-            if (direction % 2 == 0) {
-                current_crossing->under_component = L->number_of_components;
+            int direction = OPP(C->ports[1]);//Get the opposite port direction
+            current_crossing = next_crossing;//Set current crossing to next crossing
+            if (direction % 2 == 0) {//If even (understrand)
+                current_crossing->under_component = L->number_of_components-1;//Set under_component to new component number
             }
-            else {
-                current_crossing->over_component = L->number_of_components;
+            else {//If odd (overstrand)
+                current_crossing->over_component = L->number_of_components-1;
             }
             do {
                 next_crossing = current_crossing->data[direction];
                 direction = OPP(current_crossing->ports[direction]);
                 current_crossing = next_crossing;
                 if (direction % 2 == 0) {
-                    current_crossing->under_component = L->number_of_components;
+                    current_crossing->under_component = L->number_of_components-1;
                 }
                 else {
-                    current_crossing->over_component = L->number_of_components;
+                    current_crossing->over_component = L->number_of_components-1;
                 }
             } while (!(current_crossing == C->data[1] && direction == OPP(C->ports[1])));
-            L->first_crossing_in_components[L->number_of_components]=C->data[1];
+            L->first_crossing_in_components[L->number_of_components-1]=C->data[1];
             current_crossing = C;
             next_crossing = C->data[3];
             direction = OPP(C->ports[3]);
@@ -105,7 +105,7 @@ void smooth_crossing(struct link *L, struct crossing* C, int type)
                 }
             } while (!(current_crossing == C->data[3] && direction == OPP(C->ports[3])));
             L->number_of_crossings_in_components[C->over_component] = counter2 / 2; // These counters are guaranteed to be even
-            L->number_of_crossings_in_components[L->number_of_components] = counter1 / 2;
+            L->number_of_crossings_in_components[L->number_of_components-1] = counter1 / 2;
             delete_crossing(C);
         }
         else {// If negative (number of comps stays the same)
@@ -120,9 +120,13 @@ void smooth_crossing(struct link *L, struct crossing* C, int type)
                 if (direction == 0) {
                     current_crossing->overdirection = OPP(current_crossing->overdirection);//Switch sign of crossing as I swap the strand
                     SWAP(struct crossing*, current_crossing->data[0], current_crossing->data[2]);
+                    SWAP(struct crossing*, current_crossing->data[1], current_crossing->data[3]);
                     SWAP(int, current_crossing->ports[0], current_crossing->ports[2]);
+                    SWAP(int, current_crossing->ports[1], current_crossing->ports[3]);
                     current_crossing->data[0]->ports[current_crossing->ports[0]] = 0;
                     current_crossing->data[2]->ports[current_crossing->ports[2]] = 2;
+                    current_crossing->data[1]->ports[current_crossing->ports[1]] = 1;
+                    current_crossing->data[3]->ports[current_crossing->ports[3]] = 3;
                     direction = 2;
                 }
                 else if ((direction % 2 == 1) && (direction != current_crossing->overdirection)){
@@ -137,7 +141,6 @@ void smooth_crossing(struct link *L, struct crossing* C, int type)
         }
     } else {
         if ((C->overdirection == OVER_POS && type == 0) || (C->overdirection == OVER_NEG && type == 1)){
-            L->number_of_components -= 1;
             struct crossing* current_crossing = C;
             struct crossing* next_crossing = C->data[1];
             int comp_1 = C->over_component;
@@ -150,10 +153,10 @@ void smooth_crossing(struct link *L, struct crossing* C, int type)
                 next_crossing = current_crossing->data[direction];
                 direction = OPP(current_crossing->ports[direction]);
                 current_crossing = next_crossing;
-                if (current_crossing->over_component == oldcomp){
+                if (direction % 2 == 1){
                     current_crossing->over_component = newcomp;
                 }
-                if (current_crossing->under_component == oldcomp){
+                if (direction % 2 == 0){
                     current_crossing->under_component = newcomp;
                 }
             } while (!(current_crossing == C->data[1] && direction == OPP(C->ports[1])));
@@ -187,10 +190,10 @@ void smooth_crossing(struct link *L, struct crossing* C, int type)
             }
             int number = L->number_of_crossings_in_components[oldcomp]+L->number_of_crossings_in_components[newcomp]-1; //Working here
             L->number_of_crossings_in_components[newcomp] = number;
+            L->number_of_components -= 1;
             delete_crossing(C);
         }
         else {// If negative (merge, but sign check needed)
-            L->number_of_components -= 1;
             struct crossing* current_crossing = C;
             struct crossing* next_crossing = C->data[1];
             int comp_1 = C->over_component;
@@ -203,10 +206,10 @@ void smooth_crossing(struct link *L, struct crossing* C, int type)
                 next_crossing = current_crossing->data[direction];
                 direction = OPP(current_crossing->ports[direction]);
                 current_crossing = next_crossing;
-                if (current_crossing->over_component == oldcomp){
+                if (direction%2 == 1){
                     current_crossing->over_component = newcomp;
                 }
-                if (current_crossing->under_component == oldcomp){
+                if (direction%2 == 0){
                     current_crossing->under_component = newcomp;
                 }
             } while (!(current_crossing == C->data[1] && direction == OPP(C->ports[1])));
@@ -222,9 +225,13 @@ void smooth_crossing(struct link *L, struct crossing* C, int type)
                 if (direction == 0){
                     current_crossing->overdirection = OPP(current_crossing->overdirection);//Switch sign of crossing as I swap the strand
                     SWAP(struct crossing*, current_crossing->data[0], current_crossing->data[2]);
-                    SWAP(int, C->ports[0], C->ports[2]);
+                    SWAP(struct crossing*, current_crossing->data[1], current_crossing->data[3]);
+                    SWAP(int, current_crossing->ports[0], current_crossing->ports[2]);
+                    SWAP(int, current_crossing->ports[1], current_crossing->ports[3]);
                     current_crossing->data[0]->ports[current_crossing->ports[0]] = 0;
                     current_crossing->data[2]->ports[current_crossing->ports[2]] = 2;
+                    current_crossing->data[1]->ports[current_crossing->ports[1]] = 1;
+                    current_crossing->data[3]->ports[current_crossing->ports[3]] = 3;
                     direction = 2;
                 } else if ((direction % 2 == 1) && (direction != current_crossing->overdirection)){
                     current_crossing->overdirection = OPP(current_crossing->overdirection);//Switch sign of crossing as I swap the strand
@@ -249,6 +256,7 @@ void smooth_crossing(struct link *L, struct crossing* C, int type)
             }
             int number = L->number_of_crossings_in_components[oldcomp]+L->number_of_crossings_in_components[newcomp]-1; //Working here
             L->number_of_crossings_in_components[newcomp] = number;
+            L->number_of_components -= 1;
             delete_crossing(C);
         }
     }
