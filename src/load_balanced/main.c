@@ -41,15 +41,33 @@ int main()
 	struct PD_knot test_PD = {4, test_PD_crossings};
 
 	struct link* trefoil = PD_to_algorithm_knot(&trefoil_PD);
-	printf("writhe: %d\n", writhe(trefoil));
+	//printf("writhe: %d\n", writhe(trefoil));
 
-	struct link* test_knot = PD_to_algorithm_knot(&test_PD);
-	print_link(test_knot, TRUE);
-	null_triple(test_knot);
-	printf("\n%d\n", test_knot->number_of_crossings_in_components[0]);
-	print_link(test_knot, FALSE);
-	//printf("triple %d", triple_search(test_knot));
-	return 0;
+	struct crossing* hopf_crossing_one = (struct crossing*) safe_malloc(sizeof(struct crossing));
+	struct crossing* hopf_crossing_two = (struct crossing*) safe_malloc(sizeof(struct crossing));
+	for (int i = 0; i < 4; i++) {
+		hopf_crossing_one->data[i] = hopf_crossing_two;
+		hopf_crossing_one->ports[i] = (i % 2 == 0) ? (i + 1) : (i - 1);
+		hopf_crossing_two->data[i] = hopf_crossing_one;
+		hopf_crossing_two->ports[i] = (i % 2 == 0) ? (i + 1) : (i - 1);
+	}
+	hopf_crossing_one->overdirection = 1;
+	hopf_crossing_two->overdirection = 1;
+	hopf_crossing_one->over_component = 0;
+	hopf_crossing_two->over_component = 1;
+	hopf_crossing_one->under_component = 1;
+	hopf_crossing_two->under_component = 0;
+	struct link* hopf_link = (struct link*) safe_malloc(sizeof(struct link));
+	hopf_link->number_of_components = 2;
+	hopf_link->number_of_crossings_in_components[0] = 2;
+	hopf_link->number_of_crossings_in_components[1] = 2;
+	hopf_link->first_crossing_in_components[0] = hopf_crossing_one;
+	hopf_link->first_crossing_in_components[1] = hopf_crossing_one;
+
+	print_link(hopf_link, TRUE);
+	struct link* hopf_link_copy = copy_link(hopf_link);
+	print_link(hopf_link_copy, TRUE);
+
 
 	/*struct link* nine_43_knot = PD_to_algorithm_knot(&nine_43_PD);
 	struct laurent_polynomial* test_polynomial_nine_43 = jones_polynomial(nine_43_knot);

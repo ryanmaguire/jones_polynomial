@@ -54,8 +54,8 @@ enum boolean null_gamma(struct link* L)
         // This will be decremented by 1 if the crossing will be visitied twice, by 2 otherwise
         int crossings_left_to_visit = 2 * L->number_of_crossings_in_components[component]; 
 
-        int next_index = 2;
         struct crossing* current_crossing = L->first_crossing_in_components[component];
+        int next_index = (current_crossing->under_component == component) ? 2 : 1;
         struct crossing* previous_crossing = current_crossing->data[OPP(next_index)];
         do {
             struct crossing* next_crossing = current_crossing->data[next_index];

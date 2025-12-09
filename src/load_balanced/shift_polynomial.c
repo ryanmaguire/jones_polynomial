@@ -19,25 +19,16 @@
  ******************************************************************************/
  #include "load_balanced.h"
 
-/* Function to compute the writhe of a link*/
-int writhe(const struct link* L) 
-{
-    int writhe = 0;
-    for (int component = 0; component < L->number_of_components; component++) {
-        struct crossing* previous_crossing = NULL;
-        struct crossing* current_crossing = L->first_crossing_in_components[component];
-        int next_index = (current_crossing->under_component == component) ? 2 : 1;
-        do {
-            if (current_crossing->over_component >= component && current_crossing->under_component >= component) {
-                if (current_crossing->overdirection == OVER_POS)
-                    writhe++;
-                else
-                    writhe--;
-            }
-            previous_crossing = current_crossing;
-            current_crossing = current_crossing->data[next_index];
-            next_index = OPP(previous_crossing->ports[next_index]);
-        } while (L->number_of_crossings_in_components[component] > 0 && current_crossing != L->first_crossing_in_components[component]);
+ void shift_polynomial(struct laurent_polynomial* const P, const int shift) {
+    if (shift == 0)
+        return;
+    if (shift > 0) {
+        for (int degree = P->highest_degree; degree >= P->lowest_degree; degree--)
+            P->coeffs[degree + shift] = P->coeffs[degree];
+    } else {
+        for (int degree = P->lowest_degree; P->highest_degree; degree++)
+            P->coeffs[degree + shift] = P->coeffs[degree];
     }
-    return writhe;
-}
+    P->highest_degree += shift;
+    P->lowest_degree += shift;
+ }

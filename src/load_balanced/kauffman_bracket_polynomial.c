@@ -91,7 +91,7 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
 
     /* Smooth respective crossings in both link copies */
     smooth_crossing(L, L->first_crossing_in_components[pattern_component], 0);
-    smooth_crossing(L_copy, L->first_crossing_in_components[pattern_component], 1);
+    smooth_crossing(L_copy, L_copy->first_crossing_in_components[pattern_component], 1);
 
     /* Recursion step */
     struct laurent_polynomial* polynomial_1 = kauffman_bracket_polynomial(L);
@@ -101,10 +101,9 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
 
     /* First, compute the two individual terms - notice that multiplying or dividing by 
      * A is just shifting the coeffs up or down by 1 index */
-    polynomial_1->highest_degree++;
-    polynomial_1->lowest_degree++;
-    polynomial_2->highest_degree--;
-    polynomial_2->lowest_degree--;
+    shift_polynomial(polynomial_1, 1);
+    shift_polynomial(polynomial_2, -1);
+
 
     /* Now, add them */
     struct laurent_polynomial* sum_of_two_polynomials = add_polynomials(polynomial_1, polynomial_2);

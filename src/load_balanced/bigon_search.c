@@ -59,7 +59,7 @@ int bigon_search(const struct link* L)
 
         struct crossing* previous_crossing = NULL;
         struct crossing* current_crossing = L->first_crossing_in_components[component];
-        int next_index = 2;
+        int next_index = (current_crossing->under_component == component) ? 2 : 1;
         do {
             struct crossing* next_crossing = current_crossing->data[next_index];
             int far_index = OPP(current_crossing->ports[next_index]);

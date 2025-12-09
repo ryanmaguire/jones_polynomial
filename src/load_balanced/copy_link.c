@@ -60,7 +60,7 @@ struct link* copy_link(const struct link* L)
 
         struct crossing* previous_crossing = NULL;
         struct crossing* current_crossing = L->first_crossing_in_components[component];
-        int next_index = 2;
+        int next_index = (current_crossing->under_component == component) ? 2 : 1;
         do {
             current_crossing->id = -1;
 
@@ -88,7 +88,7 @@ struct link* copy_link(const struct link* L)
 
         struct crossing* previous_crossing = NULL;
         struct crossing* current_crossing = L->first_crossing_in_components[component];
-        int next_index = 2;
+        int next_index = (current_crossing->under_component == component) ? 2 : 1;
         do {
             if (current_crossing->id == -1) {
                 current_crossing->id = current_id++;
@@ -125,7 +125,7 @@ struct link* copy_link(const struct link* L)
 
         struct crossing* previous_crossing = NULL;
         struct crossing* current_crossing = L->first_crossing_in_components[component];
-        int next_index = 2;
+        int next_index = (current_crossing->under_component == component) ? 2 : 1;
         do {
             if (current_crossing->id > largest_seen_id) {
                 /* Then, current_crossing->id must be largest_seen_id + 1 due to order preservation */
@@ -162,7 +162,7 @@ struct link* copy_link(const struct link* L)
         } while (crossings_left_to_visit > 0);
 
         /* Now, current_crossing = L->first_crossing_in_components[component], so we can do this: */
-        M->first_crossing_in_components[component] = new_crossings_address + current_crossing->id;
+        M->first_crossing_in_components[component] = new_crossings_address + L->first_crossing_in_components[component]->id;
     }
 
     return M;
