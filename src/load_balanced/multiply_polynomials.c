@@ -25,7 +25,7 @@ struct laurent_polynomial* multiply_polynomials(const struct laurent_polynomial*
 	struct laurent_polynomial* product = (struct laurent_polynomial*) safe_malloc(sizeof(struct laurent_polynomial));
 	product->lowest_degree = P->lowest_degree + Q->lowest_degree;
 	product->highest_degree = P->highest_degree + Q->highest_degree;
-	product->coeffs = (int*) safe_malloc(MAX_POLY_SIZE * sizeof(int));
+	product->coeffs = (int*) safe_calloc(MAX_POLY_SIZE, sizeof(int));
 	for (int degree = product->lowest_degree; degree <= product->highest_degree; degree++)
 		product->coeffs[degree + DEGREE_SHIFT] = 0;
 	for (int P_degree = P->lowest_degree; P_degree <= P->highest_degree; P_degree++)

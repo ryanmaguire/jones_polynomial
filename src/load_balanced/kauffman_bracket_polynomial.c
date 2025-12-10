@@ -114,10 +114,10 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     /* We never actually need to free L or L_copy because they will get passed down
      * the recursion and eventually freed by the base case */
     /* However, we do need to free polynomials 1 and 2, their sum, and multiplier */
-    delete_polynomial(polynomial_1);
-    delete_polynomial(polynomial_2);
-    delete_polynomial(sum_of_two_polynomials);
-    delete_polynomial(multiplier);
+    delete_polynomial(&polynomial_1);
+    delete_polynomial(&polynomial_2);
+    delete_polynomial(&sum_of_two_polynomials);
+    delete_polynomial(&multiplier);
 
     /* We are done. */
     return result;

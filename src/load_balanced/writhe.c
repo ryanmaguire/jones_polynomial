@@ -24,6 +24,9 @@ int writhe(const struct link* L)
 {
     int writhe = 0;
     for (int component = 0; component < L->number_of_components; component++) {
+        if (L->number_of_crossings_in_components[component] == 0) {
+            continue;
+        }
         struct crossing* previous_crossing = NULL;
         struct crossing* current_crossing = L->first_crossing_in_components[component];
         int next_index = (current_crossing->under_component == component) ? 2 : 1;

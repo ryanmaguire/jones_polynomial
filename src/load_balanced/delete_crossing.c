@@ -20,6 +20,6 @@
  #include "load_balanced.h"
 
 /* Function to free up the memory allocated to a crossing. DOES NOT UPDATE NEIGHBORING CROSSINGS */
-void delete_crossing(struct crossing* C) {
-    SAFE_FREE(C);
+void delete_crossing(struct crossing** C) {
+    SAFE_FREE(*C);
 }

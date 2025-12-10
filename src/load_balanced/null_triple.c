@@ -280,8 +280,8 @@ enum boolean null_triple(struct link* L)
                         next_crossing->ports[next_to_bottom_index] = bottom_left_crossing_enter_index;
                     }
 
-                    delete_crossing(top_middle_crossing);
-                    delete_crossing(bottom_middle_crossing);
+                    delete_crossing(&top_middle_crossing);
+                    delete_crossing(&bottom_middle_crossing);
                 }
             } 
             

@@ -24,6 +24,7 @@
  {
     int w = writhe(L);
     struct laurent_polynomial* kauffman_bracket = kauffman_bracket_polynomial(L);
+    adjust_polynomial_degree(kauffman_bracket);
     struct laurent_polynomial* jones_polynomial = initialize_polynomial();
     int sign = (w % 2 == 0) ? 1 : -1;
 	for (int degree = kauffman_bracket->lowest_degree; degree <= kauffman_bracket->highest_degree; degree+= 4) 
@@ -31,6 +32,6 @@
 	jones_polynomial->lowest_degree = -(kauffman_bracket->highest_degree - 3 * w) / 4;
 	jones_polynomial->highest_degree = -(kauffman_bracket->lowest_degree - 3 * w) / 4;
 
-    delete_polynomial(kauffman_bracket);    
+    delete_polynomial(&kauffman_bracket);    
     return jones_polynomial;
  }

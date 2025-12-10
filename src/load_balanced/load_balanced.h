@@ -55,11 +55,12 @@ struct laurent_polynomial {
 };
 
 extern struct laurent_polynomial* initialize_polynomial(void);
-extern void delete_polynomial(struct laurent_polynomial* P);
+extern void delete_polynomial(struct laurent_polynomial** P);
 extern void print_polynomial(const struct laurent_polynomial* P, char c);
 extern struct laurent_polynomial* add_polynomials(const struct laurent_polynomial* P, const struct laurent_polynomial* Q);
 extern struct laurent_polynomial* multiply_polynomials(const struct laurent_polynomial* P, const struct laurent_polynomial* Q);
 extern void shift_polynomial(struct laurent_polynomial* const P, const int shift);
+extern void adjust_polynomial_degree(struct laurent_polynomial* P);
 
 /* Struct for crossing in PD notation; first entry of data is the undercrossing which points at
 	the crossing (when the knot is given an orientation), and then lists crossings adjacent to it
@@ -95,7 +96,7 @@ struct crossing {
 };
 
 extern struct crossing* make_crossing(const int id, struct crossing** const data, const int* ports, const int overdirection, const int over_component, const int under_component);
-extern void delete_crossing(struct crossing* C); // DOES NOT UPDATE NEIGHBORING CROSSINGS
+extern void delete_crossing(struct crossing** C); // DOES NOT UPDATE NEIGHBORING CROSSINGS
 extern void pair_crossings(struct crossing* const C1, const int c1_index, struct crossing* const C2, const int c2_index);
 
 struct link {

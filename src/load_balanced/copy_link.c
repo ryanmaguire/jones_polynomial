@@ -110,7 +110,10 @@ struct link* copy_link(const struct link* L)
     int number_of_crossings = current_id; // No OBOE becausee current_id was postcremented
 
     /* Allocate memory for new crossings */
-    struct crossing* new_crossings_address = (struct crossing*) safe_malloc(number_of_crossings * sizeof(struct crossing));
+    struct crossing** new_crossings_addresses = (struct crossing**) safe_malloc(number_of_crossings * sizeof(struct crossing*));
+    for (int i = 0; i < number_of_crossings; i++) {
+        new_crossings_addresses[i] = (struct crossing*) safe_malloc(sizeof(struct crossing));
+    }
 
     /* Initialize all of the new crossings */
     /* We are guaranteed to go through L in the same order as we did when we first ided every crossing */
@@ -132,11 +135,11 @@ struct link* copy_link(const struct link* L)
                 largest_seen_id = current_crossing->id;
 
                 /* Address of the new, copied crossing */
-                struct crossing* copied_crossing = new_crossings_address + largest_seen_id;
+                struct crossing* copied_crossing = new_crossings_addresses[largest_seen_id];
 
                 /* Copy data[4] over */
                 for (int i = 0; i < 4; i++) {
-                    copied_crossing->data[i] = new_crossings_address + current_crossing->data[i]->id;
+                    copied_crossing->data[i] = new_crossings_addresses[current_crossing->data[i]->id];
                 }
 
                 /* Copy ports[4] over */
@@ -162,8 +165,10 @@ struct link* copy_link(const struct link* L)
         } while (crossings_left_to_visit > 0);
 
         /* Now, current_crossing = L->first_crossing_in_components[component], so we can do this: */
-        M->first_crossing_in_components[component] = new_crossings_address + L->first_crossing_in_components[component]->id;
+        M->first_crossing_in_components[component] = new_crossings_addresses[L->first_crossing_in_components[component]->id];
     }
+
+    SAFE_FREE(new_crossings_addresses);
 
     return M;
 }

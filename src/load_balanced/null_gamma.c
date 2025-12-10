@@ -124,7 +124,7 @@ enum boolean null_gamma(struct link* L)
                 crossings_left_to_visit -= 2;
 
                 next_index = OPP(very_far_crossing_exit_index);
-                delete_crossing(previous_crossing);
+                delete_crossing(&previous_crossing);
                 previous_crossing = next_crossing;
                 current_crossing = very_far_crossing;
 

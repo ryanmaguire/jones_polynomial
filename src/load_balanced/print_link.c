@@ -22,15 +22,18 @@
 // Print the crossing connections of a link
 void print_link(struct link* const L, enum boolean redo_ids)
 {
+    printf("Number of components: %d\n", L->number_of_components);
+
     if (redo_ids == FALSE) {
-        printf("First crossings in each component:\n");
+        printf("Number of crossings / first crossings:\n");
         for (int component = 0; component < L->number_of_components; component++) {
             if (L->number_of_crossings_in_components[component] == 0) {
                 continue;
             }
-            printf("Component %d: %d\n", component, L->first_crossing_in_components[component]->id);
+            printf("Component %d: %d, %d\n", component, L->number_of_crossings_in_components[component], L->first_crossing_in_components[component]->id);
         }
 
+        printf("Connections in knot:\n");
         for (int component = 0; component < L->number_of_components; component++) {
             if (L->number_of_crossings_in_components[component] == 0) {
                 continue;
@@ -120,15 +123,16 @@ void print_link(struct link* const L, enum boolean redo_ids)
         } while (crossings_left_to_visit > 0);
     }
 
-    printf("First crossings in each component:\n");
+    printf("Number of crossings / first crossings:\n");
     for (int component = 0; component < L->number_of_components; component++) {
         if (L->number_of_crossings_in_components[component] == 0) {
             continue;
         }
-        printf("Component %d: %d\n", component, L->first_crossing_in_components[component]->id);
+        printf("Component %d: %d, %d\n", component, L->number_of_crossings_in_components[component], L->first_crossing_in_components[component]->id);
     }
 
     /* Run through and print */
+    printf("Connections in knot:\n");
     current_id = 0;
     for (int component = 0; component < L->number_of_components; component++) {
         if (L->number_of_crossings_in_components[component] == 0) {

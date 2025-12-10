@@ -23,11 +23,15 @@
     if (shift == 0)
         return;
     if (shift > 0) {
-        for (int degree = P->highest_degree; degree >= P->lowest_degree; degree--)
-            P->coeffs[degree + shift] = P->coeffs[degree];
+        for (int degree = P->highest_degree; degree >= P->lowest_degree; degree--) {
+            P->coeffs[DEGREE_SHIFT + degree + shift] = P->coeffs[DEGREE_SHIFT + degree];
+            P->coeffs[DEGREE_SHIFT + degree] = 0;
+        }
     } else {
-        for (int degree = P->lowest_degree; P->highest_degree; degree++)
-            P->coeffs[degree + shift] = P->coeffs[degree];
+        for (int degree = P->lowest_degree; degree <= P->highest_degree; degree++) {
+            P->coeffs[DEGREE_SHIFT + degree + shift] = P->coeffs[DEGREE_SHIFT + degree];
+            P->coeffs[DEGREE_SHIFT + degree] = 0;
+        }
     }
     P->highest_degree += shift;
     P->lowest_degree += shift;

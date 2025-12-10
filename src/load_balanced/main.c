@@ -59,39 +59,45 @@ int main()
 	hopf_crossing_two->under_component = 0;
 	struct link* hopf_link = (struct link*) safe_malloc(sizeof(struct link));
 	hopf_link->number_of_components = 2;
+	hopf_link->first_crossing_in_components = (struct crossing**) safe_malloc(2 * sizeof(struct crossing*));
+	hopf_link->number_of_crossings_in_components = (int*)safe_calloc(2, sizeof(int));
 	hopf_link->number_of_crossings_in_components[0] = 2;
 	hopf_link->number_of_crossings_in_components[1] = 2;
 	hopf_link->first_crossing_in_components[0] = hopf_crossing_one;
 	hopf_link->first_crossing_in_components[1] = hopf_crossing_one;
 
-	print_link(hopf_link, TRUE);
-	struct link* hopf_link_copy = copy_link(hopf_link);
-	print_link(hopf_link_copy, TRUE);
+	/*struct link* hopf_link_copy = copy_link(hopf_link);
+	smooth_crossing(hopf_link_copy, hopf_link_copy->first_crossing_in_components[0], 0);
+	print_link(hopf_link_copy, TRUE);*/
 
+	//print_polynomial(jones_polynomial(hopf_link), 'q');
 
 	/*struct link* nine_43_knot = PD_to_algorithm_knot(&nine_43_PD);
 	struct laurent_polynomial* test_polynomial_nine_43 = jones_polynomial(nine_43_knot);
-	delete_polynomial(test_polynomial_nine_43);
+	delete_polynomial(&test_polynomial_nine_43);
 	return 0;*/
 
-	/*struct link* eight_21_knot = PD_to_algorithm_knot(&eight_21_PD);
+	struct link* eight_21_knot = PD_to_algorithm_knot(&eight_21_PD);
 	struct laurent_polynomial* test_polynomial_eight_21 = jones_polynomial(eight_21_knot);
-	delete_polynomial(test_polynomial_eight_21);
-	return 0;*/
+	delete_polynomial(&test_polynomial_eight_21);
+	return 0;
 
 	/*struct link* figure_eight_knot = PD_to_algorithm_knot(&figure_eight_PD);
+	print_link(figure_eight_knot, TRUE);
 	struct laurent_polynomial* test_polynomial_figure_eight = jones_polynomial(figure_eight_knot);
-	delete_polynomial(test_polynomial_figure_eight);
+	print_polynomial(test_polynomial_figure_eight, 'q');
+	delete_polynomial(&test_polynomial_figure_eight);
 	return 0;*/
 
 	/*struct link* six_three_knot = PD_to_algorithm_knot(&six_three_PD);
 	struct laurent_polynomial* test_polynomial_six_three = jones_polynomial(six_three_knot);
 	print_polynomial(test_polynomial_six_three, 'q');
-	delete_polynomial(test_polynomial_six_three);*/
+	delete_polynomial(&test_polynomial_six_three);*/
 
+	//print_link(trefoil, TRUE);
 	/*struct laurent_polynomial* test_polynomial = jones_polynomial(trefoil);
 	print_polynomial(test_polynomial, 'q');
-	delete_polynomial(test_polynomial);*/
+	delete_polynomial(&test_polynomial);*/
 
 	return 0;
 }

@@ -20,8 +20,8 @@
  #include "load_balanced.h"
 
 /* Function to free memory associated with a laurent_polynomial struct */
-void delete_polynomial(struct laurent_polynomial* P)
+void delete_polynomial(struct laurent_polynomial** P)
 {
-    SAFE_FREE(P->coeffs);
-    SAFE_FREE(P);
+    SAFE_FREE((*P)->coeffs);
+    SAFE_FREE(*P);
 }

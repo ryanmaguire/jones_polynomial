@@ -66,6 +66,7 @@ enum boolean reidemeister_move_ii(struct link* L)
             int far_index = OPP(current_crossing->ports[next_index]);
 
             if (
+                current_crossing != next_crossing &&
                 /* current_crossing connects to next_crossing somewhere else */
                 (current_crossing->data[PREV(next_index)] == next_crossing || current_crossing->data[NEXT(next_index)] == next_crossing)
                 /* && the crossing signs are correct for an R2*/
@@ -77,39 +78,46 @@ enum boolean reidemeister_move_ii(struct link* L)
 
                 int diff_next_index = // Find whichever one leads to somewhere else from current_crossing
                     (current_crossing->data[NEXT(next_index)] == next_crossing) ? 
-                        NEXT(next_index) :
-                        PREV(next_index);
+                        PREV(next_index) :
+                        NEXT(next_index);
                 struct crossing* diff_previous_crossing = current_crossing->data[OPP(diff_next_index)];
 
                 int diff_far_index = // Find whichever one leads to somewhere else from next_crossing
                     (next_crossing->data[NEXT(far_index)] == current_crossing) ?
-                        NEXT(far_index) :
-                        PREV(far_index);
+                        PREV(far_index) :
+                        NEXT(far_index);
                 struct crossing* diff_far_crossing = next_crossing->data[OPP(diff_far_index)];
+
+                /* Set new variables */
+                int same_previous_crossing_leave_index = current_crossing->ports[OPP(next_index)];
+                int diff_previous_crossing_leave_index = current_crossing->ports[OPP(diff_next_index)];
+                int same_far_crossing_enter_index = next_crossing->ports[far_index];
+                int diff_far_crossing_enter_index = next_crossing->ports[diff_far_index];
+
+                int same_previous_crossing_new_port = next_crossing->ports[far_index];
+                int diff_previous_crossing_new_port = next_crossing->ports[diff_far_index];
+                int same_far_crossing_new_port = current_crossing->ports[OPP(next_index)];
+                int diff_far_crossing_new_port = current_crossing->ports[OPP(diff_next_index)];
                 
                 /* Update same_previous_crossing */
-                int same_previous_crossing_leave_index = current_crossing->ports[OPP(next_index)];
                 same_previous_crossing->data[same_previous_crossing_leave_index] = same_far_crossing;
-                same_previous_crossing->ports[same_previous_crossing_leave_index] = next_crossing->ports[far_index];
+                same_previous_crossing->ports[same_previous_crossing_leave_index] = same_previous_crossing_new_port;
 
                 /* Update diff_previous_crossing */
-                int diff_previous_crossing_leave_index = current_crossing->ports[OPP(diff_next_index)];
                 diff_previous_crossing->data[diff_previous_crossing_leave_index] = diff_far_crossing;
-                diff_previous_crossing->ports[diff_previous_crossing_leave_index] = next_crossing->ports[diff_far_index];
+                diff_previous_crossing->ports[diff_previous_crossing_leave_index] = diff_previous_crossing_new_port;
 
                 /* Update same_far_crossing */
-                int same_far_crossing_enter_index = next_crossing->ports[far_index];
                 same_far_crossing->data[same_far_crossing_enter_index] = same_previous_crossing;
-                same_far_crossing->ports[same_far_crossing_enter_index] = current_crossing->ports[OPP(next_index)];
+                same_far_crossing->ports[same_far_crossing_enter_index] = same_far_crossing_new_port;
 
                 /* Update diff_far_crossing */
-                int diff_far_crossing_enter_index = next_crossing->ports[diff_far_index];
                 diff_far_crossing->data[diff_far_crossing_enter_index] = diff_previous_crossing;
-                diff_far_crossing->ports[diff_far_crossing_enter_index] = current_crossing->ports[OPP(diff_next_index)];
+                diff_far_crossing->ports[diff_far_crossing_enter_index] = diff_far_crossing_new_port;
 
                 /* Update crossing counts in link component */
                 L->number_of_crossings_in_components[component] -= 2;
-                int other_component;
+                int other_component = -1;
                 if (current_crossing->over_component != component || current_crossing->under_component != component) {
                     /* Hack to calculate the index of the other component */
                     other_component = current_crossing->over_component + current_crossing->under_component - component;
@@ -137,9 +145,11 @@ enum boolean reidemeister_move_ii(struct link* L)
                 crossings_left_to_visit -= 4; // two crossings get die
 
                 next_index = OPP(next_crossing->ports[far_index]);
-                delete_crossing(current_crossing);
-                delete_crossing(next_crossing);
-                current_crossing = same_far_crossing; 
+                delete_crossing(&current_crossing);
+                delete_crossing(&next_crossing);
+                if (crossings_left_to_visit > 0) {
+                    current_crossing = same_far_crossing; 
+                }
                 // No need to update previous_crossing since it is now adjacent to same_far_crossing = current_crossing
 
                 found_something = TRUE;

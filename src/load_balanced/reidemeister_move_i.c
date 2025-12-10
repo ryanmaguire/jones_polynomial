@@ -56,7 +56,7 @@ enum boolean reidemeister_move_i(struct link* L)
         int next_index = (current_crossing->under_component == component) ? 2 : 1;
         struct crossing* previous_crossing = current_crossing->data[OPP(next_index)];
         do {
-            if (current_crossing->data[next_index] == current_crossing) {
+            if (current_crossing->data[next_index] == current_crossing) { // Perform a check for R1
                 struct crossing* next_crossing = // Find whichever one leads to somewhere else
                     (current_crossing->data[NEXT(next_index)] == current_crossing) ? 
                         current_crossing->data[PREV(next_index)] :
@@ -84,8 +84,10 @@ enum boolean reidemeister_move_i(struct link* L)
                 crossings_left_to_visit -= 2; // current_crossing always has both strands in current component
 
                 next_index = OPP(current_crossing->ports[next_index]);
-                delete_crossing(current_crossing);
-                current_crossing = next_crossing; 
+                delete_crossing(&current_crossing);
+                if (crossings_left_to_visit > 0) {
+                    current_crossing = next_crossing; 
+                }
                 // No need to update previous_crossing since it is now adjacent to next_crossing = current_crossing
 
                 found_something = TRUE;
