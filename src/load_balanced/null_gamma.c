@@ -34,11 +34,11 @@
 //                                              (previous_crossing)
 //                                                    /  \\
 //                                                   /    \\
-//                                            next_index   \\
+//                                                  /    far_index
 //                                                 /        \\
 //                (side_crossing)---(current_crossing)------(next_crossing)---(different_side_crossing)
 //                                                 \         //
-//                                               far_index  //      
+//                                              next_index  //      
 //                                                   \     //          
 //                                                    \   //             
 //                                                     \ //  
@@ -69,7 +69,7 @@ enum boolean null_gamma(struct link* L)
                 int former_crossing_index = OPP(current_crossing->ports[OPP(next_index)]);
                 struct crossing* former_crossing = previous_crossing->data[former_crossing_index];
 
-                int very_far_crossing_index = OPP(next_crossing->ports[OPP(far_index)]);
+                int very_far_crossing_index = OPP(next_crossing->ports[far_index]);
                 struct crossing* very_far_crossing = previous_crossing->data[very_far_crossing_index];
 
                 int side_crossing_index = 

@@ -78,15 +78,15 @@ enum boolean reidemeister_move_ii(struct link* L)
 
                 int diff_next_index = // Find whichever one leads to somewhere else from current_crossing
                     (current_crossing->data[NEXT(next_index)] == next_crossing) ? 
-                        PREV(next_index) :
-                        NEXT(next_index);
+                        NEXT(next_index) :
+                        PREV(next_index);
                 struct crossing* diff_previous_crossing = current_crossing->data[OPP(diff_next_index)];
 
                 int diff_far_index = // Find whichever one leads to somewhere else from next_crossing
                     (next_crossing->data[NEXT(far_index)] == current_crossing) ?
                         PREV(far_index) :
                         NEXT(far_index);
-                struct crossing* diff_far_crossing = next_crossing->data[OPP(diff_far_index)];
+                struct crossing* diff_far_crossing = next_crossing->data[diff_far_index];
 
                 /* Set new variables */
                 int same_previous_crossing_leave_index = current_crossing->ports[OPP(next_index)];
