@@ -105,7 +105,7 @@ struct link {
 	struct crossing** first_crossing_in_components; // Array of pointers to a crossing in each link component, length = MAX_CROSSINGS
 };
 extern struct link* make_link(const int number_of_components, int* const number_of_crossings_in_components, struct crossing** const first_crossing_in_components);
-extern struct link* copy_link(const struct link* L);
+extern struct link* copy_link(const struct link* const L);
 extern void print_link(struct link* const L, enum boolean redo_ids);
 
 extern void smooth_crossing(struct link* L, struct crossing* C, const int smoothing_type);

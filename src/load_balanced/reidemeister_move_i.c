@@ -26,7 +26,7 @@
 //                                  /                         \
 //                                  |                         |
 //  (previous_crossing)-----(current_crossing)--next_index>---/
-//                                  |
+//                        current_to_next_index \/
 //                                  |
 //                           (next_crossing)
 
@@ -34,7 +34,7 @@
 
 //                           (next_crossing)
 //                                  |
-//                                  |
+//                       current_to_next_index /\
 //  (previous_crossing)-----(current_crossing)--next_index>---\
 //                                  |                         |
 //                                  \_________________________/
@@ -57,18 +57,19 @@ enum boolean reidemeister_move_i(struct link* L)
         struct crossing* previous_crossing = current_crossing->data[OPP(next_index)];
         do {
             if (current_crossing->data[next_index] == current_crossing) { // Perform a check for R1
-                struct crossing* next_crossing = // Find whichever one leads to somewhere else
+                int current_to_next_index = // Find whichever one leads to somewhere else
                     (current_crossing->data[NEXT(next_index)] == current_crossing) ? 
-                        current_crossing->data[PREV(next_index)] :
-                        current_crossing->data[NEXT(next_index)];
+                        PREV(next_index) :
+                        NEXT(next_index);
+
+                struct crossing* next_crossing = current_crossing->data[current_to_next_index];
                 
                 /* Update previous_crossing */
                 int previous_crossing_leave_index = current_crossing->ports[OPP(next_index)];
                 previous_crossing->data[previous_crossing_leave_index] = next_crossing;
-                previous_crossing->ports[previous_crossing_leave_index] = current_crossing->ports[next_index];
+                previous_crossing->ports[previous_crossing_leave_index] = current_crossing->ports[current_to_next_index];
                 
                 /* Update next_crossing */
-                int current_to_next_index = OPP(current_crossing->ports[next_index]);
                 int next_crossing_enter_index = current_crossing->ports[current_to_next_index];
                 next_crossing->data[next_crossing_enter_index] = previous_crossing;
                 next_crossing->ports[next_crossing_enter_index] = current_crossing->ports[OPP(next_index)];

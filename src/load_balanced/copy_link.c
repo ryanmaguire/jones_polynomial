@@ -29,7 +29,7 @@ The new crossing with number k will eventually have memory address A+k
 
 /* Function to make a deep copy of a link */
 /* Renumbers ids in the original link L */
-struct link* copy_link(const struct link* L)
+struct link* copy_link(const struct link* const L)
 {
     struct link* M = (struct link*) safe_malloc(sizeof(struct link));
 

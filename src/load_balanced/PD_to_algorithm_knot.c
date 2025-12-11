@@ -25,9 +25,9 @@ struct link* PD_to_algorithm_knot(const struct PD_knot* K)
 	struct link* temp = (struct link*)safe_malloc(sizeof(struct link));
 	int number_of_crossings = K->number_of_crossings;
 	temp->number_of_components = 1;
-	temp->number_of_crossings_in_components = (int*)safe_calloc(number_of_crossings, sizeof(int));
+	temp->number_of_crossings_in_components = (int*)safe_calloc(MAX_CROSSINGS, sizeof(int));
 	temp->number_of_crossings_in_components[0] = number_of_crossings;
-	temp->first_crossing_in_components = (struct crossing**)safe_malloc(number_of_crossings * sizeof(struct crossing*));
+	temp->first_crossing_in_components = (struct crossing**)safe_malloc(MAX_CROSSINGS * sizeof(struct crossing*));
 
 	struct crossing** crossings_array = (struct crossing**)safe_malloc(number_of_crossings * sizeof(struct crossing*));
 	enum boolean* visited_edges = (enum boolean*)safe_malloc((2 * number_of_crossings + 1) * sizeof(enum boolean));
