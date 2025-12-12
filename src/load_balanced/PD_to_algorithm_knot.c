@@ -61,5 +61,10 @@ struct link* PD_to_algorithm_knot(const struct PD_knot* K)
 	}
 	temp->first_crossing_in_components[0] = crossings_array[0];
 
+	SAFE_FREE(crossings_array);
+	SAFE_FREE(visited_edges);
+	SAFE_FREE(visited_edge_crossings);
+	SAFE_FREE(visited_edge_ports);
+
 	return temp;
 }
