@@ -40,9 +40,9 @@
 //                                  \_________________________/
 //                                
 
-enum boolean reidemeister_move_i(struct link* L) 
+int reidemeister_move_i(struct link* L, int* writhe) 
 {
-    enum boolean found_something = FALSE;
+    int number_of_simplifications = 0;
     
     for (int component = 0; component < L->number_of_components; component++) {
         if (L->number_of_crossings_in_components[component] <= 0) {
@@ -57,6 +57,8 @@ enum boolean reidemeister_move_i(struct link* L)
         struct crossing* previous_crossing = current_crossing->data[OPP(next_index)];
         do {
             if (current_crossing->data[next_index] == current_crossing) { // Perform a check for R1
+                *writhe += (current_crossing->overdirection == OVER_POS) ? 1 : -1;
+
                 int current_to_next_index = // Find whichever one leads to somewhere else
                     (current_crossing->data[NEXT(next_index)] == current_crossing) ? 
                         PREV(next_index) :
@@ -91,7 +93,7 @@ enum boolean reidemeister_move_i(struct link* L)
                 }
                 // No need to update previous_crossing since it is now adjacent to next_crossing = current_crossing
 
-                found_something = TRUE;
+                number_of_simplifications++;
             } else {
                 if (current_crossing->over_component == current_crossing->under_component) {
                     crossings_left_to_visit -= 1;
@@ -106,5 +108,5 @@ enum boolean reidemeister_move_i(struct link* L)
         } while (L->number_of_crossings_in_components[component] > 0 && crossings_left_to_visit > 0);
     }
 
-    return found_something;
+    return number_of_simplifications;
 }

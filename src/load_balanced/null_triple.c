@@ -51,9 +51,9 @@
 //                                            (bottom_left_crossing)        (bottom_right_crossing)
 //
 
-enum boolean null_triple(struct link* L) 
+int null_triple(struct link* L) 
 {
-    enum boolean found_something = FALSE;
+    int number_of_simplifications = 0;
 
     for (int component = 0; component < L->number_of_components; component++) {
         if (L->number_of_crossings_in_components[component] <= 2) { // change later
@@ -282,6 +282,8 @@ enum boolean null_triple(struct link* L)
 
                     delete_crossing(&top_middle_crossing);
                     delete_crossing(&bottom_middle_crossing);
+
+                    number_of_simplifications++;
                 }
             } 
             
@@ -301,6 +303,6 @@ enum boolean null_triple(struct link* L)
         } while (L->number_of_crossings_in_components[component] > 0 && crossings_left_to_visit > 0);
     }
 
-    return found_something;
+    return number_of_simplifications;
 }
 

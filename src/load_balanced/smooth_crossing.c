@@ -24,6 +24,7 @@
 
 void smooth_crossing(struct link *L, struct crossing* C, int type)//Type 0 means 0-smoothing, type 1 means 1-smoothing
 {
+    printf("smoothing id %d\n", C->id);
     int crossing_0_pair, crossing_2_pair; //Variables to hold which crossings to pair
     if (type == 0) {//If 0-smoothing
         crossing_0_pair = 1;//Pair crossing 0 with crossing 1
@@ -113,10 +114,13 @@ void smooth_crossing(struct link *L, struct crossing* C, int type)//Type 0 means
                     SWAP(struct crossing*, current_crossing->data[1], current_crossing->data[3]);
                     SWAP(int, current_crossing->ports[0], current_crossing->ports[2]);
                     SWAP(int, current_crossing->ports[1], current_crossing->ports[3]);
-                    current_crossing->data[0]->ports[current_crossing->ports[0]] = 0;
-                    current_crossing->data[2]->ports[current_crossing->ports[2]] = 2;
-                    current_crossing->data[1]->ports[current_crossing->ports[1]] = 1;
-                    current_crossing->data[3]->ports[current_crossing->ports[3]] = 3;
+                    for (int i = 0; i < 4; i++) {
+                        if (current_crossing->data[i] != current_crossing) {
+                            current_crossing->data[i]->ports[current_crossing->ports[i]] = i;
+                        } else {
+                            current_crossing->ports[i] = OPP(current_crossing->ports[i]);
+                        }
+                    }
                     direction = 2;
                 }
                 else if ((direction % 2 == 1) && (direction != current_crossing->overdirection)){
@@ -131,6 +135,7 @@ void smooth_crossing(struct link *L, struct crossing* C, int type)//Type 0 means
         }
     } else {
         if ((C->overdirection == OVER_POS && type == 0) || (C->overdirection == OVER_NEG && type == 1)){//If K0 (merge & slide down)
+            printf("\nasdfadsfsdafdfsadsfadasf\n");
             struct crossing* current_crossing = C;//current crossing is C
             struct crossing* next_crossing = C->data[1];//next crossing is C->data[1]
             int comp_1 = C->over_component;//comp_1 is overcomponent
@@ -159,7 +164,7 @@ void smooth_crossing(struct link *L, struct crossing* C, int type)//Type 0 means
                     current_crossing->under_component = newcomp;//do the undercomponent
                 }
             } while (!(current_crossing == C->data[1] && direction == OPP(C->ports[1])));
-            
+            printf("overlap: %d\n", overlap);
             int counter;//define counter
             for (counter = 1; counter< L->number_of_components - oldcomp; counter++){//Shift everything to the left; loop over everything above oldcomp
                 if (L->number_of_crossings_in_components[oldcomp+counter] == 0) {
@@ -235,16 +240,19 @@ void smooth_crossing(struct link *L, struct crossing* C, int type)//Type 0 means
                     SWAP(struct crossing*, current_crossing->data[1], current_crossing->data[3]);
                     SWAP(int, current_crossing->ports[0], current_crossing->ports[2]);
                     SWAP(int, current_crossing->ports[1], current_crossing->ports[3]);
-                    current_crossing->data[0]->ports[current_crossing->ports[0]] = 0;
-                    current_crossing->data[2]->ports[current_crossing->ports[2]] = 2;
-                    current_crossing->data[1]->ports[current_crossing->ports[1]] = 1;
-                    current_crossing->data[3]->ports[current_crossing->ports[3]] = 3;
+                    for (int i = 0; i < 4; i++) {
+                        if (current_crossing->data[i] != current_crossing) {
+                            current_crossing->data[i]->ports[current_crossing->ports[i]] = i;
+                        } else {
+                            current_crossing->ports[i] = OPP(current_crossing->ports[i]);
+                        }
+                    }
                     direction = 2;
                 } else if ((direction % 2 == 1) && (direction != current_crossing->overdirection)){
                     current_crossing->overdirection = OPP(current_crossing->overdirection);//Switch sign of crossing as I swap the strand
                 }
             } while (!(current_crossing == C->data[1] && direction % 2 == OPP(C->ports[1]) % 2));
-            
+            printf("overlap: %d\n", overlap);
             int counter;
             for (counter = 1; counter< L->number_of_components - oldcomp; counter++){
                 if (L->number_of_crossings_in_components[oldcomp+counter] == 0) {

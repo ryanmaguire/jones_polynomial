@@ -25,7 +25,8 @@
 struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
 {
     /* Loop through all reidemeister moves and generalized reidemeister moves until no more can be performed */
-    while (reidemeister_move_i(L) || reidemeister_move_ii(L) || null_gamma(L) || null_triple(L)) {}
+    int r1_count = 0;
+    while (reidemeister_move_i(L, &r1_count) || reidemeister_move_ii(L) || null_gamma(L) || null_triple(L)) {}
 
     /* Count number of unknot diagrams in link */
     int number_of_unknots = 0;
@@ -39,10 +40,12 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
         int exponent = number_of_unknots - 1;
         struct laurent_polynomial* result = initialize_polynomial();
         for (int i = 0; i < MAX_POLY_SIZE; i++) { // Copy these terms over
-            result->coeffs[i] = a_squared_a_inv_squared_powers[exponent][i];
+            result->coeffs[i] = a_squared_a_inv_squared_powers[exponent][i] * (((r1_count + exponent) % 2 == 0) ? 1 : -1);
         }
         result->lowest_degree = -2 * exponent;
         result->highest_degree = 2 * exponent;
+
+        shift_polynomial(result, -3 * r1_count);
         
         /* Free memory of L */
         /* All components of L must now be unknots, so there are no crossings to free */
@@ -56,7 +59,7 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     /* Otherwise, check for individual unknot diagrams and remove them */
     struct laurent_polynomial* multiplier = initialize_polynomial();
     for (int i = 0; i < MAX_POLY_SIZE; i++) { // Copy these terms over
-        multiplier->coeffs[i] = a_squared_a_inv_squared_powers[number_of_unknots][i];
+        multiplier->coeffs[i] = a_squared_a_inv_squared_powers[number_of_unknots][i] * ((number_of_unknots % 2 == 0) ? 1 : -1);
     }
     multiplier->lowest_degree = -2 * number_of_unknots;
     multiplier->highest_degree = 2 * number_of_unknots;
@@ -118,6 +121,11 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     delete_polynomial(&polynomial_2);
     delete_polynomial(&sum_of_two_polynomials);
     delete_polynomial(&multiplier);
+
+    shift_polynomial(result, -3 * r1_count);
+    for (int i = MAX_POLY_SIZE + result->lowest_degree; i <= MAX_POLY_SIZE + result->highest_degree; i++) { // sign issues
+        result->coeffs[i] *= -1;
+    }
 
     /* We are done. */
     return result;

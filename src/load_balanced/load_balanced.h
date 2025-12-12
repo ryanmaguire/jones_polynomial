@@ -110,10 +110,10 @@ extern void print_link(struct link* const L, enum boolean redo_ids);
 
 extern void smooth_crossing(struct link* L, struct crossing* C, const int smoothing_type);
 
-extern enum boolean reidemeister_move_i(struct link* L);
-extern enum boolean reidemeister_move_ii(struct link* L);
-extern enum boolean null_gamma(struct link* L);
-extern enum boolean null_triple(struct link* L);
+extern int reidemeister_move_i(struct link* L, int* writhe);
+extern int reidemeister_move_ii(struct link* L);
+extern int null_gamma(struct link* L);
+extern int null_triple(struct link* L);
 
 extern int writhe(const struct link* L);
 extern struct laurent_polynomial* jones_polynomial(struct link* L);

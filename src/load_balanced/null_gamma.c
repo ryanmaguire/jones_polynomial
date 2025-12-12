@@ -42,9 +42,9 @@
 //                                                   \     //          
 //                                                    \   //             
 //                                                     \ //  
-enum boolean null_gamma(struct link* L) 
+int null_gamma(struct link* L) 
 {
-    enum boolean found_something = FALSE;
+    int number_of_simplifications = 0;
 
     for (int component = 0; component < L->number_of_components; component++) {
         if (L->number_of_crossings_in_components[component] <= 2) {
@@ -128,7 +128,7 @@ enum boolean null_gamma(struct link* L)
                 previous_crossing = next_crossing;
                 current_crossing = very_far_crossing;
 
-                found_something = TRUE;
+                number_of_simplifications++;
             } else {
                 if (current_crossing->over_component == current_crossing->under_component) {
                     crossings_left_to_visit -= 1;
@@ -143,6 +143,6 @@ enum boolean null_gamma(struct link* L)
         } while (L->number_of_crossings_in_components[component] > 0 && crossings_left_to_visit > 0);
     }
 
-    return found_something;
+    return number_of_simplifications;
 }
 

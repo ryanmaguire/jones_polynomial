@@ -79,6 +79,7 @@ int main()
 
 	struct link* eight_21_knot = PD_to_algorithm_knot(&eight_21_PD);
 	struct laurent_polynomial* test_polynomial_eight_21 = jones_polynomial(eight_21_knot);
+	print_polynomial(test_polynomial_eight_21, 'q');
 	delete_polynomial(&test_polynomial_eight_21);
 	return 0;
 
