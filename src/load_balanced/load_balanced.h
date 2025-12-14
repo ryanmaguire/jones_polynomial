@@ -41,7 +41,8 @@ enum boolean { FALSE, TRUE };
 /* Functions to safely use malloc, calloc, and free */
 extern void* safe_malloc(const size_t size);
 extern void* safe_calloc(const size_t n, const size_t size);
-#define SAFE_FREE(pointer_SAFE_FREE_MACRO) if (pointer_SAFE_FREE_MACRO) {free(pointer_SAFE_FREE_MACRO);} pointer_SAFE_FREE_MACRO = NULL
+/* Safe free macro that also sets pointer to NULL and is safe in all contexts */
+#define SAFE_FREE(pointer_MACRO) do { if ((pointer_MACRO) != NULL) { free((pointer_MACRO)); (pointer_MACRO) = NULL; } } while (0)
 
 #define MAX_CROSSINGS (32)
 #define MAX_POLY_SIZE (6 * MAX_CROSSINGS + 1)

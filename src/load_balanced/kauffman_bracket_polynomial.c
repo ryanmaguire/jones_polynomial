@@ -123,7 +123,7 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     delete_polynomial(&multiplier);
 
     shift_polynomial(result, -3 * r1_count);
-    for (int i = MAX_POLY_SIZE + result->lowest_degree; i <= MAX_POLY_SIZE + result->highest_degree; i++) { // sign issues
+    for (int i = DEGREE_SHIFT + result->lowest_degree; i <= DEGREE_SHIFT + result->highest_degree; i++) { // sign issues
         result->coeffs[i] *= -1;
     }
 

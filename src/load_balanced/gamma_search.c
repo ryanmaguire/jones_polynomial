@@ -53,7 +53,7 @@ int gamma_search(const struct link* L)
         do {
             for (dir = 0; dir <4; dir++){//Check all four directions from current crossing
                 if (current_crossing->data[dir]->data[(current_crossing->ports[dir]+1)%4] == current_crossing && (dir + current_crossing->ports[dir])%2 == 1){//Bigon??
-                    if((current_crossing->data[(dir+1)%4] == current_crossing->data[dir]->data[(current_crossing->ports[dir]+3)&4] && (current_crossing->ports[(dir+1)%4] + current_crossing->data[dir]->ports[(current_crossing->ports[dir]+3)&4])%2 == 0) || (current_crossing->data[(dir+2)%4] == current_crossing->data[dir]->data[(current_crossing->ports[dir]+2)&4] && (current_crossing->ports[(dir+2)%4] + current_crossing->data[dir]->ports[(current_crossing->ports[dir]+2)&4])%2 == 0)){//Check whether the two other strands intersect to form a gamma: 2 cases
+                    if((current_crossing->data[(dir+1)%4] == current_crossing->data[dir]->data[(current_crossing->ports[dir]+3)%4] && (current_crossing->ports[(dir+1)%4] + current_crossing->data[dir]->ports[(current_crossing->ports[dir]+3)%4])%2 == 0) || (current_crossing->data[(dir+2)%4] == current_crossing->data[dir]->data[(current_crossing->ports[dir]+2)%4] && (current_crossing->ports[(dir+2)%4] + current_crossing->data[dir]->ports[(current_crossing->ports[dir]+2)%4])%2 == 0)){//Check whether the two other strands intersect to form a gamma: 2 cases
                         L->first_crossing_in_components[component] = current_crossing;//Set first crossing of component to current crossing (for easy passing to smoothing function)
                         return component;//Return component number
                     }
