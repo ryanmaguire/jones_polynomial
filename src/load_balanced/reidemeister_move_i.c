@@ -57,14 +57,14 @@ int reidemeister_move_i(struct link* L, int* writhe)
         struct crossing* previous_crossing = current_crossing->data[OPP(next_index)];
         do {
             if (current_crossing->data[next_index] == current_crossing) { // Perform a check for R1
-                *writhe += (current_crossing->overdirection == OVER_POS) ? 1 : -1;
-
                 int current_to_next_index = // Find whichever one leads to somewhere else
-                    (current_crossing->data[NEXT(next_index)] == current_crossing) ? 
+                    (current_crossing->data[NEXT(next_index)] == current_crossing && current_crossing->ports[NEXT(next_index)] == next_index) ? 
                         PREV(next_index) :
                         NEXT(next_index);
 
                 struct crossing* next_crossing = current_crossing->data[current_to_next_index];
+
+                *writhe += ((next_index + OPP(current_to_next_index)) % 4 == 1) ? 1 : -1;
                 
                 /* Update previous_crossing */
                 int previous_crossing_leave_index = current_crossing->ports[OPP(next_index)];
