@@ -25,8 +25,8 @@
 struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
 {
     /* Loop through all reidemeister moves and generalized reidemeister moves until no more can be performed */
-    int r1_count = 0;
-    while (reidemeister_move_i(L, &r1_count) || reidemeister_move_ii(L) || null_gamma(L) || null_triple(L)) {}
+    int writhe_change = 0;
+    while (reidemeister_move_i(L, &writhe_change) || reidemeister_move_ii(L) || null_gamma(L, &writhe_change) || null_triple(L)) {}
 
     /* Count number of unknot diagrams in link */
     int number_of_unknots = 0;
@@ -40,12 +40,12 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
         int exponent = number_of_unknots - 1;
         struct laurent_polynomial* result = initialize_polynomial();
         for (int i = 0; i < MAX_POLY_SIZE; i++) { // Copy these terms over
-            result->coeffs[i] = a_squared_a_inv_squared_powers[exponent][i] * (((r1_count + exponent) % 2 == 0) ? 1 : -1);
+            result->coeffs[i] = a_squared_a_inv_squared_powers[exponent][i] * (((writhe_change + exponent) % 2 == 0) ? 1 : -1);
         }
         result->lowest_degree = -2 * exponent;
         result->highest_degree = 2 * exponent;
 
-        shift_polynomial(result, 3 * r1_count);
+        shift_polynomial(result, 3 * writhe_change);
         
         /* Free memory of L */
         /* All components of L must now be unknots, so there are no crossings to free */
@@ -122,9 +122,9 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     delete_polynomial(&sum_of_two_polynomials);
     delete_polynomial(&multiplier);
 
-    shift_polynomial(result, 3 * r1_count);
+    shift_polynomial(result, 3 * writhe_change);
     for (int i = DEGREE_SHIFT + result->lowest_degree; i <= DEGREE_SHIFT + result->highest_degree; i++) { // sign issues
-        result->coeffs[i] *= (r1_count % 2 == 0) ? 1 : -1;
+        result->coeffs[i] *= (writhe_change % 2 == 0) ? 1 : -1;
     }
 
     /* We are done. */

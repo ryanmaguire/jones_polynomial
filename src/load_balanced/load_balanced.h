@@ -111,9 +111,9 @@ extern void print_link(struct link* const L, enum boolean redo_ids);
 
 extern void smooth_crossing(struct link* L, struct crossing* C, const int smoothing_type);
 
-extern int reidemeister_move_i(struct link* L, int* writhe);
+extern int reidemeister_move_i(struct link* L, int* const writhe);
 extern int reidemeister_move_ii(struct link* L);
-extern int null_gamma(struct link* L);
+extern int null_gamma(struct link* L, int* const writhe);
 extern int null_triple(struct link* L);
 
 extern int writhe(const struct link* L);

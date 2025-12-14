@@ -42,7 +42,7 @@
 //                                                   \     //          
 //                                                    \   //             
 //                                                     \ //  
-int null_gamma(struct link* L) 
+int null_gamma(struct link* L, int* const writhe) 
 {
     int number_of_simplifications = 0;
 
@@ -83,6 +83,8 @@ int null_gamma(struct link* L)
                         PREV(far_index) :
                         NEXT(far_index);
                 struct crossing* different_side_crossing = next_crossing->data[different_side_crossing_index];
+
+                *writhe += ((former_crossing_index + very_far_crossing_index) % 4 == 1) ? 1 : -1;
 
                 int former_crossing_enter_index = previous_crossing->ports[former_crossing_index];
                 current_crossing->data[OPP(next_index)] = former_crossing;

@@ -40,7 +40,7 @@
 //                                  \_________________________/
 //                                
 
-int reidemeister_move_i(struct link* L, int* writhe) 
+int reidemeister_move_i(struct link* L, int* const writhe) 
 {
     int number_of_simplifications = 0;
     

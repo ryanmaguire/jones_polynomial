@@ -53,5 +53,6 @@ int writhe(const struct link* L)
             next_index = OPP(previous_crossing->ports[next_index]);
         } while (crossings_left_to_visit > 0);
     }
+    writhe /= 2;
     return writhe;
 }
