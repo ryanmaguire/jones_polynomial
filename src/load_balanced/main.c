@@ -41,6 +41,9 @@ int main()
 	struct PD_crossing eleven_42_knot_PD_crossings[] = { {{4,2,5,1}}, {{8,4,9,3}}, {{12,5,13,6}}, {{2,8,3,7}}, {{9,18,10,19}}, {{11,21,12,20}}, {{6,13,7,14}}, {{15,10,16,11}}, {{17,22,18,1}}, {{19,15,20,14}}, {{21,16,22,17}} };
 	struct PD_knot eleven_42_PD = {11, eleven_42_knot_PD_crossings};
 
+	struct PD_crossing T_7_4_PD_crossings[] = { {{9,41,10,40}}, {{20,42,21,41}}, {{31,1,32,42}}, {{21,11,22,10}}, {{32,12,33,11}}, {{1,13,2,12}}, {{33,23,34,22}}, {{2,24,3,23}}, {{13,25,14,24}}, {{3,35,4,34}}, {{14,36,15,35}}, {{25,37,26,36}}, {{15,5,16,4}}, {{26,6,27,5}}, {{37,7,38,6}}, {{27,17,28,16}}, {{38,18,39,17}}, {{7,19,8,18}}, {{39,29,40,28}}, {{8,30,9,29}}, {{19,31,20,30}} };
+	struct PD_knot T_7_4_PD = {21, T_7_4_PD_crossings};
+
 	struct PD_crossing test_PD_crossings[] = { {{6,2,7,1}}, {{7,2,8,3}}, {{5,4,4,3}}, {{5,8,6,1}} };
 	struct PD_knot test_PD = {4, test_PD_crossings};
 
@@ -69,6 +72,12 @@ int main()
 	hopf_link->number_of_crossings_in_components[1] = 2;
 	hopf_link->first_crossing_in_components[0] = hopf_crossing_one;
 	hopf_link->first_crossing_in_components[1] = hopf_crossing_one;
+
+	/*struct link* T_7_4_knot = PD_to_algorithm_knot(&T_7_4_PD);
+	struct laurent_polynomial* test_polynomial_T_7_4 = jones_polynomial(T_7_4_knot);
+	print_polynomial(test_polynomial_T_7_4, 'q');
+	delete_polynomial(&test_polynomial_T_7_4);
+	return 0;*/
 
 	/*struct link* eleven_42_knot = PD_to_algorithm_knot(&eleven_42_PD);
 	struct laurent_polynomial* test_polynomial_eleven_42 = jones_polynomial(eleven_42_knot);
@@ -110,10 +119,19 @@ int main()
 		delete_polynomial(&test_polynomial_eleven_42);
 	}
 	printf("Time taken: %.2f seconds\n", (double)(clock() - start_time) / CLOCKS_PER_SEC);
-	struct link* eleven_42_knot = PD_to_algorithm_knot(&eleven_42_PD);
-	struct laurent_polynomial* test_polynomial_eleven_42 = jones_polynomial(eleven_42_knot);
-	print_polynomial(test_polynomial_eleven_42, 'q');
-	delete_polynomial(&test_polynomial_eleven_42);
+	//print_polynomial(test_polynomial_eleven_42, 'q');
+	//delete_polynomial(&test_polynomial_eleven_42);
+
+	start_time = clock();
+	for (int i = 0; i < 10000; i++) {
+		struct link* T_7_4_knot = PD_to_algorithm_knot(&T_7_4_PD);
+		struct laurent_polynomial* test_polynomial_T_7_4 = jones_polynomial(T_7_4_knot);
+		delete_polynomial(&test_polynomial_T_7_4);
+	}
+	printf("Time taken: %.2f seconds\n", (double)(clock() - start_time) / CLOCKS_PER_SEC);
+	//print_polynomial(test_polynomial_T_7_4, 'q');
+	//delete_polynomial(&test_polynomial_T_7_4);
+
 	return 0;
 
 	/*struct link* figure_eight_knot = PD_to_algorithm_knot(&figure_eight_PD);
