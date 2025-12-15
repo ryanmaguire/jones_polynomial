@@ -165,7 +165,7 @@ void smooth_crossing(struct link *L, struct crossing* C, int type)//Type 0 means
                     continue;
                 }
                 current_crossing = L->first_crossing_in_components[oldcomp+counter];
-                int d =  (current_crossing->under_component == oldcomp+counter) ? 2 : 1;
+                int d = (current_crossing->under_component == oldcomp+counter) ? 2 : 1;
                 next_crossing = current_crossing->data[d];
                 if (current_crossing->over_component == oldcomp+counter){
                     current_crossing->over_component = oldcomp+counter-1;
@@ -249,8 +249,10 @@ void smooth_crossing(struct link *L, struct crossing* C, int type)//Type 0 means
                     continue;
                 }
                 current_crossing = L->first_crossing_in_components[oldcomp+counter];
-                int d =  (current_crossing->under_component == oldcomp+counter) ? 2 : 1;
+                int d = (current_crossing->under_component == oldcomp+counter) ? 2 : 1;
+                direction = OPP(current_crossing->ports[d]);
                 next_crossing = current_crossing->data[d];
+                current_crossing = next_crossing;
                 do {
                     if (current_crossing->over_component == oldcomp+counter){
                         current_crossing->over_component = oldcomp+counter-1;
@@ -258,6 +260,7 @@ void smooth_crossing(struct link *L, struct crossing* C, int type)//Type 0 means
                     if (current_crossing->under_component == oldcomp+counter){
                         current_crossing->under_component = oldcomp+counter-1;
                     }
+                    next_crossing = current_crossing->data[direction];
                     direction = OPP(current_crossing->ports[direction]);
                     current_crossing = next_crossing;
                 } while (!(current_crossing == L->first_crossing_in_components[oldcomp+counter]->data[d] && direction == OPP(L->first_crossing_in_components[oldcomp+counter]->ports[d])));
