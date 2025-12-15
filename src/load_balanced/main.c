@@ -70,12 +70,11 @@ int main()
 	hopf_link->first_crossing_in_components[0] = hopf_crossing_one;
 	hopf_link->first_crossing_in_components[1] = hopf_crossing_one;
 
-	struct link* eleven_42_knot = PD_to_algorithm_knot(&eleven_42_PD);
+	/*struct link* eleven_42_knot = PD_to_algorithm_knot(&eleven_42_PD);
 	struct laurent_polynomial* test_polynomial_eleven_42 = jones_polynomial(eleven_42_knot);
 	print_polynomial(test_polynomial_eleven_42, 'q');
 	delete_polynomial(&test_polynomial_eleven_42);
-
-	return 0;
+	return 0;*/
 
 	/*struct link* hopf_link_copy = copy_link(hopf_link);
 	smooth_crossing(hopf_link_copy, hopf_link_copy->first_crossing_in_components[0], 0);
@@ -104,7 +103,7 @@ int main()
 	//print_polynomial(test_polynomial_eight_21, 'q');
 	//delete_polynomial(&test_polynomial_eight_21);
 
-	/*start_time = clock();
+	start_time = clock();
 	for (int i = 0; i < 10000; i++) {
 		struct link* eleven_42_knot = PD_to_algorithm_knot(&eleven_42_PD);
 		struct laurent_polynomial* test_polynomial_eleven_42 = jones_polynomial(eleven_42_knot);
@@ -114,7 +113,7 @@ int main()
 	struct link* eleven_42_knot = PD_to_algorithm_knot(&eleven_42_PD);
 	struct laurent_polynomial* test_polynomial_eleven_42 = jones_polynomial(eleven_42_knot);
 	print_polynomial(test_polynomial_eleven_42, 'q');
-	delete_polynomial(&test_polynomial_eleven_42);*/
+	delete_polynomial(&test_polynomial_eleven_42);
 	return 0;
 
 	/*struct link* figure_eight_knot = PD_to_algorithm_knot(&figure_eight_PD);
