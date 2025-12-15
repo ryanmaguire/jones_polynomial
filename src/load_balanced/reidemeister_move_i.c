@@ -86,7 +86,7 @@ int reidemeister_move_i(struct link* L, int* const writhe)
 
                 crossings_left_to_visit -= 2; // current_crossing always has both strands in current component
 
-                next_index = OPP(current_crossing->ports[next_index]);
+                next_index = OPP(current_crossing->ports[current_to_next_index]);
                 delete_crossing(&current_crossing);
                 if (crossings_left_to_visit > 0) {
                     current_crossing = next_crossing; 
