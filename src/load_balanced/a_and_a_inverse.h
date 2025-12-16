@@ -17,9 +17,12 @@
  *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
-#define A_AND_A_INVERSE_H
 #ifndef A_AND_A_INVERSE_H
+#define A_AND_A_INVERSE_H
 
-extern const int A[], A_inverse[];
+#include "load_balanced.h"
+
+extern const int A[MAX_POLY_SIZE];
+extern const int A_inverse[MAX_POLY_SIZE];
 
 #endif

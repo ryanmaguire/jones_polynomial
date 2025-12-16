@@ -21,6 +21,6 @@
 #define A_SQUARED_PLUS_A_INVERSE_SQUARED_H
 
 /* Stores powers of A^2 + A^-2, see definitions file */
-extern const int* a_squared_a_inv_squared_powers[];
+extern const int* a_squared_a_inv_squared_powers[33];
 
 #endif
