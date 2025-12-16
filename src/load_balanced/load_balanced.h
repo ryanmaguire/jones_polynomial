@@ -24,6 +24,8 @@
 #include <stdlib.h>
 #include <math.h>
 #include <assert.h>
+#include <string.h>
+#include <ctype.h>
 
 #include "a_and_a_inverse.h"
 #include "a_squared_plus_a_inverse_squared.h"
@@ -136,4 +138,13 @@ struct PD_knot {
 
 struct PD_knot* make_PD_knot(const int number_of_crossings, struct PD_crossing* crossings);
 struct link* PD_to_algorithm_knot(const struct PD_knot* K);
+
+struct DT_knot {
+	char* DT_code;
+	int number_of_crossings;
+};
+
+extern struct DT_knot* make_DT_knot(const char* const DT_code);
+extern struct knot* DT_to_PD(const struct DT_knot* const K);
+extern int DT_letter_to_number(const char c);
 #endif
