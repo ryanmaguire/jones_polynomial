@@ -20,6 +20,10 @@
 #ifndef LOAD_BALANCED_H
 #define LOAD_BALANCED_H
 
+#define MAX_CROSSINGS (32)
+#define MAX_POLY_SIZE (6 * MAX_CROSSINGS + 1)
+#define DEGREE_SHIFT (3 * MAX_CROSSINGS)
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -45,10 +49,6 @@ extern void* safe_malloc(const size_t size);
 extern void* safe_calloc(const size_t n, const size_t size);
 /* Safe free macro that also sets pointer to NULL and is safe in all contexts */
 #define SAFE_FREE(pointer_MACRO) do { if ((pointer_MACRO) != NULL) { free((pointer_MACRO)); (pointer_MACRO) = NULL; } } while (0)
-
-#define MAX_CROSSINGS (32)
-#define MAX_POLY_SIZE (6 * MAX_CROSSINGS + 1)
-#define DEGREE_SHIFT (3 * MAX_CROSSINGS)
 
 /* Struct for laurent polynomial; stores coefficients, highet, and lowest degrees of polyonmial */
 struct laurent_polynomial {
