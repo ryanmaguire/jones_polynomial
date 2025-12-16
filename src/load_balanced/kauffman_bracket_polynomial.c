@@ -112,8 +112,13 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     /* Check for untwistable gammas, which have complexity type (2,1+bigon) */
     //else if ((pattern_component = gamma_search(L)) != -1) {}
     /* Otherwise pick a component and crossing at random */
-    else pattern_component = 0;
-
+    else {
+        pattern_component = 0;
+        while (L->number_of_crossings_in_components[pattern_component] == 0) {
+            pattern_component++;
+        }  
+    }
+    
     /* Make a deep copy of link L */
     struct link *L_copy = copy_link(L);
     print_link(L_copy, TRUE);
