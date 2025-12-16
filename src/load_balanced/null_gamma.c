@@ -115,7 +115,7 @@ int null_gamma(struct link* L, int* const writhe)
 
                 current_crossing->data[side_crossing_index] = next_crossing;
                 current_crossing->ports[side_crossing_index] = different_side_crossing_index;
-                if (side_crossing != previous_crossing) {
+                if (side_crossing != previous_crossing && side_crossing != next_crossing) {
                     /* no weird edge case */
                     side_crossing->data[side_crossing_exit_index] = next_crossing;
                     side_crossing->ports[side_crossing_exit_index] = OPP(different_side_crossing_index);
@@ -123,27 +123,36 @@ int null_gamma(struct link* L, int* const writhe)
 
                 next_crossing->data[different_side_crossing_index] = current_crossing;
                 next_crossing->ports[different_side_crossing_index] = side_crossing_index;
-                if (different_side_crossing != previous_crossing) {
+                if (different_side_crossing != previous_crossing && different_side_crossing != current_crossing) {
                     /* no weird edge case */
                     different_side_crossing->data[different_side_crossing_exit_index] = current_crossing;
                     different_side_crossing->ports[different_side_crossing_exit_index] = OPP(side_crossing_index);
                 }
 
                 int new_side_crossing_index = OPP(different_side_crossing_index);
+                int new_different_side_crossing_index = OPP(side_crossing_index);
+
                 if (side_crossing == previous_crossing) {
                     /* weird edge case */
                     next_crossing->data[new_side_crossing_index] = next_crossing;
                     next_crossing->ports[new_side_crossing_index] = far_index;
+                } else if (side_crossing == next_crossing) {
+                    /* other weird edge case */
+                    next_crossing->data[new_side_crossing_index] = current_crossing;
+                    next_crossing->ports[new_side_crossing_index] = new_different_side_crossing_index;
                 } else {
                     next_crossing->data[new_side_crossing_index] = side_crossing;
                     next_crossing->ports[new_side_crossing_index] = side_crossing_exit_index;
                 }
 
-                int new_different_side_crossing_index = OPP(side_crossing_index);
                 if (different_side_crossing == previous_crossing) {
                     /* weird edge case */
                     current_crossing->data[new_different_side_crossing_index] = current_crossing;
                     current_crossing->ports[new_different_side_crossing_index] = OPP(next_index);
+                } else if (different_side_crossing == current_crossing) {
+                    /* other weird edge case */
+                    current_crossing->data[new_different_side_crossing_index] = next_crossing;
+                    current_crossing->ports[new_different_side_crossing_index] = new_side_crossing_index;
                 } else {
                     current_crossing->data[new_different_side_crossing_index] = different_side_crossing;
                     current_crossing->ports[new_different_side_crossing_index] = different_side_crossing_exit_index;
