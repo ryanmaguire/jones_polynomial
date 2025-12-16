@@ -99,13 +99,18 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     /* Check for R3 configurations, which have complexity type (3,1) */
     if ((pattern_component = reidemeister_move_iii_search(L)) != -1) {}
     /* Check for triples, which have complexity type (4,1+R3) for types 1,2 or (3,1+bigon) for types 3,4 */ 
-    else if ((pattern_component = triple_search(L)) != -1) {}
+    //else if ((pattern_component = triple_search(L)) != -1) {}
     /* Check for bigons, which have complexity type (2,1) */
     else if ((pattern_component = bigon_search(L)) != -1) {}
     /* Check for untwistable gammas, which have complexity type (2,1+bigon) */
-    else if ((pattern_component = gamma_search(L)) != -1) {}
+    //else if ((pattern_component = gamma_search(L)) != -1) {}
     /* Otherwise pick a component and crossing at random */
-    else pattern_component = 0;
+    else {
+        pattern_component = 0;
+        while (L->number_of_crossings_in_components[pattern_component] == 0) {
+            pattern_component++;
+        }
+    }
 
     /* Make a deep copy of link L */
     struct link *L_copy = copy_link(L);
