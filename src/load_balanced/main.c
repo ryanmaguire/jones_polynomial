@@ -130,9 +130,9 @@ int main()
 
 	start_time = clock();
 	for (int i = 0; i < 10000; i++) {
-		struct link* T_7_4_knot = PD_to_algorithm_knot(&T_7_4_PD);
-		struct laurent_polynomial* test_polynomial_T_7_4 = jones_polynomial(T_7_4_knot);
-		delete_polynomial(&test_polynomial_T_7_4);
+		struct link* big_19_knot = PD_to_algorithm_knot(&big_19_PD);
+		struct laurent_polynomial* test_polynomial_big_19 = jones_polynomial(big_19_knot);
+		delete_polynomial(&test_polynomial_big_19);
 	}
 	printf("Time taken: %.2f seconds\n", (double)(clock() - start_time) / CLOCKS_PER_SEC);
 	//print_polynomial(test_polynomial_T_7_4, 'q');
