@@ -35,8 +35,6 @@ int main()
 
 	printf("Time taken: %.2f seconds\n", (double)(clock() - start_time) / CLOCKS_PER_SEC);
 	print_polynomial(jones_polynomial(PD_to_algorithm_knot(knot_PD_code)), 'q');
-	delete_PD_knot(&knot_PD_code);
-	delete_DT_knot(&knot_DT);
 	
 	return 0;
 }
