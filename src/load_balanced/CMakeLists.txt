@@ -6,6 +6,12 @@ cmake_minimum_required(VERSION 3.12)
 
 project(load_balanced LANGUAGES C)
 
+if (MSVC)
+    set(CMAKE_C_FLAGS "/O2")
+else()
+    set(CMAKE_C_FLAGS "-O3 -Wall -Wextra -flto")
+endif()
+
 # Add source to this project's executable.
 add_executable (
     load_balanced
