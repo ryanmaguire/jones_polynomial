@@ -47,6 +47,7 @@ enum boolean { FALSE, TRUE };
 /* Functions to safely use malloc, calloc, and free */
 extern void* safe_malloc(const size_t size);
 extern void* safe_calloc(const size_t n, const size_t size);
+
 /* Safe free macro that also sets pointer to NULL and is safe in all contexts */
 #define SAFE_FREE(pointer_MACRO) do { if ((pointer_MACRO) != NULL) { free((pointer_MACRO)); (pointer_MACRO) = NULL; } } while (0)
 
@@ -60,8 +61,13 @@ struct laurent_polynomial {
 extern struct laurent_polynomial* initialize_polynomial(void);
 extern void delete_polynomial(struct laurent_polynomial** P);
 extern void print_polynomial(const struct laurent_polynomial* P, char c);
-extern struct laurent_polynomial* add_polynomials(const struct laurent_polynomial* P, const struct laurent_polynomial* Q);
-extern struct laurent_polynomial* multiply_polynomials(const struct laurent_polynomial* P, const struct laurent_polynomial* Q);
+
+extern struct laurent_polynomial*
+add_polynomials(const struct laurent_polynomial* P, const struct laurent_polynomial* Q);
+
+extern struct laurent_polynomial*
+multiply_polynomials(const struct laurent_polynomial* P, const struct laurent_polynomial* Q);
+
 extern void shift_polynomial(struct laurent_polynomial* const P, const int shift);
 extern void adjust_polynomial_degree(struct laurent_polynomial* P);
 
@@ -94,20 +100,42 @@ struct crossing {
 	struct crossing* data[4]; // Array of pointers to neighboring crossings
 	int ports[4]; // Which port is connected to which neighboring crossing
 	int overdirection; // Gives sign (OVER_POS = positive, OVER_NEG = negative)
-	int over_component; // Component containing overstrand
-	int under_component; // Component containing understrand
+	size_t over_component; // Component containing overstrand
+	size_t under_component; // Component containing understrand
 };
 
-extern struct crossing* make_crossing(const int id, struct crossing** const data, const int* ports, const int overdirection, const int over_component, const int under_component);
+extern struct crossing*
+make_crossing(const int id,
+              struct crossing** const data,
+			  const int* ports,
+			  const int overdirection,
+			  const size_t over_component,
+			  const size_t under_component);
+
 extern void delete_crossing(struct crossing** C); // DOES NOT UPDATE NEIGHBORING CROSSINGS
-extern void pair_crossings(struct crossing* const C1, const int c1_index, struct crossing* const C2, const int c2_index);
+
+extern void pair_crossings(struct crossing* const C1,
+                           const int c1_index,
+						   struct crossing* const C2,
+						   const int c2_index);
 
 struct link {
-	int number_of_components; // Link components
-	int* number_of_crossings_in_components; // Array of number of crossings in each link component, length = MAX_CROSSINGS
-	struct crossing** first_crossing_in_components; // Array of pointers to a crossing in each link component, length = MAX_CROSSINGS
+
+	// Link components
+	size_t number_of_components;
+
+	// Array of number of crossings in each link component, length = MAX_CROSSINGS
+	size_t * number_of_crossings_in_components;
+
+	// Array of pointers to a crossing in each link component, length = MAX_CROSSINGS
+	struct crossing** first_crossing_in_components;
 };
-extern struct link* make_link(const int number_of_components, int* const number_of_crossings_in_components, struct crossing** const first_crossing_in_components);
+
+extern struct link*
+make_link(const size_t number_of_components,
+          size_t* const number_of_crossings_in_components,
+		  struct crossing** const first_crossing_in_components);
+
 extern struct link* copy_link(const struct link* const L);
 extern void print_link(struct link* const L, enum boolean redo_ids);
 
@@ -132,19 +160,20 @@ struct PD_crossing {
 };
 
 struct PD_knot {
-	int number_of_crossings;
+	size_t number_of_crossings;
 	struct PD_crossing* crossings;
 };
 
-struct PD_knot* make_PD_knot(const int number_of_crossings, struct PD_crossing* crossings);
+struct PD_knot* make_PD_knot(const size_t number_of_crossings, struct PD_crossing* crossings);
 struct link* PD_to_algorithm_knot(const struct PD_knot* K);
 
 struct DT_knot {
 	char* DT_code;
-	int number_of_crossings;
+	size_t number_of_crossings;
 };
 
 extern struct DT_knot* make_DT_knot(const char* const DT_code);
 extern struct PD_knot* DT_to_PD(const struct DT_knot* const K);
 extern int DT_letter_to_number(const char c);
+
 #endif

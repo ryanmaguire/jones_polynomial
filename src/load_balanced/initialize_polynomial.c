@@ -14,18 +14,20 @@
  *  GNU General Public License for more details.                              *
  *                                                                            *
  *  You should have received a copy of the GNU General Public License along   *
- *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
- #include "load_balanced.h"
+#include "load_balanced.h"
 
-/*Function which returns a laurent polynomial initialized to the zero polynomial*/
-struct laurent_polynomial* initialize_polynomial(void) 
+/*  Function which returns a laurent polynomial initialized to the            *
+ *  zero polynomial.                                                          */
+struct laurent_polynomial* initialize_polynomial(void)
 {
-	/*Create struct for polynomial, set its lowest and highest degrees to zero, and then set
-	all of its coefficients to zero*/
-	struct laurent_polynomial* temp = (struct laurent_polynomial*) safe_malloc(sizeof(struct laurent_polynomial));
+	/*  Create struct for polynomial, set its lowest and highest degrees to   *
+	 *  zero, and then set all of its coefficients to zero.                   */
+	struct laurent_polynomial* temp = safe_malloc(sizeof(*temp));
+
 	temp->lowest_degree = temp->highest_degree = 0;
-	temp->coeffs = (int*) safe_calloc(MAX_POLY_SIZE, sizeof(int));
+	temp->coeffs = safe_calloc(MAX_POLY_SIZE, sizeof(int));
+
 	return temp;
 }

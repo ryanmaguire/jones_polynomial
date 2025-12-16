@@ -23,12 +23,12 @@
 /* If found, returns the component number and sets the crossing as the first crossing of the component */
 /* If not found, L is unchanged and -1 is returned */
 
-// 
-// 
-// 
-// 
-// 
-// 
+//
+//
+//
+//
+//
+//
 //         -------------------------------------------------
 //
 //
@@ -43,11 +43,11 @@ int gamma_search(const struct link* L)
     struct crossing* next_crossing;//Next crossing in search
     int direction;//Direction of travel in search
     int dir;// Direction from current_crossing two second crossing of gamma
-    for (int component = 0; component < L->number_of_components; component++){//Iterate over components
+    for (size_t component = 0; component < L->number_of_components; component++){//Iterate over components
 
         // This will be decremented by 1 if the crossing will be visitied twice, by 2 otherwise
-        int crossings_left_to_visit = 2 * L->number_of_crossings_in_components[component]; 
-        
+        size_t crossings_left_to_visit = 2 * L->number_of_crossings_in_components[component];
+
         current_crossing = L->first_crossing_in_components[component];//Current crossing should be in the current component
         direction = (current_crossing->over_component == component) ? 1 : 0;//Make sure that you're going in the right direction
         do {
@@ -57,7 +57,7 @@ int gamma_search(const struct link* L)
                         L->first_crossing_in_components[component] = current_crossing;//Set first crossing of component to current crossing (for easy passing to smoothing function)
                         return component;//Return component number
                     }
-                    
+
                 }
             }
 

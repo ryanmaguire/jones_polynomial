@@ -23,7 +23,7 @@
 
 //1008895
 
-int main() 
+int main()
 {
 	char buffer[256];
 	char knot_DT_code[] = "dMKhGjnaPfBoCeIl";
