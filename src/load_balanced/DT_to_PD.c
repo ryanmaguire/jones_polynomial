@@ -38,6 +38,7 @@ void reverse_array(int*, const int, const int);
 /*Function to convert DT code of a knot to PD code; based on the program in the Mathematica Knot Theory package
 written by Siddarth Sankaran*/
 struct PD_knot* DT_to_PD(const struct DT_knot* const K) {
+	if (K == NULL || K->DT_code == NULL) return NULL;
 	int n = K->number_of_crossings;
 
 	/*DT code is converted to a gauss input, and original edge list with all edges from 1 to 2n is made*/

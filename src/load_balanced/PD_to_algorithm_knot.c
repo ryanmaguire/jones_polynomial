@@ -22,6 +22,7 @@
 /* Function to convert a knot in PD code to a knot as defined in the header file */
 struct link* PD_to_algorithm_knot(const struct PD_knot* K) 
 {
+	if (K == NULL) return NULL;
 	struct link* temp = (struct link*)safe_malloc(sizeof(struct link));
 	int number_of_crossings = K->number_of_crossings;
 	temp->number_of_components = 1;

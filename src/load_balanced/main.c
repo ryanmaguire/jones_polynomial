@@ -75,7 +75,8 @@ int main()
 	printf("please print\n");
 
 	char knot_DT_code[] = "dRisJqpebLnHCAgfokM";
-	struct PD_knot* knot_PD_code = DT_to_PD(knot_DT_code);
+	struct DT_knot* knot_DT = make_DT_knot(knot_DT_code);
+	struct PD_knot* knot_PD_code = DT_to_PD(knot_DT);
 	printf("ASDFSDF");
 	long start_time = clock();
 	for (int i = 0; i < 1000; i++) {
@@ -83,6 +84,7 @@ int main()
 		struct laurent_polynomial* knot_jones = jones_polynomial(knot);
 		delete_polynomial(&knot_jones);
 	}
+
 	printf("Time taken: %.2f seconds\n", (double)(clock() - start_time) / CLOCKS_PER_SEC);
 	print_polynomial(jones_polynomial(PD_to_algorithm_knot(knot_PD_code)), 'q');
 	return 0;
