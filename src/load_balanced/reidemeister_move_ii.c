@@ -99,21 +99,33 @@ int reidemeister_move_ii(struct link* L)
                 int same_far_crossing_new_port = current_crossing->ports[OPP(next_index)];
                 int diff_far_crossing_new_port = current_crossing->ports[OPP(diff_next_index)];
                 
-                /* Update same_previous_crossing */
-                same_previous_crossing->data[same_previous_crossing_leave_index] = same_far_crossing;
-                same_previous_crossing->ports[same_previous_crossing_leave_index] = same_previous_crossing_new_port;
+                /* Update same_previous_crossing and diff_previous_crossing */
+                if (same_far_crossing == next_crossing) {
+                    /* Weird edge case */
+                    same_previous_crossing->data[same_previous_crossing_leave_index] = diff_previous_crossing;
+                    same_previous_crossing->ports[same_previous_crossing_leave_index] = diff_previous_crossing_leave_index;
+                    diff_previous_crossing->data[diff_previous_crossing_leave_index] = same_previous_crossing;
+                    diff_previous_crossing->ports[diff_previous_crossing_leave_index] = same_previous_crossing_leave_index;
+                } else {
+                    same_previous_crossing->data[same_previous_crossing_leave_index] = same_far_crossing;
+                    same_previous_crossing->ports[same_previous_crossing_leave_index] = same_previous_crossing_new_port;
+                    diff_previous_crossing->data[diff_previous_crossing_leave_index] = diff_far_crossing;
+                    diff_previous_crossing->ports[diff_previous_crossing_leave_index] = diff_previous_crossing_new_port;
+                }
 
-                /* Update diff_previous_crossing */
-                diff_previous_crossing->data[diff_previous_crossing_leave_index] = diff_far_crossing;
-                diff_previous_crossing->ports[diff_previous_crossing_leave_index] = diff_previous_crossing_new_port;
-
-                /* Update same_far_crossing */
-                same_far_crossing->data[same_far_crossing_enter_index] = same_previous_crossing;
-                same_far_crossing->ports[same_far_crossing_enter_index] = same_far_crossing_new_port;
-
-                /* Update diff_far_crossing */
-                diff_far_crossing->data[diff_far_crossing_enter_index] = diff_previous_crossing;
-                diff_far_crossing->ports[diff_far_crossing_enter_index] = diff_far_crossing_new_port;
+                /* Update same_far_crossing and diff_far_crossing  */
+                if (same_previous_crossing == current_crossing) {
+                    /* Weird edge case */
+                    same_far_crossing->data[same_far_crossing_enter_index] = diff_far_crossing;
+                    same_far_crossing->ports[same_far_crossing_enter_index] = diff_far_crossing_enter_index;
+                    diff_far_crossing->data[diff_far_crossing_enter_index] = same_far_crossing;
+                    diff_far_crossing->ports[diff_far_crossing_enter_index] = same_far_crossing_enter_index;
+                } else {
+                    same_far_crossing->data[same_far_crossing_enter_index] = same_previous_crossing;
+                    same_far_crossing->ports[same_far_crossing_enter_index] = same_far_crossing_new_port;
+                    diff_far_crossing->data[diff_far_crossing_enter_index] = diff_previous_crossing;
+                    diff_far_crossing->ports[diff_far_crossing_enter_index] = diff_far_crossing_new_port;
+                }
 
                 /* Update crossing counts in link component */
                 L->number_of_crossings_in_components[component] -= 2;
@@ -126,7 +138,7 @@ int reidemeister_move_ii(struct link* L)
 
                 /* Edge case where current_crossing or next_crossing is also first crossing */
                 if (current_crossing == L->first_crossing_in_components[component] || next_crossing == L->first_crossing_in_components[component]) {
-                    L->first_crossing_in_components[component] = same_previous_crossing;
+                    L->first_crossing_in_components[component] = (same_previous_crossing != current_crossing) ? same_previous_crossing : same_far_crossing;
                 }
                 if ( // Also do this for the other component
                     other_component != -1 
@@ -139,6 +151,7 @@ int reidemeister_move_ii(struct link* L)
                      * trying to iterate through other_component right now, which means that we are safe
                      * to move the first crossing for other_component to some arbitrary crossing in 
                      * other_component. */
+                    /* Also, if there are two different components, then the weird edge case cannot happen */
                     L->first_crossing_in_components[other_component] = diff_previous_crossing;
                 }
 

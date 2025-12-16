@@ -44,8 +44,8 @@ int main()
 	struct PD_crossing T_7_4_PD_crossings[] = { {{9,41,10,40}}, {{20,42,21,41}}, {{31,1,32,42}}, {{21,11,22,10}}, {{32,12,33,11}}, {{1,13,2,12}}, {{33,23,34,22}}, {{2,24,3,23}}, {{13,25,14,24}}, {{3,35,4,34}}, {{14,36,15,35}}, {{25,37,26,36}}, {{15,5,16,4}}, {{26,6,27,5}}, {{37,7,38,6}}, {{27,17,28,16}}, {{38,18,39,17}}, {{7,19,8,18}}, {{39,29,40,28}}, {{8,30,9,29}}, {{19,31,20,30}} };
 	struct PD_knot T_7_4_PD = {21, T_7_4_PD_crossings};
 
-	struct PD_crossing test_PD_crossings[] = { {{6,2,7,1}}, {{7,2,8,3}}, {{5,4,4,3}}, {{5,8,6,1}} };
-	struct PD_knot test_PD = {4, test_PD_crossings};
+	struct PD_crossing big_19_PD_crossings[] = { {{1,8,2,9}}, {{36,3,37,4}}, {{5,18,6,19}}, {{7,38,8,1}}, {{20,9,21,10}}, {{11,34,12,35}}, {{13,33,14,32}}, {{15,11,16,10}}, {{17,4,18,5}}, {{24,19,25,20}}, {{21,28,22,29}}, {{16,23,17,24}}, {{6,26,7,25}}, {{2,27,3,28}}, {{29,14,30,15}}, {{31,13,32,12}}, {{33,31,34,30}}, {{35,22,36,23}}, {{26,37,27,38}} };
+	struct PD_knot big_19_PD = {19, big_19_PD_crossings};
 
 	struct link* trefoil = PD_to_algorithm_knot(&trefoil_PD);
 	//printf("writhe: %d\n", writhe(trefoil));
@@ -72,6 +72,12 @@ int main()
 	hopf_link->number_of_crossings_in_components[1] = 2;
 	hopf_link->first_crossing_in_components[0] = hopf_crossing_one;
 	hopf_link->first_crossing_in_components[1] = hopf_crossing_one;
+
+	struct link* big_19_knot = PD_to_algorithm_knot(&big_19_PD);
+	struct laurent_polynomial* test_polynomial_big_19_4 = jones_polynomial(big_19_knot);
+	print_polynomial(test_polynomial_big_19_4, 'q');
+	delete_polynomial(&test_polynomial_big_19_4);
+	return 0;
 
 	/*struct link* T_7_4_knot = PD_to_algorithm_knot(&T_7_4_PD);
 	struct laurent_polynomial* test_polynomial_T_7_4 = jones_polynomial(T_7_4_knot);

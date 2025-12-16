@@ -71,6 +71,24 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
         if (L->number_of_crossings_in_components[scanning_index] != 0) {
             L->number_of_crossings_in_components[moved_index] = L->number_of_crossings_in_components[scanning_index];
             L->first_crossing_in_components[moved_index] = L->first_crossing_in_components[scanning_index];
+
+            struct crossing* current_crossing = L->first_crossing_in_components[moved_index];
+            int next_index = (current_crossing->under_component == moved_index) ? 2 : 1;
+            int start_index = next_index;
+            struct crossing* next_crossing = current_crossing;
+            do {
+                if (current_crossing->over_component == scanning_index) {
+                    current_crossing->over_component = moved_index;
+                }
+                if (current_crossing->under_component == scanning_index) {
+                    current_crossing->under_component = moved_index;
+                }
+
+                next_crossing = current_crossing->data[next_index];
+                next_index = OPP(current_crossing->ports[next_index]);
+                current_crossing = next_crossing;
+            } while (!(current_crossing == L->first_crossing_in_components[moved_index] && next_index == start_index));
+
             moved_index++;
         }
     }
