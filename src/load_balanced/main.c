@@ -23,7 +23,7 @@
 int main() 
 {
 	/* Starting to run tests with trefoil */
-	struct PD_crossing trefoil_PD_crossings[] = { {{1, 5, 2, 4}}, {{3, 1, 4, 6}}, {{5, 3, 6, 2}} };
+	/*struct PD_crossing trefoil_PD_crossings[] = {{{1, 5, 2, 4}}, {{3, 1, 4, 6}}, {{5, 3, 6, 2}}};
 	struct PD_knot trefoil_PD = { 3, trefoil_PD_crossings };
 
 	struct PD_crossing figure_eight_PD_crossings[] = { {{4,2,5,1}}, {{8,6,1,5}}, {{6,3,7,4}}, {{2,7,3,8}} };
@@ -47,10 +47,10 @@ int main()
 	struct PD_crossing big_19_PD_crossings[] = { {{1,8,2,9}}, {{36,3,37,4}}, {{5,18,6,19}}, {{7,38,8,1}}, {{20,9,21,10}}, {{11,34,12,35}}, {{13,33,14,32}}, {{15,11,16,10}}, {{17,4,18,5}}, {{24,19,25,20}}, {{21,28,22,29}}, {{16,23,17,24}}, {{6,26,7,25}}, {{2,27,3,28}}, {{29,14,30,15}}, {{31,13,32,12}}, {{33,31,34,30}}, {{35,22,36,23}}, {{26,37,27,38}} };
 	struct PD_knot big_19_PD = {19, big_19_PD_crossings};
 
-	struct link* trefoil = PD_to_algorithm_knot(&trefoil_PD);
+	struct link* trefoil = PD_to_algorithm_knot(&trefoil_PD);*/
 	//printf("writhe: %d\n", writhe(trefoil));
 
-	struct crossing* hopf_crossing_one = (struct crossing*) safe_malloc(sizeof(struct crossing));
+	/*struct crossing* hopf_crossing_one = (struct crossing*)safe_malloc(sizeof(struct crossing));
 	struct crossing* hopf_crossing_two = (struct crossing*) safe_malloc(sizeof(struct crossing));
 	for (int i = 0; i < 4; i++) {
 		hopf_crossing_one->data[i] = hopf_crossing_two;
@@ -71,12 +71,20 @@ int main()
 	hopf_link->number_of_crossings_in_components[0] = 2;
 	hopf_link->number_of_crossings_in_components[1] = 2;
 	hopf_link->first_crossing_in_components[0] = hopf_crossing_one;
-	hopf_link->first_crossing_in_components[1] = hopf_crossing_one;
+	hopf_link->first_crossing_in_components[1] = hopf_crossing_one;*/
+	printf("please print\n");
 
-	struct link* big_19_knot = PD_to_algorithm_knot(&big_19_PD);
-	struct laurent_polynomial* test_polynomial_big_19_4 = jones_polynomial(big_19_knot);
-	print_polynomial(test_polynomial_big_19_4, 'q');
-	delete_polynomial(&test_polynomial_big_19_4);
+	char knot_DT_code[] = "dRisJqpebLnHCAgfokM";
+	struct PD_knot* knot_PD_code = DT_to_PD(knot_DT_code);
+	printf("ASDFSDF");
+	long start_time = clock();
+	for (int i = 0; i < 1000; i++) {
+		struct link* knot = PD_to_algorithm_knot(knot_PD_code);
+		struct laurent_polynomial* knot_jones = jones_polynomial(knot);
+		delete_polynomial(&knot_jones);
+	}
+	printf("Time taken: %.2f seconds\n", (double)(clock() - start_time) / CLOCKS_PER_SEC);
+	print_polynomial(jones_polynomial(PD_to_algorithm_knot(knot_PD_code)), 'q');
 	return 0;
 
 	/*struct link* T_7_4_knot = PD_to_algorithm_knot(&T_7_4_PD);
@@ -97,48 +105,48 @@ int main()
 
 	//print_polynomial(jones_polynomial(hopf_link), 'q');
 
-	long start_time = clock();
+	/*long start_time = clock();
 	for (int i = 0; i < 10000; i++) {
 		struct link* nine_43_knot = PD_to_algorithm_knot(&nine_43_PD);
 		struct laurent_polynomial* test_polynomial_nine_43 = jones_polynomial(nine_43_knot);
 		delete_polynomial(&test_polynomial_nine_43);
 	}
-	printf("Time taken: %.2f seconds\n", (double)(clock() - start_time) / CLOCKS_PER_SEC);
+	printf("Time taken: %.2f seconds\n", (double)(clock() - start_time) / CLOCKS_PER_SEC);*/
 	//print_polynomial(test_polynomial_nine_43, 'q');
 	//delete_polynomial(&test_polynomial_nine_43);
 	//return 0;
 
-	start_time = clock();
+	/*start_time = clock();
 	for (int i = 0; i < 10000; i++) {
 		struct link* eight_21_knot = PD_to_algorithm_knot(&eight_21_PD);
 		struct laurent_polynomial* test_polynomial_eight_21 = jones_polynomial(eight_21_knot);
 		delete_polynomial(&test_polynomial_eight_21);
 	}
-	printf("Time taken: %.2f seconds\n", (double)(clock() - start_time) / CLOCKS_PER_SEC);
+	printf("Time taken: %.2f seconds\n", (double)(clock() - start_time) / CLOCKS_PER_SEC);*/
 	//print_polynomial(test_polynomial_eight_21, 'q');
 	//delete_polynomial(&test_polynomial_eight_21);
 
-	start_time = clock();
+	/*start_time = clock();
 	for (int i = 0; i < 10000; i++) {
 		struct link* eleven_42_knot = PD_to_algorithm_knot(&eleven_42_PD);
 		struct laurent_polynomial* test_polynomial_eleven_42 = jones_polynomial(eleven_42_knot);
 		delete_polynomial(&test_polynomial_eleven_42);
 	}
-	printf("Time taken: %.2f seconds\n", (double)(clock() - start_time) / CLOCKS_PER_SEC);
+	printf("Time taken: %.2f seconds\n", (double)(clock() - start_time) / CLOCKS_PER_SEC);*/
 	//print_polynomial(test_polynomial_eleven_42, 'q');
 	//delete_polynomial(&test_polynomial_eleven_42);
 
-	start_time = clock();
+	/*start_time = clock();
 	for (int i = 0; i < 10000; i++) {
 		struct link* big_19_knot = PD_to_algorithm_knot(&big_19_PD);
 		struct laurent_polynomial* test_polynomial_big_19 = jones_polynomial(big_19_knot);
 		delete_polynomial(&test_polynomial_big_19);
 	}
-	printf("Time taken: %.2f seconds\n", (double)(clock() - start_time) / CLOCKS_PER_SEC);
+	printf("Time taken: %.2f seconds\n", (double)(clock() - start_time) / CLOCKS_PER_SEC);*/
 	//print_polynomial(test_polynomial_T_7_4, 'q');
 	//delete_polynomial(&test_polynomial_T_7_4);
 
-	return 0;
+	//return 0;
 
 	/*struct link* figure_eight_knot = PD_to_algorithm_knot(&figure_eight_PD);
 	print_link(figure_eight_knot, TRUE);
@@ -157,5 +165,6 @@ int main()
 	print_polynomial(test_polynomial, 'q');
 	delete_polynomial(&test_polynomial);*/
 
-	return 0;
+
+	//return 0;
 }

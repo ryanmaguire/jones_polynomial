@@ -145,6 +145,6 @@ struct DT_knot {
 };
 
 extern struct DT_knot* make_DT_knot(const char* const DT_code);
-extern struct knot* DT_to_PD(const struct DT_knot* const K);
+extern struct PD_knot* DT_to_PD(const struct DT_knot* const K);
 extern int DT_letter_to_number(const char c);
 #endif
