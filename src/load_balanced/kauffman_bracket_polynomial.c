@@ -24,9 +24,11 @@
 /* In particular, the current pattern ordering is valid for all alpha >= 1.619 > phi */
 struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
 {
+    printf("\n\nNEW FUNCTION CALL\n");
+    print_link(L, TRUE);
     /* Loop through all reidemeister moves and generalized reidemeister moves until no more can be performed */
     int writhe_change = 0;
-    while (reidemeister_move_i(L, &writhe_change) || reidemeister_move_ii(L) || null_gamma(L, &writhe_change) || null_triple(L)) {}
+    while (reidemeister_move_i(L, &writhe_change) || reidemeister_move_ii(L) || null_gamma(L, &writhe_change)/* || null_triple(L)*/) {}
 
     /* Count number of unknot diagrams in link */
     int number_of_unknots = 0;
@@ -38,6 +40,7 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     if (number_of_unknots == L->number_of_components) {
         /* If we remove unknots until we have one remaining, we get number_of_unknots - 1 as our exponent for A^2+A^-2 */
         int exponent = number_of_unknots - 1;
+        printf("dfsaafds");
         struct laurent_polynomial* result = initialize_polynomial();
         for (int i = 0; i < MAX_POLY_SIZE; i++) { // Copy these terms over
             result->coeffs[i] = a_squared_a_inv_squared_powers[exponent][i] * (((writhe_change + exponent) % 2 == 0) ? 1 : -1);
@@ -52,6 +55,8 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
         SAFE_FREE(L->first_crossing_in_components);
         SAFE_FREE(L->number_of_crossings_in_components);
         SAFE_FREE(L);
+
+        print_polynomial(result, 'q');
 
         return result;
     }
@@ -97,27 +102,48 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     int pattern_component; // Component in which pattern is located
 
     /* Check for R3 configurations, which have complexity type (3,1) */
-    if ((pattern_component = reidemeister_move_iii_search(L)) != -1) {}
+    if ((pattern_component = reidemeister_move_iii_search(L)) != -1) {printf("found r3 in %d", pattern_component);}
     /* Check for triples, which have complexity type (4,1+R3) for types 1,2 or (3,1+bigon) for types 3,4 */ 
-    //else if ((pattern_component = triple_search(L)) != -1) {}
+    //else if ((pattern_component = triple_search(L)) != -1) {printf("found triple in %d", pattern_component);}
     /* Check for bigons, which have complexity type (2,1) */
-    else if ((pattern_component = bigon_search(L)) != -1) {}
+    else if ((pattern_component = bigon_search(L)) != -1) {printf("found bigon in %d", pattern_component);}
     /* Check for untwistable gammas, which have complexity type (2,1+bigon) */
-    //else if ((pattern_component = gamma_search(L)) != -1) {}
+    //else if ((pattern_component = gamma_search(L)) != -1) {printf("found gamma in %d", pattern_component);}
     /* Otherwise pick a component and crossing at random */
-    else {
-        pattern_component = 0;
-        while (L->number_of_crossings_in_components[pattern_component] == 0) {
-            pattern_component++;
-        }
-    }
+    else {pattern_component = 0; printf("default component in %d", pattern_component);}
+
+    print_link(L, TRUE);
+
+    printf("\nsmoothing at crossing %d\n", L->first_crossing_in_components[pattern_component]->id);
 
     /* Make a deep copy of link L */
     struct link *L_copy = copy_link(L);
+    print_link(L_copy, TRUE);
+
+    printf("done copy");
 
     /* Smooth respective crossings in both link copies */
     smooth_crossing(L, L->first_crossing_in_components[pattern_component], 0);
+    print_link(L, FALSE);
+    /*printf("\n\nL information:");
+    printf("\nnumber of components: %d\n", L->number_of_components);
+    for (int i = 0; i < L->number_of_components; i++) {
+        printf("%d, ", L->number_of_crossings_in_components[i]);
+    }
+    printf("\n");
+    print_link(L, FALSE);*/
+    printf("\ndone 0 smoothing\n");
     smooth_crossing(L_copy, L_copy->first_crossing_in_components[pattern_component], 1);
+    print_link(L_copy, FALSE);
+    //smooth_crossing(L_copy, L_copy->first_crossing_in_components[pattern_component], 1);
+    /*printf("\n\nL_copy information:");
+    printf("\nnumber of components: %d\n", L_copy->number_of_components);
+    for (int i = 0; i < L_copy->number_of_components; i++) {
+        printf("%d, ", L_copy->number_of_crossings_in_components[i]);
+    }
+    printf("\n");
+    print_link(L_copy, FALSE);*/
+    printf("\ndone 1 smoothing\n");
 
     /* Recursion step */
     struct laurent_polynomial* polynomial_1 = kauffman_bracket_polynomial(L);
@@ -130,9 +156,16 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     shift_polynomial(polynomial_1, 1);
     shift_polynomial(polynomial_2, -1);
 
+    printf("poly 1 is ");
+    print_polynomial(polynomial_1, 'q');
+    printf("poly 2 is ");
+    print_polynomial(polynomial_2, 'q');
 
     /* Now, add them */
     struct laurent_polynomial* sum_of_two_polynomials = add_polynomials(polynomial_1, polynomial_2);
+
+    printf("sum is ");
+    print_polynomial(sum_of_two_polynomials, 'q');
     
     /* Finally, scale by multiplier */
     struct laurent_polynomial* result = multiply_polynomials(sum_of_two_polynomials, multiplier);
@@ -149,6 +182,9 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     for (int i = DEGREE_SHIFT + result->lowest_degree; i <= DEGREE_SHIFT + result->highest_degree; i++) { // sign issues
         result->coeffs[i] *= (writhe_change % 2 == 0) ? 1 : -1;
     }
+
+    printf("result is ");
+    print_polynomial(result, 'q');
 
     /* We are done. */
     return result;

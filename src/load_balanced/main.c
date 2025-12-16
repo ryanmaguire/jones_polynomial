@@ -19,22 +19,54 @@
  ******************************************************************************/
 #include "load_balanced.h"
 #include <time.h>
+#include <stdio.h>
+
+//1008895
 
 int main() 
 {
-	char knot_DT_code[] = "ipDGomClaKNhfJeb";
+	char buffer[256];
+	char knot_DT_code[] = "dMKhGjnaPfBoCeIl";
 	struct DT_knot* knot_DT = make_DT_knot(knot_DT_code);
 	struct PD_knot* knot_PD_code = DT_to_PD(knot_DT);
 
 	long start_time = clock();
-	for (int i = 0; i < 10000; i++) {
-		struct link* knot = PD_to_algorithm_knot(knot_PD_code);
-		struct laurent_polynomial* knot_jones = jones_polynomial(knot);
-		delete_polynomial(&knot_jones);
+
+	/*FILE *fptr;
+	//8895
+
+	//record = strtok(NULL, ","); 
+	char *record;
+
+	// Open a file in read mode
+	fptr = fopen("../16n_hyp_jones.txt", "r");
+
+	char *myString;
+
+	printf("asdffadsafds\n");
+
+	int i = 0;
+	while (i < 1008895 && fgets(buffer, sizeof(buffer), fptr)) {
+		myString = strtok(buffer, ",");
+		strtok(NULL, ","); // skip the second field (split on commas)
+
+		printf("Processing knot %d: %s\n", i + 1, myString);
+
+		struct DT_knot* test_DT = make_DT_knot(myString);
+		struct PD_knot* test_PD_code = DT_to_PD(test_DT);
+
+		struct link* test_knot = PD_to_algorithm_knot(test_PD_code);
+		struct laurent_polynomial* test_jones = jones_polynomial(test_knot);
+		delete_polynomial(&test_jones);
+
+		i++;
 	}
+
+	// Close the file
+	fclose(fptr);*/
 
 	printf("Time taken: %.2f seconds\n", (double)(clock() - start_time) / CLOCKS_PER_SEC);
 	print_polynomial(jones_polynomial(PD_to_algorithm_knot(knot_PD_code)), 'q');
-	
+
 	return 0;
 }
