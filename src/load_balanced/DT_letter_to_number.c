@@ -18,14 +18,17 @@
  ******************************************************************************/
 #include "load_balanced.h"
 
- /*Function which converts from a letter-based DT notation to numerical labels. The labels use 0-indexing, so
- A becomes 1, B becomes 3, C becomes 5, and so on for capital letters. For lowercase letters, the label is the
- negative of the corresponding uppercase label. For invalid inputs, the function returns 0. */
-int DT_letter_to_number(const char c) {
-	if (islower(c))
-		return 2 * ('a' - c) - 1;
-	else if (isupper(c))
-		return 2 * (c - 'A') + 1;
+/*  Function which converts from a letter-based DT notation to numerical      *
+ *  labels. The labels use 0-indexing, so A becomes 1, B becomes 3, C becomes *
+ *  5, and so on for capital letters. For lowercase letters, the label is the *
+ *  negative of the corresponding uppercase label. For invalid inputs, the    *
+ *  function returns 0.                                                       */
+int DT_letter_to_number(const char c)
+{
+    if (islower(c))
+        return 2 * ('a' - c) - 1;
+    else if (isupper(c))
+        return 2 * (c - 'A') + 1;
 
-	return 0;
+    return 0;
 }

@@ -17,12 +17,12 @@
  *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
- #include "load_balanced.h"
+#include "load_balanced.h"
 
 /*
 Loop through every single link component and walk through the entire component
 Begin by setting all status to -1
-Then go back and loop again, numbering all the crossings from 0 to n-1 
+Then go back and loop again, numbering all the crossings from 0 to n-1
 Allocate memory for an array A of length n*sizeof(struct crossing)
 The new crossing with number k will eventually have memory address A+k
 */
@@ -31,36 +31,41 @@ The new crossing with number k will eventually have memory address A+k
 /* Renumbers ids in the original link L */
 struct link* copy_link(const struct link* const L)
 {
-    struct link* M = (struct link*) safe_malloc(sizeof(struct link));
+    size_t i, component;
+    struct link* M = safe_malloc(sizeof(*M));
 
     /* Set number_of_components */
     M->number_of_components = L->number_of_components;
 
     /* Set number_of_crossings_in_components */
-    M->number_of_crossings_in_components = (int*) safe_malloc(MAX_CROSSINGS * sizeof(int));
-    for (int i = 0; i < M->number_of_components; i++) {
+    M->number_of_crossings_in_components = safe_malloc(
+        MAX_CROSSINGS * sizeof(*M->number_of_crossings_in_components)
+    );
+
+    for (i = 0; i < M->number_of_components; i++)
         M->number_of_crossings_in_components[i] = L->number_of_crossings_in_components[i];
-    }
 
     /* Allocate memory for first_crossing_in_components */
-    M->first_crossing_in_components = (struct crossing**) safe_malloc(MAX_CROSSINGS * sizeof(struct crossing*));
+    M->first_crossing_in_components =safe_malloc(MAX_CROSSINGS * sizeof(struct crossing*));
 
     /* Reid every crossing from 0 to n-1
      * Allocate memory for all the new crossings
      * Old ids will now correspond to new memory addresses */
 
     /* Id every crossing to -1 */
-    for (int component = 0; component < L->number_of_components; component++) {
-        if (L->number_of_crossings_in_components[component] == 0) {
+    for (component = 0; component < L->number_of_components; component++)
+    {
+        if (L->number_of_crossings_in_components[component] == 0)
             continue;
-        }
+
 
         // This will be decremented by 1 if the crossing will be visitied twice, by 2 otherwise
-        int crossings_left_to_visit = 2 * L->number_of_crossings_in_components[component]; 
+        int crossings_left_to_visit = 2 * L->number_of_crossings_in_components[component];
 
         struct crossing* previous_crossing = NULL;
         struct crossing* current_crossing = L->first_crossing_in_components[component];
         int next_index = (current_crossing->under_component == component) ? 2 : 1;
+
         do {
             current_crossing->id = -1;
 
@@ -78,13 +83,15 @@ struct link* copy_link(const struct link* const L)
 
     /* Assign ids to every crossing from 0 to n-1, inclusive */
     int current_id = 0;
-    for (int component = 0; component < L->number_of_components; component++) {
-        if (L->number_of_crossings_in_components[component] == 0) {
+
+    for (component = 0; component < L->number_of_components; component++)
+    {
+        if (L->number_of_crossings_in_components[component] == 0)
             continue;
-        }
+
 
         // This will be decremented by 1 if the crossing will be visitied twice, by 2 otherwise
-        int crossings_left_to_visit = 2 * L->number_of_crossings_in_components[component]; 
+        size_t crossings_left_to_visit = 2 * L->number_of_crossings_in_components[component];
 
         struct crossing* previous_crossing = NULL;
         struct crossing* current_crossing = L->first_crossing_in_components[component];
@@ -107,28 +114,30 @@ struct link* copy_link(const struct link* const L)
     }
 
     /* We now know the total number of crossings */
-    int number_of_crossings = current_id; // No OBOE becausee current_id was postcremented
+    size_t number_of_crossings = current_id; // No OBOE becausee current_id was postcremented
 
     /* Allocate memory for new crossings */
-    struct crossing** new_crossings_addresses = (struct crossing**) safe_malloc(number_of_crossings * sizeof(struct crossing*));
-    for (int i = 0; i < number_of_crossings; i++) {
-        new_crossings_addresses[i] = (struct crossing*) safe_malloc(sizeof(struct crossing));
-    }
+    struct crossing** new_crossings_addresses = safe_malloc(number_of_crossings * sizeof(struct crossing*));
+
+    for (i = 0; i < number_of_crossings; i++)
+        new_crossings_addresses[i] = safe_malloc(sizeof(struct crossing));
 
     /* Initialize all of the new crossings */
     /* We are guaranteed to go through L in the same order as we did when we first ided every crossing */
     int largest_seen_id = -1;
-    for (int component = 0; component < L->number_of_components; component++) {
-        if (L->number_of_crossings_in_components[component] == 0) {
+
+    for (component = 0; component < L->number_of_components; component++)
+    {
+        if (L->number_of_crossings_in_components[component] == 0)
             continue;
-        }
 
         // This will be decremented by 1 if the crossing will be visitied twice, by 2 otherwise
-        int crossings_left_to_visit = 2 * L->number_of_crossings_in_components[component]; 
+        int crossings_left_to_visit = 2 * L->number_of_crossings_in_components[component];
 
         struct crossing* previous_crossing = NULL;
         struct crossing* current_crossing = L->first_crossing_in_components[component];
         int next_index = (current_crossing->under_component == component) ? 2 : 1;
+
         do {
             if (current_crossing->id > largest_seen_id) {
                 /* Then, current_crossing->id must be largest_seen_id + 1 due to order preservation */

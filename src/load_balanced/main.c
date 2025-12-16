@@ -20,14 +20,15 @@
 #include "load_balanced.h"
 #include <time.h>
 
-int main() 
+int main()
 {
 	char knot_DT_code[] = "ipDGomClaKNhfJeb";
 	struct DT_knot* knot_DT = make_DT_knot(knot_DT_code);
 	struct PD_knot* knot_PD_code = DT_to_PD(knot_DT);
 
 	long start_time = clock();
-	for (int i = 0; i < 10000; i++) {
+	for (int i = 0; i < 10000; i++)
+	{
 		struct link* knot = PD_to_algorithm_knot(knot_PD_code);
 		struct laurent_polynomial* knot_jones = jones_polynomial(knot);
 		delete_polynomial(&knot_jones);
@@ -35,6 +36,6 @@ int main()
 
 	printf("Time taken: %.2f seconds\n", (double)(clock() - start_time) / CLOCKS_PER_SEC);
 	print_polynomial(jones_polynomial(PD_to_algorithm_knot(knot_PD_code)), 'q');
-	
+
 	return 0;
 }

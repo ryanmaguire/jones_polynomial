@@ -17,22 +17,27 @@
  *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
- #include "load_balanced.h"
+#include "load_balanced.h"
 
  /* Function to adjust degree of laurent polynomial correctly */
-void adjust_polynomial_degree(struct laurent_polynomial* P) 
+void adjust_polynomial_degree(struct laurent_polynomial* P)
 {
-	/*The lowest degree of P is set to the lowest power at which the coefficient is nonzero*/
-	for (int index = 0; index < MAX_POLY_SIZE; index++)
-		if (P->coeffs[index] != 0) {
-			P->lowest_degree = index - DEGREE_SHIFT;
-			break;
-		}
+    int index;
 
-	/*The highest degree of P is set to the highest power of P with a nonzero coefficient*/
-	for (int index = MAX_POLY_SIZE - 1; index >= 0; index--)
-		if (P->coeffs[index] != 0) {
-			P->highest_degree = index - DEGREE_SHIFT;
-			break;
-		}
+    /*  The lowest degree of P is set to the lowest power at which the        *
+     *  coefficient is nonzero.                                               */
+    for (index = 0; index < MAX_POLY_SIZE; index++)
+        if (P->coeffs[index] != 0)
+        {
+            P->lowest_degree = index - DEGREE_SHIFT;
+            break;
+        }
+
+    /*  The highest degree of P is set to the highest power of P with a       *
+     *  nonzero coefficient.                                                  */
+    for (index = MAX_POLY_SIZE - 1; index >= 0; index--)
+        if (P->coeffs[index] != 0) {
+            P->highest_degree = index - DEGREE_SHIFT;
+            break;
+        }
 }

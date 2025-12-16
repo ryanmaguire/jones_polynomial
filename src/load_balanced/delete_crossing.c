@@ -14,12 +14,13 @@
  *  GNU General Public License for more details.                              *
  *                                                                            *
  *  You should have received a copy of the GNU General Public License along   *
- *
  *  with jones_polynomial.  If not, see <https://www.gnu.org/licenses/>.      *
  ******************************************************************************/
- #include "load_balanced.h"
+#include "load_balanced.h"
 
-/* Function to free up the memory allocated to a crossing. DOES NOT UPDATE NEIGHBORING CROSSINGS */
-void delete_crossing(struct crossing** C) {
+/*  Function to free up the memory allocated to a crossing.                   *
+ *  DOES NOT UPDATE NEIGHBORING CROSSINGS.                                    */
+void delete_crossing(struct crossing** C)
+{
     SAFE_FREE(*C);
 }
