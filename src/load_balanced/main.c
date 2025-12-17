@@ -26,23 +26,15 @@
 int main()
 {
 	char buffer[256];
-	char knot_DT_code[] = "dnKiJBlfMpEgOaHc";
-	struct DT_knot* knot_DT = make_DT_knot(knot_DT_code);
-	struct PD_knot* knot_PD_code = DT_to_PD(knot_DT);
 
 	long start_time = clock();
 
 	FILE *fptr;
 
-	//record = strtok(NULL, ","); 
-	char *record;
-
 	// Open a file in read mode
 	fptr = fopen("../16n_hyp_jones.txt", "r");
 
 	char *myString;
-
-	printf("asdffadsafds\n");
 
 	int i = 0;
 	//1008895
@@ -70,7 +62,11 @@ int main()
 	fclose(fptr);
 
 	printf("Time taken: %.2f seconds\n", (double)(clock() - start_time) / CLOCKS_PER_SEC);
-	//print_polynomial(jones_polynomial(PD_to_algorithm_knot(knot_PD_code)), 'q');
+	
+	/*char knot_DT_code[] = "dnKiJBlfMpEgOaHc";
+	struct DT_knot* knot_DT = make_DT_knot(knot_DT_code);
+	struct PD_knot* knot_PD_code = DT_to_PD(knot_DT);
+	print_polynomial(jones_polynomial(PD_to_algorithm_knot(knot_PD_code)), 'q');*/
 
 	return 0;
 }
