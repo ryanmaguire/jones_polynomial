@@ -80,7 +80,7 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
             L->first_crossing_in_components[moved_index] = L->first_crossing_in_components[scanning_index];
 
             struct crossing* current_crossing = L->first_crossing_in_components[moved_index];
-            int next_index = (current_crossing->under_component == moved_index) ? 2 : 1;
+            int next_index = (current_crossing->under_component == scanning_index) ? 2 : 1;
             int start_index = next_index;
             struct crossing* next_crossing = current_crossing;
             do {
