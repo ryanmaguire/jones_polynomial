@@ -46,7 +46,7 @@ int main()
 
 	int i = 0;
 	//1008895
-	while (i < 10000 && fgets(buffer, sizeof(buffer), fptr)) {
+	while (i < 100000 && fgets(buffer, sizeof(buffer), fptr)) {
 		myString = strtok(buffer, ",");
 		strtok(NULL, ","); // skip the second field (split on commas)
 
@@ -58,10 +58,10 @@ int main()
 		struct link* test_knot = PD_to_algorithm_knot(test_PD_code);
 		struct laurent_polynomial* test_jones = jones_polynomial(test_knot);
 		delete_polynomial(&test_jones);
-		safe_free(test_DT->DT_code);
-		safe_free(test_DT);
-		safe_free(test_PD_code->crossings);
-		safe_free(test_PD_code);
+		SAFE_FREE(test_DT->DT_code);
+		SAFE_FREE(test_DT);
+		SAFE_FREE(test_PD_code->crossings);
+		SAFE_FREE(test_PD_code);
 
 		i++;
 	}
