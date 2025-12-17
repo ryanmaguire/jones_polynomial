@@ -24,6 +24,9 @@
 /* In particular, the current pattern ordering is valid for all alpha >= 1.619 > phi */
 struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
 {
+    //printf("\nNEW FUNCTION CALL\n");
+    //print_link(L, TRUE);
+    
     size_t i;
 
     /* Loop through all reidemeister moves and generalized reidemeister moves until no more can be performed */
@@ -40,7 +43,7 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     if (number_of_unknots == L->number_of_components) {
         /* If we remove unknots until we have one remaining, we get number_of_unknots - 1 as our exponent for A^2+A^-2 */
         int exponent = number_of_unknots - 1;
-        printf("dfsaafds");
+        //printf("dfsaafds");
         struct laurent_polynomial* result = initialize_polynomial();
 
         // Copy these terms over
@@ -58,7 +61,7 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
         SAFE_FREE(L->number_of_crossings_in_components);
         SAFE_FREE(L);
 
-        print_polynomial(result, 'q');
+        //print_polynomial(result, 'q');
 
         return result;
     }
@@ -108,7 +111,7 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     /* Check for triples, which have complexity type (4,1+R3) for types 1,2 or (3,1+bigon) for types 3,4 */
     //else if ((pattern_component = triple_search(L)) != -1) {}
     /* Check for bigons, which have complexity type (2,1) */
-    else if ((pattern_component = bigon_search(L)) != -1) {printf("found bigon in %d", pattern_component);}
+    else if ((pattern_component = bigon_search(L)) != -1) {/*printf("found bigon in %d", pattern_component);*/}
     /* Check for untwistable gammas, which have complexity type (2,1+bigon) */
     //else if ((pattern_component = gamma_search(L)) != -1) {}
     /* Otherwise pick a component and crossing at random */
@@ -121,13 +124,13 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     
     /* Make a deep copy of link L */
     struct link *L_copy = copy_link(L);
-    print_link(L_copy, TRUE);
+    //print_link(L_copy, TRUE);
 
-    printf("done copy");
+    //printf("done copy");
 
     /* Smooth respective crossings in both link copies */
     smooth_crossing(L, L->first_crossing_in_components[pattern_component], 0);
-    print_link(L, FALSE);
+    //print_link(L, FALSE);
     /*printf("\n\nL information:");
     printf("\nnumber of components: %d\n", L->number_of_components);
     for (int i = 0; i < L->number_of_components; i++) {
@@ -135,9 +138,9 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     }
     printf("\n");
     print_link(L, FALSE);*/
-    printf("\ndone 0 smoothing\n");
+    //printf("\ndone 0 smoothing\n");
     smooth_crossing(L_copy, L_copy->first_crossing_in_components[pattern_component], 1);
-    print_link(L_copy, FALSE);
+    //print_link(L_copy, FALSE);
     //smooth_crossing(L_copy, L_copy->first_crossing_in_components[pattern_component], 1);
     /*printf("\n\nL_copy information:");
     printf("\nnumber of components: %d\n", L_copy->number_of_components);
@@ -146,7 +149,7 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     }
     printf("\n");
     print_link(L_copy, FALSE);*/
-    printf("\ndone 1 smoothing\n");
+    //printf("\ndone 1 smoothing\n");
 
     /* Recursion step */
     struct laurent_polynomial* polynomial_1 = kauffman_bracket_polynomial(L);
@@ -159,10 +162,10 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
     shift_polynomial(polynomial_1, 1);
     shift_polynomial(polynomial_2, -1);
 
-    printf("poly 1 is ");
-    print_polynomial(polynomial_1, 'q');
-    printf("poly 2 is ");
-    print_polynomial(polynomial_2, 'q');
+    //printf("poly 1 is ");
+    //print_polynomial(polynomial_1, 'q');
+    //printf("poly 2 is ");
+    //print_polynomial(polynomial_2, 'q');
 
     /* Now, add them */
     struct laurent_polynomial* sum_of_two_polynomials = add_polynomials(polynomial_1, polynomial_2);
@@ -183,8 +186,8 @@ struct laurent_polynomial* kauffman_bracket_polynomial(struct link* L)
         result->coeffs[k] *= (writhe_change % 2 == 0) ? 1 : -1;
     }
 
-    printf("result is ");
-    print_polynomial(result, 'q');
+    //printf("result is ");
+    //print_polynomial(result, 'q');
 
     /* We are done. */
     return result;

@@ -26,14 +26,13 @@
 int main()
 {
 	char buffer[256];
-	char knot_DT_code[] = "dMKhGjnaPfBoCeIl";
+	char knot_DT_code[] = "dnKiJBlfMpEgOaHc";
 	struct DT_knot* knot_DT = make_DT_knot(knot_DT_code);
 	struct PD_knot* knot_PD_code = DT_to_PD(knot_DT);
 
 	long start_time = clock();
 
 	FILE *fptr;
-	//8895
 
 	//record = strtok(NULL, ","); 
 	char *record;
@@ -46,11 +45,12 @@ int main()
 	printf("asdffadsafds\n");
 
 	int i = 0;
-	while (i < 1008895 && fgets(buffer, sizeof(buffer), fptr)) {
+	//1008895
+	while (i < 10000 && fgets(buffer, sizeof(buffer), fptr)) {
 		myString = strtok(buffer, ",");
 		strtok(NULL, ","); // skip the second field (split on commas)
 
-		printf("Processing knot %d: %s\n", i + 1, myString);
+		//printf("Processing knot %d: %s\n", i + 1, myString);
 
 		struct DT_knot* test_DT = make_DT_knot(myString);
 		struct PD_knot* test_PD_code = DT_to_PD(test_DT);
@@ -58,6 +58,10 @@ int main()
 		struct link* test_knot = PD_to_algorithm_knot(test_PD_code);
 		struct laurent_polynomial* test_jones = jones_polynomial(test_knot);
 		delete_polynomial(&test_jones);
+		safe_free(test_DT->DT_code);
+		safe_free(test_DT);
+		safe_free(test_PD_code->crossings);
+		safe_free(test_PD_code);
 
 		i++;
 	}

@@ -45,6 +45,8 @@
 */
 int null_gamma(struct link* L, int* const writhe) 
 {
+    //printf("null gamma called\n");
+    //print_link(L, FALSE);
     int number_of_simplifications = 0;
 
     for (size_t component = 0; component < L->number_of_components; component++) {
@@ -185,7 +187,7 @@ int null_gamma(struct link* L, int* const writhe)
             }
         } while (L->number_of_crossings_in_components[component] > 1 && crossings_left_to_visit > 0);
     }
-
+    //printf("null gamma finished\n");
     return number_of_simplifications;
 }
 
