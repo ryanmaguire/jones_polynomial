@@ -25,14 +25,14 @@
 
 int main()
 {
-	//char buffer[256];
+	char buffer[256];
 	char knot_DT_code[] = "dMKhGjnaPfBoCeIl";
 	struct DT_knot* knot_DT = make_DT_knot(knot_DT_code);
 	struct PD_knot* knot_PD_code = DT_to_PD(knot_DT);
 
 	long start_time = clock();
 
-	/*FILE *fptr;
+	FILE *fptr;
 	//8895
 
 	//record = strtok(NULL, ","); 
@@ -63,10 +63,10 @@ int main()
 	}
 
 	// Close the file
-	fclose(fptr);*/
+	fclose(fptr);
 
 	printf("Time taken: %.2f seconds\n", (double)(clock() - start_time) / CLOCKS_PER_SEC);
-	print_polynomial(jones_polynomial(PD_to_algorithm_knot(knot_PD_code)), 'q');
+	//print_polynomial(jones_polynomial(PD_to_algorithm_knot(knot_PD_code)), 'q');
 
 	return 0;
 }

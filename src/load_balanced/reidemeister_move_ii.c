@@ -138,7 +138,7 @@ int reidemeister_move_ii(struct link* L)
 
                 /* Edge case where current_crossing or next_crossing is also first crossing */
                 if (current_crossing == L->first_crossing_in_components[component] || next_crossing == L->first_crossing_in_components[component]) {
-                    L->first_crossing_in_components[component] = (same_previous_crossing != current_crossing) ? same_previous_crossing : same_far_crossing;
+                    L->first_crossing_in_components[component] = (same_far_crossing == next_crossing) ? diff_previous_crossing : same_far_crossing;
                 }
                 if ( // Also do this for the other component
                     other_component != -1 
