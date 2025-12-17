@@ -23,30 +23,31 @@
 /* If found, the null gamma is untwisted, and the function continues searching with the next crossing */
 /* Leaves behind 0 in number_of_crossings_in_components if an unknot diagram is created */
 
-// previous_crossing and current_crossing must share an over/under strand
-// next_crossing and previous_crossing also share an over/under strand
-// after twisting, a bigon is left
-//
-//                                  (very_far_crossing)    (former_crossing)                
-//                                                  \\      /
-//                                                   \\    /
-//                                                    \\  /
-//                                              (previous_crossing)
-//                                                    /  \\
-//                                                   /    \\
-//                                                  /    far_index
-//                                                 /        \\
-//                (side_crossing)---(current_crossing)------(next_crossing)---(different_side_crossing)
-//                                                 \         //
-//                                              next_index  //      
-//                                                   \     //          
-//                                                    \   //             
-//                                                     \ //  
+/* previous_crossing and current_crossing must share an over/under strand
+   next_crossing and previous_crossing also share an over/under strand
+   after twisting, a bigon is left
+  
+                                    (very_far_crossing)    (former_crossing)                
+                                                    \\      /
+                                                     \\    /
+                                                      \\  /
+                                                (previous_crossing)
+                                                      /  \\
+                                                     /    \\
+                                                    /    far_index
+                                                   /        \\
+                  (side_crossing)---(current_crossing)------(next_crossing)---(different_side_crossing)
+                                                   \         //
+                                                next_index  //      
+                                                     \     //          
+                                                      \   //             
+                                                       \ //  
+*/
 int null_gamma(struct link* L, int* const writhe) 
 {
     int number_of_simplifications = 0;
 
-    for (int component = 0; component < L->number_of_components; component++) {
+    for (size_t component = 0; component < L->number_of_components; component++) {
         if (L->number_of_crossings_in_components[component] <= 2) {
             continue;
         }

@@ -25,7 +25,7 @@
 
 int main()
 {
-	char buffer[256];
+	//char buffer[256];
 	char knot_DT_code[] = "dMKhGjnaPfBoCeIl";
 	struct DT_knot* knot_DT = make_DT_knot(knot_DT_code);
 	struct PD_knot* knot_PD_code = DT_to_PD(knot_DT);

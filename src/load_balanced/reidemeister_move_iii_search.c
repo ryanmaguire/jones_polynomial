@@ -23,28 +23,29 @@
 /* If found, returns the component number and sets the crossing as the first crossing of the component */
 /* If not found, L is unchanged and -1 is returned */
 
-// next_crossing and current_crossing must share an over/under strand
-// essentially a bigon, but next_crossing meets previous_crossing again
-// Travelling along emphasized strands, from bottom to top
-//
-//                                       (far crossing)    (former crossing)                
-//                                                  \\      /
-//                                                   \\    /
-//                                                    \\  /
-//                                              (current_crossing)
-//                                                    /  \\
-//                                                   /    \\
-//                                            next_index   \\
-//                                                 /        \\
-//   (different former crossing)---(next_crossing)------(adjacent_crossing)---(different far crossing)
-//                                               /            \\
-//                                          far_index          \\
-//                                             /                \\
-//                                            /                  \\
-//                  (still different former crossing)       (still different far crossing)
+/* next_crossing and current_crossing must share an over/under strand
+   essentially a bigon, but next_crossing meets previous_crossing again
+   Travelling along emphasized strands, from bottom to top
+  
+                                         (far crossing)    (former crossing)                
+                                                    \\      /
+                                                     \\    /
+                                                      \\  /
+                                                (current_crossing)
+                                                      /  \\
+                                                     /    \\
+                                              next_index   \\
+                                                   /        \\
+     (different former crossing)---(next_crossing)------(adjacent_crossing)---(different far crossing)
+                                                 /            \\
+                                            far_index          \\
+                                               /                \\
+                                              /                  \\
+                    (still different former crossing)       (still different far crossing)
+*/
 int reidemeister_move_iii_search(const struct link* L) 
 {
-    for (int component = 0; component < L->number_of_components; component++) {
+    for (size_t component = 0; component < L->number_of_components; component++) {
         if (L->number_of_crossings_in_components[component] <= 2) {
             continue;
         }

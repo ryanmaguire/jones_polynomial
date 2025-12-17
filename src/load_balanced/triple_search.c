@@ -23,38 +23,38 @@
 /* If found, returns the component number and sets the crossing as the first crossing of the component */
 /* If not found, L is unchanged and -1 is returned */
 
-// Travelling along emphasized strands, from left to right
-//        
-//                                             (top_left_crossing)           (top_right_crossing)
-//                                                       \                             /
-//                                                        \                           /
-//                                                         \                         /
-//                                       /\ top_middle_to_left_index         top_middle_to_right_index /\
-//                                                            \                   /
-//                                                            (top_middle_crossing)
-//                                                            /                   \
-//                                                          /                       \
-//                                                        /                           \
-//                                         /\ current_to_top_index             next_to_top_index /\
-//                                                     /                                 \
-// ENTER HERE ===(previous_crossing)=====(current_crossing)== next_index > ===========(next_crossing)== far_index > =====(far_crossing)=== EXIT HERE
-//                                                     \                                 /
-//                                      \/ current_to_bottom_index             next_to_bottom_index \/
-//                                                        \                           /
-//                                                          \                       /
-//                                                            \                   /
-//                                                           (bottom_middle_crossing)
-//                                                            /                   \
-//                                    \/ bottom_middle_to_left_index         bottom_middle_to_right_index \/
-//                                                         /                         \
-//                                                        /                           \
-//                                                       /                             \
-//                                            (bottom_left_crossing)        (bottom_right_crossing)
-//
+/* Travelling along emphasized strands, from left to right
+          
+                                               (top_left_crossing)           (top_right_crossing)
+                                                         \                             /
+                                                          \                           /
+                                                           \                         /
+                                         /\ top_middle_to_left_index         top_middle_to_right_index /\
+                                                              \                   /
+                                                              (top_middle_crossing)
+                                                              /                   \
+                                                            /                       \
+                                                          /                           \
+                                           /\ current_to_top_index             next_to_top_index /\
+                                                       /                                 \
+   ENTER HERE ===(previous_crossing)=====(current_crossing)== next_index > ===========(next_crossing)== far_index > =====(far_crossing)=== EXIT HERE
+                                                       \                                 /
+                                        \/ current_to_bottom_index             next_to_bottom_index \/
+                                                          \                           /
+                                                            \                       /
+                                                              \                   /
+                                                             (bottom_middle_crossing)
+                                                              /                   \
+                                      \/ bottom_middle_to_left_index         bottom_middle_to_right_index \/
+                                                           /                         \
+                                                          /                           \
+                                                         /                             \
+                                              (bottom_left_crossing)        (bottom_right_crossing)
+*/
 
 int triple_search(const struct link* L) 
 {
-    for (int component = 0; component < L->number_of_components; component++) {
+    for (size_t component = 0; component < L->number_of_components; component++) {
         if (L->number_of_crossings_in_components[component] <= 2) { // change later
             continue;
         }

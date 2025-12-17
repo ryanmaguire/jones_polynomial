@@ -22,35 +22,35 @@
 /* Function to scan for and perform all Type II Reidemeister moves */
 /* Leaves behind 0 in number_of_crossings_in_components if an unknot diagram is created */
 
-// next_crossing and current_crossing must have different signs
-// Travelling along emphasized strands, from bottom to top
-//
-//           EXIT HERE
-//      (same_far_crossing)   (diff_far_crossing)
-//                     \\        /
-//                      \\      /
-//              /\ far_index  diff_far_index /\
-//                        \\  /
-//                   (next_crossing)
-//                        /  \\
-//                       /    \\
-//                      /      \\
-//                      \      //
-//       /\ diff_next_index  next_index /\
-//                        \  //
-//                  (current_crossing)
-//                       //   \
-//                      //     \
-//                     //       \
-// (same_previous_crossing)   (diff_previous_crossing)
-//      ENTER HERE
-//
+/* next_crossing and current_crossing must have different signs
+   Travelling along emphasized strands, from bottom to top
+  
+             EXIT HERE
+        (same_far_crossing)   (diff_far_crossing)
+                       \\        /
+                        \\      /
+                /\ far_index  diff_far_index /\
+                          \\  /
+                     (next_crossing)
+                          /  \\
+                         /    \\
+                        /      \\
+                        \      //
+         /\ diff_next_index  next_index /\
+                          \  //
+                    (current_crossing)
+                         //   \
+                        //     \
+                       //       \
+   (same_previous_crossing)   (diff_previous_crossing)
+        ENTER HERE
+*/
 
 int reidemeister_move_ii(struct link* L)
 {   
     int number_of_simplifications = 0;
 
-    for (int component = 0; component < L->number_of_components; component++) {
+    for (size_t component = 0; component < L->number_of_components; component++) {
         if (L->number_of_crossings_in_components[component] <= 1) {
             continue;
         }

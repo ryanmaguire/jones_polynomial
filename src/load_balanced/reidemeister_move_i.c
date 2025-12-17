@@ -22,29 +22,30 @@
 /* Function to scan for and perform all Type I Reidemeister moves */
 /* Leaves behind 0 in number_of_crossings_in_components if an unknot diagram is created */
 
-//                                   _________________________
-//                                  /                         \
-//                                  |                         |
-//  (previous_crossing)-----(current_crossing)--next_index>---/
-//                        current_to_next_index \/
-//                                  |
-//                           (next_crossing)
+/*                                   _________________________
+                                    /                         \
+                                    |                         |
+    (previous_crossing)-----(current_crossing)--next_index>---/
+                          current_to_next_index \/
+                                    |
+                             (next_crossing)
+*/
 
 // Alternative orientation
 
-//                           (next_crossing)
-//                                  |
-//                       current_to_next_index /\
-//  (previous_crossing)-----(current_crossing)--next_index>---\
-//                                  |                         |
-//                                  \_________________________/
-//                                
+/*                           (next_crossing)
+                                    |
+                         current_to_next_index /\
+    (previous_crossing)-----(current_crossing)--next_index>---\
+                                    |                         |
+                                    \_________________________/
+*/                                
 
 int reidemeister_move_i(struct link* L, int* const writhe) 
 {
     int number_of_simplifications = 0;
     
-    for (int component = 0; component < L->number_of_components; component++) {
+    for (size_t component = 0; component < L->number_of_components; component++) {
         if (L->number_of_crossings_in_components[component] <= 0) {
             continue;
         }
