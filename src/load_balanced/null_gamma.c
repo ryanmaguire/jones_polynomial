@@ -183,7 +183,7 @@ int null_gamma(struct link* L, int* const writhe)
                 current_crossing = current_crossing->data[next_index];
                 next_index = OPP(previous_crossing->ports[next_index]);
             }
-        } while (L->number_of_crossings_in_components[component] > 0 && crossings_left_to_visit > 0);
+        } while (L->number_of_crossings_in_components[component] > 1 && crossings_left_to_visit > 0);
     }
 
     return number_of_simplifications;

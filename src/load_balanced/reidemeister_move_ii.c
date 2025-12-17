@@ -157,13 +157,17 @@ int reidemeister_move_ii(struct link* L)
 
                 crossings_left_to_visit -= 4; // two crossings get die
 
+                // No need to update previous_crossing since it is now adjacent to same_far_crossing = current_crossing...
+                // unless we have weird edge case
+
+                if (same_previous_crossing == current_crossing) previous_crossing = diff_far_crossing;
+
                 next_index = OPP(next_crossing->ports[far_index]);
                 delete_crossing(&current_crossing);
                 delete_crossing(&next_crossing);
                 if (crossings_left_to_visit > 0) {
                     current_crossing = same_far_crossing; 
                 }
-                // No need to update previous_crossing since it is now adjacent to same_far_crossing = current_crossing
 
                 number_of_simplifications++;
             } else {
@@ -177,7 +181,7 @@ int reidemeister_move_ii(struct link* L)
                 current_crossing = current_crossing->data[next_index];
                 next_index = OPP(previous_crossing->ports[next_index]);
             }
-        } while (L->number_of_crossings_in_components[component] > 0 && crossings_left_to_visit > 0);
+        } while (L->number_of_crossings_in_components[component] > 1 && crossings_left_to_visit > 0);
     }
 
     return number_of_simplifications;
